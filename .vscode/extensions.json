@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ms-azuretools.azure-dev",
+        "ms-azuretools.vscode-bicep",
+        "ms-python.python",
+        "esbenp.prettier-vscode"
+    ]
+}

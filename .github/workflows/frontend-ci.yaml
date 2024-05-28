@@ -1,0 +1,30 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "src/frontend/**"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "src/frontend/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+      - name: Run prettier on frontend
+        run: |
+          cd ./frontend
+          npm install --include=dev
+          npx prettier --check .

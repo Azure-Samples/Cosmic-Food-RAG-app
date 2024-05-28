@@ -1,0 +1,53 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-docker-compose
+{
+    "name": "buile-24-langchain-vcore",
+    "image": "mcr.microsoft.com/vscode/devcontainers/python:3.12",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "18",
+            "nodeGypDependencies": false
+        },
+        "ghcr.io/azure/azure-dev/azd:latest": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "charliermarsh.ruff",
+                "ms-azuretools.vscode-bicep",
+                "ms-azuretools.azure-dev",
+                "mongodb.mongodb-vscode",
+                "esbenp.prettier-vscode"
+            ],
+            "settings": {
+                "python.formatting.provider": "charliermarsh.ruff",
+                "python.testing.pytestEnabled": true,
+                "python.testing.unittestEnabled": false,
+                "python.editor.codeActionsOnSave": {
+                    "source.organizeImports": true,
+                    "source.fixAll": true
+                },
+                "python.testing.pytestArgs": [
+                    "tests"
+                ],
+                "python.editor.formatOnSave": true,
+                "files.exclude": {
+                    ".coverage": true,
+                    ".pytest_cache": true,
+                    "__pycache__": true,
+                    ".ruff_cache": true
+                }
+            }
+        }
+    },
+    "forwardPorts": [
+        50505,
+        5173
+    ],
+    "portsAttributes": {
+        "50505": {"label": "Backend port", "onAutoForward": "notify"},
+        "5173": {"label": "Frontend port", "onAutoForward": "notify"}
+    },
+    "postCreateCommand": ". .devcontainer/setup.sh"
+}
