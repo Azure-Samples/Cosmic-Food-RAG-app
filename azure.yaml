@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
-name: build-24-langchain-vcore
+name: cosmic-food-rag-app
 metadata:
-    template: build-24-langchain-vcore@0.0.1
+    template: cosmic-food-rag-app@0.0.1
 infra:
     provider: "bicep"
 services:

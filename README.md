@@ -13,7 +13,7 @@ products:
 - cosmos-db
 - mongodb-vcore
 page_type: sample
-urlFragment: build-24-langchain-vcore
+urlFragment: cosmic-food-rag-app
 ---
 
 # Cosmic Food with Azure OpenAI and Azure Cosmos DB for MongoDB vCore
@@ -34,7 +34,7 @@ urlFragment: build-24-langchain-vcore
 
 1. Open the repository in GitHub Codespaces:
 
-    [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/khelanmodi/build-24-langchain-vcore?devcontainer_path=.devcontainer/devcontainer.json)
+    [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure-Samples/Cosmic-Food-RAG-app?devcontainer_path=.devcontainer/devcontainer.json)
 
 1. 📝 Start here 👉 [CBD_Mongo_vCore.ipynb](./CBD_Mongo_vCore.ipynb)
 
@@ -43,8 +43,8 @@ urlFragment: build-24-langchain-vcore
 1. **Download the project starter code locally**
 
     ```bash
-    git clone https://github.com/khelanmodi/build-24-langchain-vcore.git
-    cd build-24-langchain-vcore
+    git clone https://github.com/Azure-Samples/Cosmic-Food-RAG-app.git
+    cd Cosmic-Food-RAG-app
     ```
 
 1. **Initialize and activate a virtualenv using:**

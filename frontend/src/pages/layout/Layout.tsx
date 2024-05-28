@@ -8,7 +8,7 @@ const Layout = () => {
             <header className={styles.header} role={"banner"}>
                 <div className={styles.headerContainer}>
                     <Link to="/" className={styles.headerTitleContainer}>
-                        <h3 className={styles.headerTitle}>Cosmic Food Store</h3>
+                        <h3 className={styles.headerTitle}>Cosmic Food RAG App</h3>
                     </Link>
                     <nav>
                         <ul className={styles.headerNavList}>
@@ -19,7 +19,7 @@ const Layout = () => {
                             </li>
 
                             <li className={styles.headerNavLeftMargin}>
-                                <a href="https://github.com/khelanmodi/build-24-langchain-vcore" target={"_blank"} title="Github repository link">
+                                <a href="https://github.com/Azure-Samples/Cosmic-Food-RAG-app" target={"_blank"} title="Github repository link">
                                     <img
                                         src={github}
                                         alt="Github logo"
