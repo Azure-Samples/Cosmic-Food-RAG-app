@@ -1,0 +1,40 @@
+name: AZD templates CI
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "infra/**"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "infra/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Bicep for linting
+        uses: azure/CLI@v2
+        with:
+          inlineScript: az config set bicep.use_binary_from_path=false && az bicep build -f infra/main.bicep --stdout
+
+      - name: Run Microsoft Security DevOps Analysis
+        uses: microsoft/security-devops-action@preview
+        id: msdo
+        continue-on-error: true
+        with:
+          tools: templateanalyzer
+
+      - name: Upload alerts to Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: github.repository == 'Azure-Samples/azure-search-openai-demo'
+        with:
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}

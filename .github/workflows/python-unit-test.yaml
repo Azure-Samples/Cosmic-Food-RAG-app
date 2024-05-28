@@ -1,0 +1,54 @@
+name: Python Unit tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "**.py"
+      - "src/requirements.txt"
+      - "src/pyproject.toml"
+
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "**.py"
+      - "src/requirements.txt"
+      - "src/pyproject.toml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test_package:
+
+    name: Test ${{ matrix.os }} Python ${{ matrix.python_version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-20.04"]
+        python_version: ["3.10", "3.11", "3.12"]
+    steps:
+        - uses: actions/checkout@v4
+        - name: Setup python
+          uses: actions/setup-python@v5
+          with:
+            python-version: ${{ matrix.python_version }}
+            architecture: x64
+        - name: Setup node
+          uses: actions/setup-node@v4
+          with:
+            node-version: 18
+        - name: Build frontend
+          run: |
+            cd ./frontend
+            npm install
+            npm run build
+        - name: Install dependencies
+          run: |
+            python3 -m pip install --upgrade pip
+            python3 -m pip install -e 'src[dev]'
+        - name: Run tests
+          run: python3 -m pytest
