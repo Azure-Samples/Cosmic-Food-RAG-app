@@ -130,7 +130,7 @@ openai==1.30.4
     # via langchain-openai
 orjson==3.10.3
     # via langsmith
-packaging==24.0
+packaging==23.2
     # via
     #   langchain-core
     #   marshmallow
@@ -142,7 +142,7 @@ pydantic==2.7.1
     #   langchain-core
     #   langsmith
     #   openai
-pydantic-core==2.18.3
+pydantic-core==2.18.2
     # via pydantic
 pymongo==4.7.2
     # via quartapp (src/pyproject.toml)
