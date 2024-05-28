@@ -1,0 +1,26 @@
+[tool.ruff]
+line-length = 120
+lint.select = ["E", "F", "I", "UP"]
+target-version = "py312"
+src = ["src/quartapp"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["quartapp"]
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+
+[tool.mypy]
+check_untyped_defs = true
+python_version = 3.12
+exclude = [".venv/*"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --cov"
+testpaths = ["tests"]
+pythonpath = ['src']
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.coverage.report]
+show_missing = true

@@ -1,0 +1,908 @@
+[
+    {
+        "category": "Smoothies",
+        "name": "Ashunti`Way Smoothie",
+        "description": "Fruit n greens, mango bananas, tropical fruit blend, dragon fruit mix, mango, bananas, pineapples, apples, and spinach. Special green with strawberry bananas juice blend . Our fruity tasty smoothies are blended to perfection.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Jimmy Jam Smoothie",
+        "description": "Berries n kale, strawberries, bananas, blueberries kale, tropical fruit blend, and dragon fruit. Our fruity tasty smoothies are blended to perfection.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Tejay Impact Smoothie",
+        "description": "Tropical fruit blend, dragon fruit mix, mango, bananas, pineapples, apples, and spinach. Special blue juice blend smoothies.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Dayton 500 Smoothie",
+        "description": "Tropical fruit blend, dragon fruit mix, mango, bananas, pineapples, apples. Special green juice blend. Our fruity tasty smoothies are blended to perfection.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Nappy Head Truth Smoothie",
+        "description": "Refreshing greens with a hint of mint, apples, bananas, kale, cucumbers, spinach, and mint leaves smoothies. Our fruity tasty smoothies are blended to perfection.",
+        "price": "6.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Aw Shuckie Shuckie Now Smoothie",
+        "description": "Triple berry blend, blueberries, strawberries, raspberries, bananas, non- fat yogurt, carrots, and mango smoothies. Our fruity tasty smoothies are blended to perfection.",
+        "price": "6.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Early Birds Get the Worm Smoothie",
+        "description": "Mango, pineapples, bananas, sweet potato, v s and b special blue blend berry. Our fruity tasty smoothies are blended to perfection.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Jameria Crush Smoothie",
+        "description": "Detox rocks, pineapple, bananas, cranberry, kale, lemon, and berry mango blend smoothies. Our fruity tasty smoothies are blended to perfection.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Tongue Teaser Smoothie",
+        "description": "Tropical fruit blend, dragon fruit, pineapples, bananas, mango, apples, spinach, ginger powder. Special green blend, pineapple and ginger smoothies. Our fruity tasty smoothies are blended to perfection.",
+        "price": "6.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Groovy Louie Smoothie",
+        "description": "Mango, taro, coconut milk, pineapple juice or lime. Our fruity tasty smoothies are blended to perfection.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "J Wit Da Weezy Smoothie",
+        "description": "Kale, pineapples, peaches, blueberries, and cran blackberries. Our fruity tasty smoothies are blended to perfection.",
+        "price": "6.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Dance Wit Ginger Smoothie",
+        "description": "Avocado, blueberries, kale, spinach, and ginger. Special blue and green. Our fruity tasty smoothies are blended to perfection.",
+        "price": "6.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Taste on Da Tongue Smoothie",
+        "description": "Pineapples, orange, peaches, and coconut water. Our fruity tasty smoothies are blended to perfection.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Summer Time Smoothie",
+        "description": "Orange tangerine, tropical sunshine, apricot, craisin, lime, and pineapples. Our fruity tasty smoothies are blended to perfection.",
+        "price": "6.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "K Blend Smoothie",
+        "description": "Mango, pineapple, peaches pear apricot, cranberry, lemons, lemonade, flaxseeds, and strawberry protein. Our fruity tasty smoothies are blended to perfection.",
+        "price": "8.49 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Green Boi",
+        "description": "Banana, strawberry, spinach, yogurt, flax, collagen, ashwagandha, spirulina, and agave. With muscles.",
+        "price": "10.0 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Go Getter",
+        "description": "banana, peanut butter, raw cacao, cinnamon, hemp seeds, walnuts, almond milk, chocolate vegan protein",
+        "price": "10.8 USD"
+    },
+    {
+        "category": "Smoothies",
+        "name": "Cherry Smash",
+        "description": "100% Raspberry Juice, Chocolate, Vanilla Non-Fat Frozen Yogurt, Raspberry Sherbet, Strawberry, Cherry",
+        "price": "7.69 USD"
+    },
+    {
+        "category": "Breakfast (All-Day)",
+        "name": "Waffle Omelets",
+        "description": "Eggs, shredded mozzarella, chopped red peppers, chopped broccoli or spinach, andbreakfast sliced sausage.",
+        "price": "6.0 USD"
+    },
+    {
+        "category": "Breakfast (All-Day)",
+        "name": "Chicken Waffle Sandwich",
+        "description": "Pulled chicken, jalapeno, shredded cabbage, shredded carrot, maple syrup apple cider vinegar, and mayo.",
+        "price": "7.99 USD"
+    },
+    {
+        "category": "Lunch",
+        "name": "Kings Hawaiian",
+        "description": "Kaiser roll, turkey, ham, and monterey Jack cheese (French chili). Take a,oad off and relax sip-n-snack at J'ti'z.",
+        "price": "7.29 USD"
+    },
+    {
+        "category": "Lunch",
+        "name": "Cuban",
+        "description": "Cuban bread, roast pork, ham, swiss, and slice pickle (honey mustard). Take a,oad off and relax sip-n-snack at J'ti'z.",
+        "price": "7.29 USD"
+    },
+    {
+        "category": "Lunch",
+        "name": "Italian",
+        "description": "Tomato basil focaccia, salami, ham, and cheese provolone (feta dressing). Take a,oad off and relax sip-n-snack at J'ti'z.",
+        "price": "7.29 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Club Salad",
+        "description": "Romaine lettuce topped with crispy bacon, Canadian bacon, Roma tomatoes, whole milk mozzarella, and mild cheddar cheese.",
+        "price": "5.99 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Mediterranean  Salad",
+        "description": "Romaine lettuce and fresh spinach topped with black olives, sun dried tomatoes, mixed onions, and crumbled feta cheese.",
+        "price": "5.99 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Cobb Salad",
+        "description": "Grilled chicken, tomato, bacon, crumbled bleu cheese, egg, and seasoned croutons served over lettuce with your choice of dressing.",
+        "price": "12.99 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "House Salad - house dressing",
+        "description": "Salad mix topped with tomato, green peppers, onions, and mushrooms. All served in a large pita bowl.  Add a portion of Chicken shawarma,  steak shawarma, or Gyro for $4.49",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Tabouli Salad",
+        "description": "Parsley, bulgar, tomatoes, and onion, mixed with lemon juice, seasoned and olive oil. Served on lettuce with pita chips. Add a portion of Chicken shawarma,  steak shawarma, or Gyro for $4.49 ",
+        "price": "9.99 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Chicken Fattoush",
+        "description": "Chunks of chicken tomato, peppers, onions, and mushrooms. And romaine lettuce and toasted pita tossed with sumac and olive oil topped with feta crumbs.",
+        "price": "11.49 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "The Greenhouse Salad",
+        "description": "Mixed greens, romaine, watercress, goat cheese, tomatoes, pickled onion, avocado, salad crunch, and GH goddess.",
+        "price": "8.5 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Pretty Good #1",
+        "description": "Romaine, Napa cabbage, watercress, pickled carrots, cucumber, radish, edamame, cashews, and gochujang vin.",
+        "price": "8.5 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "GH Cobb Salad",
+        "description": "Romaine, kale, watercress, broccoli, tomatoes, pickled onion, egg, bacon, blue cheese, and GH goddess.",
+        "price": "8.5 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "The Freek Salad",
+        "description": "Romaine, mixed greens, parsley, tomatoes, cucumber, olives, chickpeas, red onion, pepperoncini, feta, and tahini vin.",
+        "price": "8.0 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Spring Salad",
+        "description": "Mixed Greens, romaine, arugula, sugar snap peas, shaved asparagus, radish, dill, ricotta salata, balsamic vinaigrette. *Recommended with crab cakes!",
+        "price": "8.0 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Buffalo Chicken Salad",
+        "description": "Romaine lettuce, tomatoes, bell peppers, onions, cheddar cheese, and croutons with fried chicken tossed in buffalo sauce.",
+        "price": "14.95 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Chef Salad",
+        "description": "Romaine lettuce, tomatoes, bell peppers, onions, and cheddar cheese topped with ham, turkey, and bacon.",
+        "price": "14.95 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Spinach Salad",
+        "description": "Spinach, mandarin oranges, feta cheese, almonds, mushrooms, onions, tomatoes, and bell peppers served with balsamic dressing.",
+        "price": "12.95 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Grilled Sirloin Tip Garden Salad",
+        "description": "Garden salads are a blend of green leaf and iceberg lettuce with shredded red cabbage, matchstick carrots, cucumbers, cheese, and roma tomatoes.",
+        "price": "13.63 USD"
+    },
+    {
+        "category": "Salad",
+        "name": "Grilled Chicken Garden Salad",
+        "description": "Garden salads are a blend of green leaf and iceberg lettuce with shredded red cabbage, matchstick carrots, cucumbers, cheese, and roma tomatoes.",
+        "price": "13.63 USD"
+    },
+    {
+        "category": "Cold Dishes",
+        "name": "Hamachi Fig",
+        "description": "Hamachi sashimi lightly tossed in a fig sauce with rum raisins, and serrano peppers then topped with fried lotus root.",
+        "price": "16.0 USD"
+    },
+    {
+        "category": "Cold Dishes",
+        "name": "Maguro Ringo",
+        "description": "Maguro tossed in anchovy sauce. served with sliced honey crisp apples, and garnished with goat cheese. ",
+        "price": "16.0 USD"
+    },
+    {
+        "category": "Hot Dishes",
+        "name": "Nikko",
+        "description": "Smoked Salmon, unagi, tamago, asparagus, avocado, cream cheese, tempura fried, topped with eel sauce.",
+        "price": "16.0 USD"
+    },
+    {
+        "category": "Hot Dishes",
+        "name": "Beef Udon Noodle Soup",
+        "description": "Served with green onion, beef slices, spinach, crab stick, seaweed, egg, shitaki mushroom and sesame seed.",
+        "price": "11.95 USD"
+    },
+    {
+        "category": "Hot Dishes",
+        "name": "Shrimp Tempura Udon Noodle Soup",
+        "description": "Served with green onion, spinach, crab stick, seaweed, egg, shitaki mushroom sesame seed and 2 pcs Shrimp Tempura.",
+        "price": "11.95 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Hatsu",
+        "description": "Beef, hot sesame, olive oil, ginger, avocado, cucumber scallions, cilantro, topped with Japanese bbq sauce and sriracha.",
+        "price": "19.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Ginger Albacore ",
+        "description": "Maguro, hamachi, jalapeno, cilantro, topped with avocado and ginger albacore, scallions, ponzu sauce.",
+        "price": "16.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "205 Roll",
+        "description": "Bluefin tuna, green onion, spicy sauce, tempura, topped with bluefin tuna, avocado, sweet soy-reduction, chili paste, sesame seeds",
+        "price": "16.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Bender Roll",
+        "description": "Deep-fried, smoked salmon, crab salad, cream cheese, topped with mango sauce, sweet soy-reduction, green onion",
+        "price": "17.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Buffalo Roll",
+        "description": "Spicy tuna tartare, tempura, topped with avocado, bacon, jalapeno, sweet soy-reduction, sriracha, green onion, tobiko, sesame seeds",
+        "price": "19.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Caipirinha Roll",
+        "description": "Hamachi, green onion, cucumber, spicy mayo, tempura, topped with fresh salmon, jalapeno, lemon slices, tobiko, sweet soy-reduction, sriracha, sesame seeds",
+        "price": "20.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Cash Me Out Roll",
+        "description": "Baked, shrimp, green onion, tempura, spicy sauce, topped with crab stick, sweet soy-reduction, chili paste",
+        "price": "19.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Double Trouble Roll",
+        "description": "Bluefin tuna, cream cheese, spicy sauce, green onion, tempura, topped with avocado, baked seafood, japanese mayo, sweet soy-reduction, sriracha, tobiko, sesame seeds",
+        "price": "20.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "H2 Roll",
+        "description": "Bluefin tuna, hamachi, cucumber, spicy sauce, jalapeno, topped with avocado, spicy salmon, jalapeno, sweet soy-reduction, tobiko",
+        "price": "19.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Jumanji Roll",
+        "description": "Shrimp, green onion, cream cheese, tempura, spicy mayo, topped with bluefin tuna, avocado, crab salad",
+        "price": "19.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Lakeview Roll",
+        "description": "Fried shrimp, cream cheese, spicy sauce, topped with crab stick, spicy mayo, masago, sweet soy-reduction",
+        "price": "18.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Last Call Roll",
+        "description": "Deep-fried, cream cheese, spicy sauce, green onion, avocado, spicy tuna, crab salad, topped with japanese mayo, sweet soy-reduction, sriracha, tobiko, sesame seeds",
+        "price": "19.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Open Tab Roll",
+        "description": "Deep-fried, crab salad, cream cheese, avocado, topped with spicy mayo, green onion, sweet soy-reduction",
+        "price": "16.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Robin Roll",
+        "description": "Hamachi, eel, green onion, spicy sauce, cucumber, topped with fresh salmon, avocado, jalapeno, sriracha, masago, sweet soy-reduction, sesame seeds",
+        "price": "20.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "The Hangover Roll",
+        "description": "Deep-fried, cream cheese, spicy sauce, green onion, avocado, spicy tuna, crab salad, topped with japanese mayo, baked seafood, sweet soy-reduction, sriracha, tobiko, sesame seeds",
+        "price": "24.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "The Welden Roll",
+        "description": "Bluefin tuna, hamachi, green onion, cucumber, topped with salmon, avocado, jalapeno, ikura, tobiko, mango sauce, sriracha, sweet soy-reduction",
+        "price": "21.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "UMAMI Roll",
+        "description": "Hamachi, spicy sauce, apples, green onion, topped with bluefin tuna, avocado, sweet soy-reduction, tobiko, jalapeno, lime zest, sriracha, sesame seeds",
+        "price": "21.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "Volcano Roll",
+        "description": "Baked, smoked salmon, shrimp tempura, topped with crab salad, spicy sauce, sweet soy-reduction, japanese mayo, green onion",
+        "price": "19.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "W.T.F Roll",
+        "description": "Bluefin tuna, crab salad, green onion, cucumber, topped with bluefin tuna, masago, sweet, spicy, sour sauce",
+        "price": "25.0 USD"
+    },
+    {
+        "category": "Sushi",
+        "name": "California Roll",
+        "description": "No sauce. Crabstick, avocado, cucumber and masago. Make it deep-fried with eel sauce for an additional charge.",
+        "price": "5.0 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "The Giant Fish Sandwich and Side",
+        "description": "Two batter dipped fish fillets on a toasty bun with cracklins, tangy tartar sauce, and shredded lettuce",
+        "price": "7.99 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "NEW The Signature Take Chicken Sandwich",
+        "description": "560 Cal. Seasoned and seared chicken breast, parmesan crisps, emerald greens and garlic aioli on a brioche roll. Allergens: Contains Wheat, Milk, Egg. May contain Soy",
+        "price": "12.89 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "NEW The Spicy Take Chicken Sandwich",
+        "description": "570 Cal. Seasoned and seared chicken breast, spicy Buffalo sauce, crispy pickle chips, and garlic aioli on a brioche roll. Allergens: Contains Wheat, Milk, Egg. May contain Soy",
+        "price": "12.89 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Toasted Frontega Chicken",
+        "description": "Whole (830 Cal.), Half (420 Cal.) Smoked, pulled chicken raised without antibiotics, fresh mozzarella, salt and pepper, vine-ripened tomatoes, red onions, fresh basil and chipotle sauce on Black Pepper Focaccia. Allergens: Contains Wheat, Milk, Egg",
+        "price": "8.79 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Bacon Turkey Bravo Sandwich",
+        "description": "Whole (1010 Cal.), Half (500 Cal.) Oven-roasted turkey breast raised without antibiotics, Applewood-smoked bacon, smoked Gouda, emerald greens, vine-ripened tomatoes, signature sauce , salt and pepper on Tomato Basil Bread. Allergens: Contains Wheat, Milk, Egg",
+        "price": "8.79 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Classic Grilled Cheese Sandwich",
+        "description": "Whole (870 Cal.), Half (440 Cal.) Sliced American cheese grilled on thick-sliced Classic White Miche. Allergens: Contains Wheat, Milk",
+        "price": "6.19 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Smokehouse BBQ Chicken Sandwich",
+        "description": "Whole (760 Cal.), Half (380 Cal.) Smoked, pulled chicken raised without antibiotics, BBQ sauce, red onions, aged white cheddar, and frizzled onions on Classic White Miche. Allergens: Contains Wheat, Milk",
+        "price": "7.19 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Napa Almond Chicken Salad Sandwich",
+        "description": "Whole (620 Cal.), Half (310 Cal.) Chicken raised without antibiotics tossed with diced celery, sliced red grapes, toasted almonds and special dressing, served with emerald greens, vine-ripened tomatoes, salt and pepper on Country Rustic Sourdough. Allergens: Contains Wheat, Egg, Tree Nuts",
+        "price": "7.19 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Tuna Salad Sandwich",
+        "description": "Whole (740 Cal.), Half (370 Cal.) Special recipe tuna salad, emerald greens, vine-ripened tomatoes, red onions, salt and pepper on Black Pepper Foccacia. Allergens: Contains Wheat, Egg, Fish",
+        "price": "7.19 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Deli Turkey Sandwich",
+        "description": "Whole (590 Cal.), Half (300 Cal.) Oven-roasted turkey breast raised without antibiotics, emerald greens, vine-ripened tomatoes, red onions, mayo, spicy mustard, salt and pepper on Country Rustic Sourdough. Allergens: Contains Wheat, Egg",
+        "price": "7.19 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Family Feast with Cookies",
+        "description": "A meal to feed the whole family, including 4 half sandwiches, 1 whole salad, 1 group soup, 1 whole French baguette and 4 Chocolate Chipper Cookies. Serves 4-6.",
+        "price": "41.09 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Family Feast",
+        "description": "A meal to feed the whole family, including 4 half sandwiches, 1 whole salad, 1 group soup and 1 whole French baguette. Serves 4-6.",
+        "price": "36.39 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Premium Family Feast with Cookies",
+        "description": "A meal to feed the whole family. Includes 4 Half Sandwiches, 1 Whole Salad, 1 Quart of Soup, 1 Whole French Baguette, and 4 Chocolate Chippers. Serves 4-6.",
+        "price": "45.79 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Premium Family Feast",
+        "description": "A meal to feed the whole family. Includes 4 Half Sandwiches, 1 Whole Salad, 1 Quart of Soup, and 1 Whole French Baguette. Serves 4-6.",
+        "price": "41.09 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Golden Temple Sandwich",
+        "description": "Served with sprouts, swiss, and tomato. Choice of guacamole or hummus. Choice of mushroom or olives. Sandwich made with whole wheat bread. Can be made as a wrap in a whole wheat tortilla. Served with kettle potato chips or corn tortilla chips.",
+        "price": "10.0 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Beyond Burger",
+        "description": "Served with Romaine lettuce, tomato, pickle, vegan mayonnaise, ketchup, and mustard on a toasted bun. Sandwich made with whole wheat bread. Can be made as a wrap in a whole wheat tortilla. Served with kettle potato chips or corn tortilla chips.",
+        "price": "9.0 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Boca Chik'n Sandwich",
+        "description": "Served with Romaine lettuce, tomato, pickle, vegan mayonnaise, ketchup, and mustard on a toasted bun. Sandwich made with whole wheat bread. Can be made as a wrap in a whole wheat tortilla. Served with kettle potato chips or corn tortilla chips.",
+        "price": "9.0 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Guacamole Sandwich",
+        "description": "Served with Romaine lettuce, tomato, Swiss, vegan mayonnaise, and mustard. Sandwich made with whole wheat bread. Can be made as a wrap in a whole wheat tortilla. Served with kettle potato chips or corn tortilla chips.",
+        "price": "9.0 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Hummus Sandwich",
+        "description": "Served with Romaine lettuce, tomato, Swiss, vegan mayonnaise, and mustard. Sandwich made with whole wheat bread. Can be made as a wrap in a whole wheat tortilla. Served with kettle potato chips or corn tortilla chips.",
+        "price": "9.0 USD"
+    },
+    {
+        "category": "Sandwiches",
+        "name": "Tofu Salad Sandwich",
+        "description": "Served with Romaine lettuce, tomato, vegan mayonnaise, and mustard. Sandwich made with whole wheat bread. Can be made as a wrap in a whole wheat tortilla. Served with kettle potato chips or corn tortilla chips.",
+        "price": "9.0 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Caramelized Jamun and Rabdi",
+        "description": "Gulab jamun served with sweet, condensed-milk based dish rabdi, made by boiling milk on low heat for a long time.",
+        "price": "10.35 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Kulfi",
+        "description": "The traditional Indian ice cream, served on a bed of dessert noodles and garnished with nuts and mughlai rose syrup",
+        "price": "8.05 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Unicorn Churros",
+        "description": "Our churros just became magical! They are baked to perfection, and dusted with cotton candy, sour apple, and blue raspberry sugar.",
+        "price": "5.49 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Cotton Candy",
+        "description": "You will receive a \"surprise\" cotton candy flavor of either Pink Vanilla, Blue Raspberry or Green Sour Apple. ",
+        "price": "3.39 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Banana Burrito",
+        "description": "A banana wrapped in a flour tortilla, deep-fried to golden brown, topped with honey and cinnamon. Served with ice cream.",
+        "price": "4.95 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Apple Crisp",
+        "description": "Granny smith apple filling served with vanilla bean ice cream and finished with crunchy oat topping.  ",
+        "price": "9.0 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Fried Cheesecake",
+        "description": "Fried 8 inch flour tortilla filled with cheesecake filling and topped with powdered sugar and strawberry pie filling.",
+        "price": "3.99 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Signature Panookie",
+        "description": "Warm chocolate chip cookie filled with molten chocolate and topped with premium vanilla ice cream and salted caramel.",
+        "price": "5.18 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "New Double Cobblers",
+        "description": "Apple, Peach or Blackberry baked cobblers with a tender flaky crust ~ enough to share. Mix it up ~ Choose one or two flavors.",
+        "price": "6.49 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Strawberry Cheesecake",
+        "description": "One of our Seasonal Favorites! Creamy cheesecake topped with fresh strawberries in a sauce, served with whipped cream.",
+        "price": "7.59 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "French Silk Pie - Slice",
+        "description": "Semi-sweet chocolate blended into a velvety, smooth filling. Topped with whipped cream and chocolate morsels.",
+        "price": "5.39 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Key Lime Pie - Slice",
+        "description": "Tangy, creamy, smooth and the perfect ending to a great meal. This pie comes in a graham cracker crust topped with whipped cream. ",
+        "price": "5.39 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Brownie Lover's Sundae for Two",
+        "description": "Our decadent walnut brownie filled with toffee morsels, drizzled with chocolate and caramel sauces, topped with vanilla ice cream.",
+        "price": "7.59 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Whole French Silk Pie",
+        "description": "Semi-sweet chocolate blended into a velvety, smooth filling. Topped with whipped cream and chocolate morsels.",
+        "price": "16.19 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Whole Key Lime Pie",
+        "description": "Tangy, creamy, smooth and the perfect ending to a great meal. This pie comes in a graham cracker crust topped with whipped cream. ",
+        "price": "16.19 USD"
+    },
+    {
+        "category": "Desserts",
+        "name": "Fresh Baked Cookies",
+        "description": "5 mouth watering fresh baked Chocolate Chip cookies!  We don't make them until you order them!  Melt in your mouth!",
+        "price": "8.29 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "NEW Citrus Asian Crunch Salad with Chicken",
+        "description": "Whole (640 Cal.), Half (320 Cal.) Romaine and a blend of chopped broccoli, green cabbage, carrots, and kale tossed with edamame, pickled red onions, and fresh cilantro in tangerine soy ginger dressing and topped with warm seared chicken thigh meat, crispy carrots, and a teriyaki drizzle. Allergens: Contains Wheat, Soy",
+        "price": "9.89 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Green Goddess Cobb Salad with Chicken",
+        "description": "Whole (500 Cal.), Half (250 Cal.) Chicken raised without antibiotics, arugula, romaine, baby kale and red leaf blend, grape tomatoes and pickled red onions tossed in freshly made Green Goddess dressing and topped with fresh avocado, Applewood-smoked bacon and cage-free hard-boiled egg. Allergens: Contains Milk, Egg",
+        "price": "9.89 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Fuji Apple Salad with Chicken",
+        "description": "Whole (560 Cal.), Half (280 Cal.) Chicken raised without antibiotics, arugula, romaine, baby kale and red leaf blend, grape tomatoes, red onions, toasted pecan pieces, Gorgonzola and apple chips tossed in sweet white balsamic vinaigrette. Allergens: Contains Milk, Tree Nuts",
+        "price": "8.79 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Caesar Salad with Chicken",
+        "description": "Whole (440 Cal.), Half (220 Cal.) Chicken raised without antibiotics, romaine, grated Parmesan and homemade black pepper focaccia croutons tossed with Caesar dressing. Allergens: Contains Wheat, Milk, Egg, Fish",
+        "price": "8.79 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Asian Sesame Salad with Chicken",
+        "description": "Whole (410 Cal.), Half (200 Cal.) Chicken raised without antibiotics, romaine, fresh cilantro, toasted almonds, sesame seeds and wonton strips tossed in Asian sesame vinaigrette. Allergens: Contains Wheat, Tree Nuts. May contain Egg",
+        "price": "8.79 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "BBQ Chicken Salad",
+        "description": "Whole (490 Cal.), Half (250 Cal.) Chicken raised without antibiotics, romaine, black bean and corn salsa and BBQ ranch dressing topped with frizzled onions and apple cider vinegar BBQ sauce. Allergens: Contains Wheat, Milk, Egg",
+        "price": "8.79 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Caesar Salad",
+        "description": "Whole (330 Cal.), Half (170 Cal.) Romaine, grated Parmesan and homemade black pepper focaccia croutons tossed with Caesar dressing. Allergens: Contains Wheat, Milk, Egg, Fish",
+        "price": "6.79 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Golden Temple Salad",
+        "description": "Romaine, spinach, spring mix, sprouts, guacamole, hummus, cheddar, Monterey Jack, feta, tomato, cucumber, bell pepper, onion, mushroom, and black olives.",
+        "price": "11.0 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Veggie Salad",
+        "description": "Romaine, spinach, spring mix, guacamole, tomato, cucumber, bell pepper, onion, mushroom, and Kalamata olives.",
+        "price": "7.0 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Italian Grilled Chicken Salad",
+        "description": "Grilled chicken breast, Genoa salami, romaine, diced tomato, green bell pepper, cucumber and mozzarella",
+        "price": "11.7 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "The Roman Empire Salad",
+        "description": "Watch your back with our delicious Caesar salad. A healthy bed of romaine lettuce topped with our creamy Caesar dressing.",
+        "price": "10.95 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Goomar Salad",
+        "description": "Fridays are for the wives, but on Saturdays, we order verdure salads. Fresh grilled veggies, gorgonzola cheese, and mixed greens.",
+        "price": "10.95 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Upstream Salad",
+        "description": "Salmon drizzled with soy dressing over arugula, farm egg, cherry tomatoes, chickpea salad, seasonal veggies, fresh fruit, Good People spent grain crackers.",
+        "price": "14.95 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Goat in the Orchard",
+        "description": "Belle Chevre Alabama goat cheese, pears, toasted walnuts, mixed greens, red grapes, champ/shallot vinaigrette.",
+        "price": "12.65 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Makarios Salad",
+        "description": "Lettuce, onions, tomatoes, cucumbers, olive, beets, feta cheese, fresh dill mixed with our homemade dressing.",
+        "price": "6.99 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Taco Salad",
+        "description": "Crispy flour tortilla with beef or shredded chicken, refried beans, lettuce, tomatoes, cheese, sour cream, and guacamole.",
+        "price": "10.45 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Chicken Salad",
+        "description": "Marinated chicken tenders, lettuce, tomatoes, onions, mushrooms, shredded cheese, and bell peppers.",
+        "price": "10.99 USD"
+    },
+    {
+        "category": "Salads",
+        "name": "Shrimp Salad",
+        "description": "Grilled shrimp, lettuce, tomatoes, onions, mushrooms, shredded cheese, and bell peppers.",
+        "price": "12.38 USD"
+    },
+    {
+        "category": "Pizza",
+        "name": "Gourmet Vegetarian Pizza",
+        "description": "Roasted eggplant, artichoke heart, mushroom, roasted garlic, black olive, onion, bell pepper, topped with fresh tomato, and basil.",
+        "price": "17.28 USD"
+    },
+    {
+        "category": "Pizza",
+        "name": "Cheese Pizza",
+        "description": "Hot and delicious cheese pizza made with our special tomato sauce and a generous topping of classic Italian mozzarella cheese.  ",
+        "price": "5.99 USD"
+    },
+    {
+        "category": "Pizza",
+        "name": "Double Slice Cheese Pizza",
+        "description": "Two slices of cheese pizza made with vine-ripened tomato sauce, mozzarella cheese, and provolone cheese.",
+        "price": "5.99 USD"
+    },
+    {
+        "category": "Pizza",
+        "name": "Double Slice Pepperoni Pizza",
+        "description": "Two slices of pepperoni pizza made with vine-ripened tomato sauce, mozzarella cheese, and provolone cheese.",
+        "price": "5.99 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Iced 100% Colombian Dark Roast",
+        "description": "Regular (10 Cal.), Large (15 Cal.) Rich and bold full body with dark chocolate notes and a nutty, sweet finish. Brewed from beans harvested from volcanic soils in Colombia. Freshly ground in cafes. Please note, this beverage is self-serve when ordering In-Cafe Pick-Up or Dine-In. Allergens: none",
+        "price": "3.09 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Hazelnut Coffee",
+        "description": "Regular (20 Cal.), Large (25 Cal.), Small (15 Cal.) Smooth and sweet with a buttery toasted hazelnut flavor. 100% Arabica coffee balanced with the flavor of buttery, toasted hazelnuts. Please note, this beverage is self-serve when ordering In-Cafe Pick-Up or Dine-In. Allergens: none",
+        "price": "2.89 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "100% Colombian Dark Roast Coffee",
+        "description": "Regular (15 Cal.), Large (15 Cal.), Small (10 Cal.) Rich and bold full body with dark chocolate notes and a nutty, sweet finish. Brewed from beans harvested from volcanic soils in Colombia. Freshly ground in cafes. Please note, this beverage is self-serve when ordering In-Cafe Pick-Up or Dine-In. Allergens: none",
+        "price": "2.89 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Cafe Blend Light Roast",
+        "description": "Regular (20 Cal.), Large (25 Cal.), Small (15 Cal.) Soft and smooth with hints of citrus, roasted nut and chocolate. A blend of Central and South American beans. Light bodied with a bright sweetness. Freshly ground in cafes. Please note, this beverage is self-serve when ordering In-Cafe Pick-Up or Dine-In. Allergens: none",
+        "price": "2.89 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Decaf Coffee",
+        "description": "Regular (20 Cal.), Large (25 Cal.), Small (15 Cal.) Medium body with sweet caramel and citrus notes. A smooth and balanced blend from Antioquia, Colombia. Fresh tasting with a clean finish. Please note, this beverage is self-serve when ordering In-Cafe Pick-Up or Dine-In. Allergens: none",
+        "price": "2.89 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Hot Tea",
+        "description": "0 Cal. Hot Teas. Please note, this beverage is self-serve when ordering In-Cafe Pick-Up or Dine-In. Allergens: none",
+        "price": "2.99 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Madagascar Vanilla Cream Cold Brew",
+        "description": "Regular (190 Cal.), Large (260 Cal.) Our dark roast cold brew coffee with Madagascar vanilla syrup and half and half, served over ice. Allergens: Contains Milk",
+        "price": "4.29 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Madagascar Vanilla Almond Cold Brew",
+        "description": "Regular (90 Cal.), Large (120 Cal.) Our dark roast cold brew coffee with Madagascar vanilla syrup and almondmilk, served over ice. Allergens: Contains Tree Nuts",
+        "price": "4.29 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Hot Chocolate",
+        "description": "Regular (430 Cal.), Large (550 Cal.) Bittersweet chocolate flavored syrup mixed with foamed milk and topped with whipped cream and drizzled with caramel syrup. Allergens: Contains Milk",
+        "price": "4.29 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Hazelnut Coffee Tote",
+        "description": "140 Cal. Subtle nutty tones with wonderful coffee flavor. Serves 10. Brewed fresh, so please allow additional 15 min./tote to prepare your order. 120 fl oz per tote. Allergens: none",
+        "price": "22.89 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Cafe Blend Light Roast Coffee Tote",
+        "description": "140 Cal. Carefully roasted from Arabica beans and freshly brewed. Brewed fresh, so please allow additional 15 min./tote to prepare your order. Serves 10. 120 fl oz per tote. Allergens: none",
+        "price": "22.89 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "100% Colombian Dark Roast Coffee Tote",
+        "description": "100 Cal. Rich and bold full body with dark chocolate notes and a nutty, sweet finish. Brewed from beans harvested from volcanic soils in Colombia. Brewed fresh, so please allow additional 15 min./tote to prepare your order. Serves 10. 120 fl oz per tote. Allergens: none",
+        "price": "22.89 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Decaf Coffee Tote",
+        "description": "140 Cal. Perfectly balanced with a clean finish. Serves 10. Brewed fresh, so please allow additional 15 min./tote to prepare your order. 120 fl oz per tote. Allergens: none",
+        "price": "22.89 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Asiago Bagel",
+        "description": "320 Cal. Freshly baked bagel made with chunks of asiago cheese baked inside and topped with more asiago. Allergens: Contains Wheat, Milk",
+        "price": "1.79 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "One Dozen Mixed Cookies",
+        "description": "4660 Cal. 12 freshly baked cookies, made with 6 Chocolate Chipper Cookies, 3 Candy Cookies, and 3 Oatmeal Raisin with Berries Cookies. Allergens: Contains Wheat, Soy, Milk, Egg",
+        "price": "22.29 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Madagascar Vanilla Latte",
+        "description": "Regular (260 Cal.), Large (310 Cal.) Freshly brewed espresso with foamed milk and Madagascar vanilla syrup, topped with whipped cream. Allergens: Contains Milk",
+        "price": "5.59 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Chocolate Latte",
+        "description": "Regular (370 Cal.), Large (420 Cal.) Freshly brewed espresso, foamed milk and chocolate topped with whipped cream and a drizzle of chocolate syrup. Allergens: Contains Milk",
+        "price": "5.59 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Cappuccino",
+        "description": "Regular (130 Cal.), Large (160 Cal.) Espresso with steamed milk, topped with a cap of foam. Allergens: Contains Milk",
+        "price": "4.99 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Americano",
+        "description": "10 Cal. Two shots of espresso made with our favorite espresso beans combined with hot water. Served hot. Allergens: none",
+        "price": "3.69 USD"
+    },
+    {
+        "category": "Breakfast",
+        "name": "Frozen Caramel Cold Brew",
+        "description": "480 Cal. Caramel and an icy cold brew coffee blend topped with whipped cream and caramel syrup. Allergens: Contains Milk",
+        "price": "5.69 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Spicy Pimento Cheese",
+        "description": "Grated sharp Cheddar, mayonnaise, diced red peppers, and Tabasco. Served with soft or baked pita chips.",
+        "price": "6.6 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Veggie Samosa",
+        "description": "Triangular pastry with a savory filling of spiced potatoes, peas, and lentils. Served with side of mint or tamarind relish",
+        "price": "8.35 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Crisp Onion Fritters",
+        "description": "A medley of onions dipped in chickpea and rice flour batter and deep-fried till crispy and golden color. ",
+        "price": "8.35 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Cauli Manchurian",
+        "description": "Fried cauliflower florets sauteed with onions, ginger, garlic, bell peppers and tossed in a chef-special Manchurian sauce.",
+        "price": "22.26 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Cottage Cheese Tikka",
+        "description": "Homemade cottage cheese cubes marinated in yogurt and spices cooked in clay oven with bell peppers and onion.",
+        "price": "13.92 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Peasant Garlic Soup",
+        "description": "A Chez Lulu signature dish, this peasant soup is fragrant with garlic but not overwhelmingly. Its stock is all vegetarian, with just a touch of cream for balance.",
+        "price": "5.75 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Appetizer Platter (for 2)",
+        "description": "Assorted appetizers, egg roll, chicken wings, fried won ton, chicken teriyaki, barbeque spare ribs, and shrimp toast.",
+        "price": "10.95 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Appetizer Platter for 2",
+        "description": "Assorted appetizers-egg roll, chicken wings, fried wonton, chicken teriyaki, BBQ spare ribs, and shrimp toast.",
+        "price": "14.25 USD"
+    },
+    {
+        "category": "Appetizers",
+        "name": "Pu Pu Platter",
+        "description": "Two egg rolls, two crab Rangoon, two cheese wontons, two fried shrimp, four shrimp toast, two fried dumplings, and two chicken on a stick. Serves two people.",
+        "price": "14.75 USD"
+    }
+]
