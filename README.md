@@ -22,8 +22,6 @@ urlFragment: cosmic-food-rag-app
 
 ![App Screenshot](https://github.com/Azure-Samples/Cosmic-Food-RAG-app/assets/64026625/95ef09bf-7aeb-4027-8c40-39d9c2615ae3)
 
-
-
 ## How to use?
 
 1. Create the following resources on Microsoft Azure:
