@@ -128,7 +128,7 @@ openai==1.30.5
     # via langchain-openai
 orjson==3.10.3
     # via langsmith
-packaging==24.0
+packaging==23.2
     # via
     #   langchain-core
     #   marshmallow
