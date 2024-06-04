@@ -6,6 +6,7 @@ from quart import Response
 
 @pytest.mark.asyncio
 async def test_index(client):
+    """test the index route"""
     response: Response = await client.get("/")
 
     html_index_file_path = "src/quartapp/static/index.html"
@@ -20,6 +21,7 @@ async def test_index(client):
 
 @pytest.mark.asyncio
 async def test_hello(client):
+    """test the hello route"""
     response: Response = await client.get("/hello")
 
     assert response.status_code == 200
@@ -30,6 +32,7 @@ async def test_hello(client):
 
 @pytest.mark.asyncio
 async def test_favicon(client):
+    """test the favicon route"""
     response: Response = await client.get("/favicon.ico")
 
     favicon_file_path = "src/quartapp/static/favicon.ico"
@@ -44,6 +47,7 @@ async def test_favicon(client):
 
 @pytest.mark.asyncio
 async def test_assets_non_existent_404(client):
+    """test the assets route with a non-existent file"""
     response: Response = await client.get("/assets/manifest.json")
 
     assert response.status_code == 404
@@ -54,6 +58,7 @@ async def test_assets_non_existent_404(client):
 
 @pytest.mark.asyncio
 async def test_assets(client):
+    """test the assets route with an existing file"""
     assets_dir_path = "src/quartapp/static/assets"
     assets_file_path = os.listdir(assets_dir_path)[0]
 
@@ -69,6 +74,7 @@ async def test_assets(client):
 
 @pytest.mark.asyncio
 async def test_chat_non_json_415(client):
+    """test the chat route with a non-json request"""
     response: Response = await client.post("/chat")
 
     assert response.status_code == 415
@@ -79,6 +85,7 @@ async def test_chat_non_json_415(client):
 
 @pytest.mark.asyncio
 async def test_chat_no_message_400(client):
+    """test the chat route with an empty request body"""
     response: Response = await client.post("/chat", json={})
 
     assert response.status_code == 400
@@ -89,6 +96,7 @@ async def test_chat_no_message_400(client):
 
 @pytest.mark.asyncio
 async def test_chat_not_implemented_501(client):
+    """test the chat route with a retrieval_mode not implemented"""
     response: Response = await client.post(
         "/chat", json={"context": {"overrides": {"retrieval_mode": "not_implemented"}}}
     )

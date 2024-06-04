@@ -14,6 +14,7 @@ from quartapp.config import AppConfig
 
 @pytest_asyncio.fixture
 async def app():
+    """Create a test app with the test config."""
     app_config = AppConfig()
     app = create_app(app_config=app_config)
     app.config.update(
@@ -27,13 +28,14 @@ async def app():
 
 @pytest.fixture
 def client(app):
+    """Create a test client for the test app."""
     return app.test_client()
 
 
 @pytest.fixture
 @patch.object(ApproachesBase, "__abstractmethods__", set())
 def approaches_base_mock():
-    # Mock quartapp.approaches.base.ApproachesBase
+    """Mock quartapp.approaches.base.ApproachesBase."""
     mock_embedding = MagicMock()
 
     # Mock Vector Store
@@ -64,18 +66,19 @@ def approaches_base_mock():
 
 @pytest.fixture
 def vector_mock(approaches_base_mock):
-    # Mock quartapp.approaches.vector.Vector
+    """Mock quartapp.approaches.vector.Vector."""
     return Vector(approaches_base_mock._vector_store, approaches_base_mock._embedding, approaches_base_mock._chat)
 
 
 @pytest.fixture
 def rag_mock(approaches_base_mock):
-    # Mock quartapp.approaches.rag.RAG
+    """Mock quartapp.approaches.rag.RAG."""
     return RAG(approaches_base_mock._vector_store, approaches_base_mock._embedding, approaches_base_mock._chat)
 
 
 @pytest.fixture(autouse=True)
 def create_stuff_documents_chain_mock(monkeypatch):
+    """Mock quartapp.approaches.rag.create_stuff_documents_chain."""
     document_chain_mock = MagicMock()
     document_chain_mock.ainvoke = AsyncMock(return_value="content")
     _mock = MagicMock()
