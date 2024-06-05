@@ -105,3 +105,135 @@ async def test_chat_not_implemented_501(client):
     assert response.content_type == "application/json"
     assert response.headers["Content-Length"] == "29"
     assert b'{"error":"Not Implemented!"}' in await response.data
+
+
+@pytest.mark.asyncio
+async def test_chat_rag_option(client_mock):
+    """test the chat route with RAG retrieval_mode option"""
+    response: Response = await client_mock.post(
+        "/chat",
+        json={
+            "session_state": "test",
+            "messages": [{"content": "test"}],
+            "context": {"overrides": {"retrieval_mode": "rag"}},
+        },
+    )
+    data = await response.get_json()
+
+    assert response.status_code == 200
+    assert response.content_type == "application/json"
+    assert response.headers["Content-Length"] == "291"
+    assert data == {
+        "choices": [
+            {
+                "context": {
+                    "data_points": {
+                        "json": [
+                            {
+                                "category": "test",
+                                "collection": "collection_name",
+                                "description": "test",
+                                "name": "test",
+                                "price": "5.0USD",
+                            }
+                        ]
+                    },
+                    "thoughts": [{"description": None, "title": "Source"}],
+                },
+                "index": 0,
+                "message": {"content": "content", "role": "assistant"},
+                "session_state": "test",
+            }
+        ]
+    }
+
+
+@pytest.mark.asyncio
+async def test_chat_vector_option(client_mock):
+    """test the chat route with vector retrieval_mode option"""
+    response: Response = await client_mock.post(
+        "/chat",
+        json={
+            "session_state": "test",
+            "messages": [{"content": "test"}],
+            "context": {"overrides": {"retrieval_mode": "vector"}},
+        },
+    )
+    data = await response.get_json()
+
+    assert response.status_code == 200
+    assert response.content_type == "application/json"
+    assert response.headers["Content-Length"] == "445"
+    assert data == {
+        "choices": [
+            {
+                "context": {
+                    "data_points": {
+                        "json": [
+                            {
+                                "category": "test",
+                                "collection": "collection_name",
+                                "description": "test",
+                                "name": "test",
+                                "price": "5.0USD",
+                            }
+                        ]
+                    },
+                    "thoughts": [{"description": None, "title": "Source"}],
+                },
+                "index": 0,
+                "message": {
+                    "content": "\n"
+                    "            Name: test\n"
+                    "            Description: test\n"
+                    "            Price: 5.0USD\n"
+                    "            Category: test\n"
+                    "            Collection: collection_name\n"
+                    "        ",
+                    "role": "assistant",
+                },
+                "session_state": "test",
+            }
+        ]
+    }
+
+
+@pytest.mark.asyncio
+async def test_chat_keyword_option(client_mock):
+    """test the chat route with keyword retrieval_mode option"""
+    response: Response = await client_mock.post(
+        "/chat",
+        json={
+            "session_state": "test",
+            "messages": [{"content": "test"}],
+            "context": {"overrides": {"retrieval_mode": "keyword"}},
+        },
+    )
+    data = await response.get_json()
+
+    assert response.status_code == 200
+    assert response.content_type == "application/json"
+    assert response.headers["Content-Length"] == "273"
+    assert data == {
+        "choices": [
+            {
+                "context": {
+                    "data_points": {
+                        "json": [
+                            {
+                                "category": None,
+                                "collection": None,
+                                "description": None,
+                                "name": None,
+                                "price": None,
+                            }
+                        ]
+                    },
+                    "thoughts": [{"description": None, "title": None}],
+                },
+                "index": 0,
+                "message": {"content": "No results found", "role": "assistant"},
+                "session_state": "test",
+            }
+        ]
+    }
