@@ -3,6 +3,12 @@ import os
 from uuid import uuid4
 
 from pydantic.v1 import SecretStr
+from pymongo.errors import (
+    ConfigurationError,
+    InvalidName,
+    InvalidOperation,
+    OperationFailure,
+)
 
 from quartapp.approaches.schemas import Context, DataPoint, JSONDataPoint, Message, RetrievalResponse, Thought
 from quartapp.approaches.setup import Setup
@@ -35,15 +41,34 @@ class AppConfig:
             azure_endpoint=azure_endpoint,
         )
 
-    def add_to_cosmos(self, old_messages: list, new_message: dict, session_state: str | None, id: str) -> None:
+    def add_to_cosmos(
+        self, old_messages: list, new_message: dict, session_state: str | None, new_session_state: str
+    ) -> bool:
         is_first_message: bool = True if not session_state else False
         if is_first_message:
-            old_messages.append(new_message)
-            self.setup._database_setup._users_collection.insert_one({"_id": id, "messages": old_messages})
-            return
-        self.setup._database_setup._users_collection.update_one({"_id": id}, {"$push": {"messages": old_messages[-1]}})
-        self.setup._database_setup._users_collection.update_one({"_id": id}, {"$push": {"messages": new_message}})
-        return
+            try:
+                if len(old_messages) == 0 or len(new_message) == 0 or len(new_session_state) == 0:
+                    raise IndexError
+                old_messages.append(new_message)
+                self.setup._database_setup._users_collection.insert_one(
+                    {"_id": new_session_state, "messages": old_messages}
+                )
+                return True
+            except (AttributeError, ConfigurationError, InvalidName, InvalidOperation, OperationFailure, IndexError):
+                return False
+        else:
+            try:
+                if len(old_messages) == 0 or len(new_message) == 0 or len(new_session_state) == 0:
+                    raise IndexError
+                self.setup._database_setup._users_collection.update_one(
+                    {"_id": new_session_state}, {"$push": {"messages": old_messages[-1]}}
+                )
+                self.setup._database_setup._users_collection.update_one(
+                    {"_id": new_session_state}, {"$push": {"messages": new_message}}
+                )
+                return True
+            except (AttributeError, ConfigurationError, InvalidName, InvalidOperation, OperationFailure, IndexError):
+                return False
 
     async def run_vector(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
@@ -95,7 +120,7 @@ class AppConfig:
             old_messages=messages,
             new_message=message.to_dict(),
             session_state=session_state,
-            id=new_session_state,
+            new_session_state=new_session_state,
         )
 
         return [RetrievalResponse(context, index, message, new_session_state)]
@@ -108,14 +133,24 @@ class AppConfig:
         new_session_state: str = session_state if session_state else str(uuid4())
 
         if rag_response is None or len(rag_response) == 0:
-            return [
-                RetrievalResponse(
-                    session_state=new_session_state,
-                    context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-                    index=0,
-                    message=Message(content=answer, role="assistant"),
-                )
-            ]
+            if answer:
+                return [
+                    RetrievalResponse(
+                        session_state=new_session_state,
+                        context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                        index=0,
+                        message=Message(content=answer, role="assistant"),
+                    )
+                ]
+            else:
+                return [
+                    RetrievalResponse(
+                        session_state=new_session_state,
+                        context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                        index=0,
+                        message=Message(content="No results found", role="assistant"),
+                    )
+                ]
 
         data_points: DataPoint = DataPoint(json=[])
         thoughts: list[Thought] = []
@@ -141,7 +176,7 @@ class AppConfig:
             old_messages=messages,
             new_message=message.to_dict(),
             session_state=session_state,
-            id=new_session_state,
+            new_session_state=new_session_state,
         )
 
         return [RetrievalResponse(context, index, message, new_session_state)]

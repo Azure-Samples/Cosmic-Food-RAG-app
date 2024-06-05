@@ -28,7 +28,7 @@ logging.basicConfig(
 )
 
 
-def read_data(file_path) -> list[Document]:
+def read_data(file_path: str) -> list[Document]:
     # Load JSON file
     with open(file_path) as file:
         json_data = json.load(file)

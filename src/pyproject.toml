@@ -23,6 +23,7 @@ dev = [
     "ruff",
     "black",
     "mypy",
+    "mongomock",
 ]
 
 [build-system]
