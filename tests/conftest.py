@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 import pytest_asyncio
 from langchain_core.documents import Document
-from mongomock import MongoClient
+import mongomock
 from pydantic.v1 import SecretStr
 
 import quartapp
@@ -87,7 +87,7 @@ def rag_mock(approaches_base_mock):
 def database_mock(approaches_base_mock):
     """Mock quartapp.approaches.setup.DatabaseSetup."""
 
-    mock_collection = MongoClient().db.collection
+    mock_collection: mongomock.Collection = mongomock.MongoClient().db.collection
 
     database_setup = DatabaseSetup(
         connection_string="connection_string",
