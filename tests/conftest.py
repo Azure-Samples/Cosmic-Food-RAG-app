@@ -1,9 +1,9 @@
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import mongomock
 import pytest
 import pytest_asyncio
 from langchain_core.documents import Document
-import mongomock
 from pydantic.v1 import SecretStr
 
 import quartapp
