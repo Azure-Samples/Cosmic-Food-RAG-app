@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from "react";
-import { Panel, DefaultButton, SpinButton, Slider } from "@fluentui/react";
+import { Checkbox, Panel, DefaultButton, TextField, ITextFieldProps, ICheckboxProps } from "@fluentui/react";
 import cosmos from "../../assets/FeaturedDefault.png";
+import { useId } from "@fluentui/react-hooks";
+import readNDJSONStream from "ndjson-readablestream";
 
 import styles from "./Chat.module.css";
 
@@ -9,12 +11,14 @@ import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
 import { UserChatMessage } from "../../components/UserChatMessage";
+import { HelpCallout } from "../../components/HelpCallout";
 import { AnalysisPanel, AnalysisPanelTabs } from "../../components/AnalysisPanel";
 import { SettingsButton } from "../../components/SettingsButton";
 import { CartButton } from "../../components/CartButton";
 import { ClearChatButton } from "../../components/ClearChatButton";
 import { VectorSettings } from "../../components/VectorSettings";
 import { BuyModal } from "../../components/BuyModal";
+import { toolTipText } from "../../i18n/tooltips.js";
 
 const Chat = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
@@ -25,8 +29,11 @@ const Chat = () => {
     const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>(RetrievalMode.Hybrid);
 
     const lastQuestionRef = useRef<string>("");
+    const chatMessageStreamEnd = useRef<HTMLDivElement | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isStreaming, setIsStreaming] = useState<boolean>(false);
+    const [shouldStream, setShouldStream] = useState<boolean>(false);
     const [isBuy, setIsBuy] = useState<boolean>(false);
     const [address, setAddress] = useState<string>("");
     const [cartItems, setCartItems] = useState<string[]>([]);
@@ -39,6 +46,8 @@ const Chat = () => {
     const [answers, setAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
     const [sessionState, setSessionState] = useState<string | null>(null);
 
+    const [streamedAnswers, setStreamedAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
+
     const checkthenMakeApiRequest = async (question: string) => {
         lastQuestionRef.current = question;
         if (question.match(/buy/)) {
@@ -46,6 +55,49 @@ const Chat = () => {
             return;
         }
         makeApiRequest(question);
+    };
+
+    const handleAsyncRequest = async (question: string, answers: [string, ChatAppResponse][], responseBody: ReadableStream<any>) => {
+        let answer: string = "";
+        let askResponse: ChatAppResponse = {} as ChatAppResponse;
+
+        const updateState = (newContent: string) => {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    answer += newContent;
+                    const latestResponse: ChatAppResponse = {
+                        ...askResponse,
+                        message: { content: answer, role: askResponse.message.role }
+                    };
+                    setStreamedAnswers([...answers, [question, latestResponse]]);
+                    resolve(null);
+                }, 33);
+            });
+        };
+        try {
+            setIsStreaming(true);
+            for await (const event of readNDJSONStream(responseBody)) {
+                if (event["context"] && event["context"]["data_points"]) {
+                    event["message"] = event["delta"];
+                    askResponse = event as ChatAppResponse;
+                } else if (event["delta"]["content"]) {
+                    setIsLoading(false);
+                    await updateState(event["delta"]["content"]);
+                } else if (event["context"]) {
+                    // Update context with new keys from latest event
+                    askResponse.context = { ...askResponse.context, ...event["context"] };
+                } else if (event["error"]) {
+                    throw Error(event["error"]);
+                }
+            }
+        } finally {
+            setIsStreaming(false);
+        }
+        const fullResponse: ChatAppResponse = {
+            ...askResponse,
+            message: { content: answer, role: askResponse.message.role }
+        };
+        return fullResponse;
     };
 
     const makeApiRequest = async (question: string) => {
@@ -58,7 +110,7 @@ const Chat = () => {
         try {
             const messages: ResponseMessage[] = answers.flatMap(a => [
                 { content: a[0], role: "user" },
-                { content: a[1].choices[0].message.content, role: "assistant" }
+                { content: a[1].message.content, role: "assistant" }
             ]);
 
             const request: ChatAppRequest = {
@@ -83,8 +135,8 @@ const Chat = () => {
                 throw Error(parsedResponse.error || "Unknown error");
             }
             setAnswers([...answers, [question, parsedResponse as ChatAppResponse]]);
-            setSessionState(parsedResponse?.choices ? parsedResponse.choices[0].session_state : null);
-            setLatestItems(parsedResponse?.choices ? parsedResponse.choices[0].context.data_points.json : []);
+            setSessionState(parsedResponse?.session_state ? parsedResponse.session_state : null);
+            setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points.json : []);
         } catch (e) {
             setError(e);
         } finally {
@@ -97,27 +149,28 @@ const Chat = () => {
         error && setError(undefined);
         setActiveAnalysisPanelTab(undefined);
         setAnswers([]);
+        setStreamedAnswers([]);
         setIsLoading(false);
+        setIsStreaming(false);
     };
 
-    const onTemperatureChange = (
-        newValue: number,
-        range?: [number, number],
-        event?: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent | React.KeyboardEvent
-    ) => {
-        setTemperature(newValue);
+    useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
+    useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "auto" }), [streamedAnswers]);
+
+    const onTemperatureChange = (_ev?: React.SyntheticEvent<HTMLElement, Event>, newValue?: string) => {
+        setTemperature(parseFloat(newValue || "0"));
     };
 
-    const onScoreThresholdChange = (
-        newValue: number,
-        range?: [number, number],
-        event?: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent | React.KeyboardEvent
-    ) => {
-        setScoreThreshold(newValue);
+    const onScoreThresholdChange = (_ev?: React.SyntheticEvent<HTMLElement, Event>, newValue?: string) => {
+        setScoreThreshold(parseFloat(newValue || "0"));
     };
 
     const onRetrieveCountChange = (_ev?: React.SyntheticEvent<HTMLElement, Event>, newValue?: string) => {
         setRetrieveCount(parseInt(newValue || "3"));
+    };
+
+    const onShouldStreamChange = (_ev?: React.FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean) => {
+        setShouldStream(!!checked);
     };
 
     const onExampleClicked = (example: string) => {
@@ -133,6 +186,16 @@ const Chat = () => {
 
         setSelectedAnswer(index);
     };
+
+    // IDs for form labels and their associated callouts
+    const temperatureId = useId("temperature");
+    const temperatureFieldId = useId("temperatureField");
+    const searchScoreId = useId("searchScore");
+    const searchScoreFieldId = useId("searchScoreField");
+    const retrieveCountId = useId("retrieveCount");
+    const retrieveCountFieldId = useId("retrieveCountField");
+    const shouldStreamId = useId("shouldStream");
+    const shouldStreamFieldId = useId("shouldStreamField");
 
     return (
         <div className={styles.container}>
@@ -152,20 +215,38 @@ const Chat = () => {
                         </div>
                     ) : (
                         <div className={styles.chatMessageStream}>
-                            {answers.map((answer, index) => (
-                                <div key={index}>
-                                    <UserChatMessage message={answer[0]} />
-                                    <div className={styles.chatMessageGpt}>
-                                        <Answer
-                                            key={index}
-                                            answer={answer[1]}
-                                            isSelected={selectedAnswer === index && activeAnalysisPanelTab !== undefined}
-                                            onThoughtProcessClicked={() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
-                                            onSupportingContentClicked={() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
-                                        />
+                            {isStreaming &&
+                                streamedAnswers.map((streamedAnswer, index) => (
+                                    <div key={index}>
+                                        <UserChatMessage message={streamedAnswer[0]} />
+                                        <div className={styles.chatMessageGpt}>
+                                            <Answer
+                                                isStreaming={true}
+                                                key={index}
+                                                answer={streamedAnswer[1]}
+                                                isSelected={false}
+                                                onThoughtProcessClicked={() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
+                                                onSupportingContentClicked={() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            {!isStreaming &&
+                                answers.map((answer, index) => (
+                                    <div key={index}>
+                                        <UserChatMessage message={answer[0]} />
+                                        <div className={styles.chatMessageGpt}>
+                                            <Answer
+                                                isStreaming={false}
+                                                key={index}
+                                                answer={answer[1]}
+                                                isSelected={selectedAnswer === index && activeAnalysisPanelTab !== undefined}
+                                                onThoughtProcessClicked={() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
+                                                onSupportingContentClicked={() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
                             {isLoading && (
                                 <>
                                     <UserChatMessage message={lastQuestionRef.current} />
@@ -195,6 +276,7 @@ const Chat = () => {
                                     </div>
                                 </>
                             ) : null}
+                            <div ref={chatMessageStreamEnd} />
                         </div>
                     )}
 
@@ -241,42 +323,68 @@ const Chat = () => {
                     onRenderFooterContent={() => <DefaultButton onClick={() => setIsConfigPanelOpen(false)}>Close</DefaultButton>}
                     isFooterAtBottom={true}
                 >
-                    <Slider
+                    <TextField
+                        id={temperatureFieldId}
                         className={styles.chatSettingsSeparator}
                         label="Temperature"
+                        type="number"
                         min={0}
                         max={1}
                         step={0.1}
-                        defaultValue={temperature}
+                        defaultValue={temperature.toString()}
                         onChange={onTemperatureChange}
-                        showValue
-                        snapToStep
+                        aria-labelledby={temperatureId}
+                        onRenderLabel={(props: ITextFieldProps | undefined) => (
+                            <HelpCallout labelId={temperatureId} fieldId={temperatureFieldId} helpText={toolTipText.temperature} label={props?.label} />
+                        )}
                     />
 
-                    <Slider
+                    <TextField
+                        id={searchScoreFieldId}
                         className={styles.chatSettingsSeparator}
                         label="Similarity Score Threshold"
+                        type="number"
                         min={0}
                         max={1}
                         step={0.1}
-                        defaultValue={scoreThreshold}
+                        defaultValue={scoreThreshold.toString()}
                         onChange={onScoreThresholdChange}
-                        showValue
-                        snapToStep
+                        aria-labelledby={searchScoreId}
+                        onRenderLabel={(props: ITextFieldProps | undefined) => (
+                            <HelpCallout labelId={searchScoreId} fieldId={searchScoreFieldId} helpText={toolTipText.searchScore} label={props?.label} />
+                        )}
                     />
 
-                    <SpinButton
+                    <TextField
+                        id={retrieveCountFieldId}
                         className={styles.chatSettingsSeparator}
                         label="Retrieve this many search results:"
+                        type="number"
                         min={1}
                         max={20}
                         defaultValue={retrieveCount.toString()}
                         onChange={onRetrieveCountChange}
+                        aria-labelledby={retrieveCountId}
+                        onRenderLabel={(props: ITextFieldProps | undefined) => (
+                            <HelpCallout labelId={retrieveCountId} fieldId={retrieveCountFieldId} helpText={toolTipText.retrieveNumber} label={props?.label} />
+                        )}
                     />
 
                     <VectorSettings
                         defaultRetrievalMode={retrievalMode}
                         updateRetrievalMode={(retrievalMode: RetrievalMode) => setRetrievalMode(retrievalMode)}
+                    />
+
+                    <Checkbox
+                        id={shouldStreamFieldId}
+                        className={styles.chatSettingsSeparator}
+                        checked={shouldStream}
+                        label="Stream chat completion responses"
+                        onChange={onShouldStreamChange}
+                        aria-labelledby={shouldStreamId}
+                        onRenderLabel={(props: ICheckboxProps | undefined) => (
+                            <HelpCallout labelId={shouldStreamId} fieldId={shouldStreamFieldId} helpText={toolTipText.streamChat} label={props?.label} />
+                        )}
                     />
                 </Panel>
             </div>

@@ -1,5 +1,7 @@
 import { Outlet, NavLink, Link } from "react-router-dom";
+
 import github from "../../assets/github.svg";
+
 import styles from "./Layout.module.css";
 
 const Layout = () => {
@@ -8,7 +10,7 @@ const Layout = () => {
             <header className={styles.header} role={"banner"}>
                 <div className={styles.headerContainer}>
                     <Link to="/" className={styles.headerTitleContainer}>
-                        <h3 className={styles.headerTitle}>Cosmic Food RAG App</h3>
+                        <h3 className={styles.headerTitle}>Cosmic Food RAG App | Sample</h3>
                     </Link>
                     <nav>
                         <ul className={styles.headerNavList}>
@@ -17,7 +19,6 @@ const Layout = () => {
                                     Chat
                                 </NavLink>
                             </li>
-
                             <li className={styles.headerNavLeftMargin}>
                                 <a href="https://github.com/Azure-Samples/Cosmic-Food-RAG-app" target={"_blank"} title="Github repository link">
                                     <img

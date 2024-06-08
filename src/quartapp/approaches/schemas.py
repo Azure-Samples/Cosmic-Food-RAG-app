@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -32,13 +33,13 @@ class Message:
     content: str | None = None
     role: str | None = None
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, str | None]:
         return {"content": self.content, "role": self.role}
 
 
 @dataclass
 class RetrievalResponse:
     context: Context
-    index: int
+    delta: dict[str, Any]
     message: Message
     session_state: str

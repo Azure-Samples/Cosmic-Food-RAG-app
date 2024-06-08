@@ -56,34 +56,34 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
         score_threshold: float = override.get("score_threshold", 0.5)
 
         if retrieval_mode == "vector":
-            vector_answer: list[RetrievalResponse] = await app_config.run_vector(
+            vector_answer: RetrievalResponse = await app_config.run_vector(
                 session_state=session_state,
                 messages=messages,
                 temperature=temperature,
                 limit=top,
                 score_threshold=score_threshold,
             )
-            return jsonify({"choices": vector_answer})
+            return jsonify(vector_answer)
 
         elif retrieval_mode == "rag":
-            rag_answer: list[RetrievalResponse] = await app_config.run_rag(
+            rag_answer: RetrievalResponse = await app_config.run_rag(
                 session_state=session_state,
                 messages=messages,
                 temperature=temperature,
                 limit=top,
                 score_threshold=score_threshold,
             )
-            return jsonify({"choices": rag_answer})
+            return jsonify(rag_answer)
 
         elif retrieval_mode == "keyword":
-            keyword_answer: list[RetrievalResponse] = await app_config.run_keyword(
+            keyword_answer: RetrievalResponse = await app_config.run_keyword(
                 session_state=session_state,
                 messages=messages,
                 temperature=temperature,
                 limit=top,
                 score_threshold=score_threshold,
             )
-            return jsonify({"choices": keyword_answer})
+            return jsonify(keyword_answer)
 
         else:
             return jsonify({"error": "Not Implemented!"}), 501

@@ -12,13 +12,14 @@ import { SpeechOutput } from "./SpeechOutput";
 interface Props {
     answer: ChatAppResponse;
     isSelected?: boolean;
+    isStreaming: boolean;
     onThoughtProcessClicked: () => void;
     onSupportingContentClicked: () => void;
 }
 
-export const Answer = ({ answer, isSelected, onThoughtProcessClicked, onSupportingContentClicked }: Props) => {
-    const messageContent = answer.choices[0].message.content;
-    const parsedAnswer = useMemo(() => parseAnswerToHtml(messageContent), [answer]);
+export const Answer = ({ answer, isSelected, isStreaming, onThoughtProcessClicked, onSupportingContentClicked }: Props) => {
+    const messageContent = answer.message.content;
+    const parsedAnswer = useMemo(() => parseAnswerToHtml(messageContent, isStreaming), [answer]);
 
     const sanitizedAnswerHtml = DOMPurify.sanitize(parsedAnswer.answerHtml);
 
@@ -34,7 +35,7 @@ export const Answer = ({ answer, isSelected, onThoughtProcessClicked, onSupporti
                             title="Show thought process"
                             ariaLabel="Show thought process"
                             onClick={() => onThoughtProcessClicked()}
-                            disabled={!answer.choices[0].context.thoughts?.length}
+                            disabled={!answer.context.thoughts?.length}
                         />
                         <IconButton
                             style={{ color: "black" }}
@@ -42,7 +43,7 @@ export const Answer = ({ answer, isSelected, onThoughtProcessClicked, onSupporti
                             title="Show supporting content"
                             ariaLabel="Show supporting content"
                             onClick={() => onSupportingContentClicked()}
-                            disabled={!answer.choices[0].context.data_points}
+                            disabled={!answer.context.data_points}
                         />
                         <SpeechOutput answer={sanitizedAnswerHtml} />
                     </div>
