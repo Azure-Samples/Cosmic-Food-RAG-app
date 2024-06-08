@@ -6,7 +6,7 @@ import readNDJSONStream from "ndjson-readablestream";
 
 import styles from "./Chat.module.css";
 
-import { chatApi, RetrievalMode, ChatAppResponse, ChatAppResponseOrError, ChatAppRequest, ResponseMessage, JSONDataPoint } from "../../api";
+import { chatApi, chatStreamApi, RetrievalMode, ChatAppResponse, ChatAppRequest, ResponseMessage, JSONDataPoint } from "../../api";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
@@ -48,16 +48,34 @@ const Chat = () => {
 
     const [streamedAnswers, setStreamedAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
 
-    const checkthenMakeApiRequest = async (question: string) => {
+    const prepareRequest = (question: string) => {
         lastQuestionRef.current = question;
-        if (question.match(/buy/)) {
-            setIsBuy(true);
-            return;
-        }
-        makeApiRequest(question);
+
+        error && setError(undefined);
+        setIsLoading(true);
+        setActiveAnalysisPanelTab(undefined);
+
+        const messages: ResponseMessage[] = answers.flatMap(a => [
+            { content: a[0], role: "user" },
+            { content: a[1].message.content, role: "assistant" }
+        ]);
+
+        const request: ChatAppRequest = {
+            messages: [...messages, { content: question, role: "user" }],
+            context: {
+                overrides: {
+                    top: retrieveCount,
+                    temperature: temperature,
+                    score_threshold: scoreThreshold,
+                    retrieval_mode: retrievalMode
+                }
+            },
+            session_state: sessionState ? sessionState : null
+        };
+        return request;
     };
 
-    const handleAsyncRequest = async (question: string, answers: [string, ChatAppResponse][], responseBody: ReadableStream<any>) => {
+    const handleAsyncResponse = async (question: string, answers: [string, ChatAppResponse][], responseBody: ReadableStream<any>) => {
         let answer: string = "";
         let askResponse: ChatAppResponse = {} as ChatAppResponse;
 
@@ -100,47 +118,51 @@ const Chat = () => {
         return fullResponse;
     };
 
-    const makeApiRequest = async (question: string) => {
-        lastQuestionRef.current = question;
-
-        error && setError(undefined);
-        setIsLoading(true);
-        setActiveAnalysisPanelTab(undefined);
-
+    const makeChatApiRequest = async (question: string) => {
         try {
-            const messages: ResponseMessage[] = answers.flatMap(a => [
-                { content: a[0], role: "user" },
-                { content: a[1].message.content, role: "assistant" }
-            ]);
+            const request = prepareRequest(question);
 
-            const request: ChatAppRequest = {
-                messages: [...messages, { content: question, role: "user" }],
-                context: {
-                    overrides: {
-                        top: retrieveCount,
-                        temperature: temperature,
-                        score_threshold: scoreThreshold,
-                        retrieval_mode: retrievalMode
-                    }
-                },
-                session_state: sessionState ? sessionState : null
-            };
-
-            const response = await chatApi(request);
-            if (!response.body) {
-                throw Error("No response body");
-            }
-            const parsedResponse: ChatAppResponseOrError = await response.json();
-            if (response.status > 299 || !response.ok) {
-                throw Error(parsedResponse.error || "Unknown error");
-            }
-            setAnswers([...answers, [question, parsedResponse as ChatAppResponse]]);
+            const parsedResponse: ChatAppResponse = await chatApi(request);
+            setAnswers([...answers, [question, parsedResponse]]);
             setSessionState(parsedResponse?.session_state ? parsedResponse.session_state : null);
             setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points.json : []);
         } catch (e) {
             setError(e);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const makeChatStreamApiRequest = async (question: string) => {
+        try {
+            const request = prepareRequest(question);
+            const response = await chatStreamApi(request);
+
+            if (!response.body) {
+                throw Error("No response body");
+            }
+            const parsedResponse: ChatAppResponse = await handleAsyncResponse(question, answers, response.body);
+            setAnswers([...answers, [question, parsedResponse]]);
+            setSessionState(parsedResponse?.session_state ? parsedResponse.session_state : null);
+            setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points.json : []);
+        } catch (e) {
+            setError(e);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const checkthenMakeApiRequest = async (question: string) => {
+        lastQuestionRef.current = question;
+        if (question.match(/buy/)) {
+            setIsBuy(true);
+            return;
+        }
+
+        if (shouldStream) {
+            makeChatStreamApiRequest(question);
+        } else {
+            makeChatApiRequest(question);
         }
     };
 
@@ -174,7 +196,7 @@ const Chat = () => {
     };
 
     const onExampleClicked = (example: string) => {
-        makeApiRequest(example);
+        makeChatApiRequest(example);
     };
 
     const onToggleTab = (tab: AnalysisPanelTabs, index: number) => {
@@ -272,7 +294,7 @@ const Chat = () => {
                                 <>
                                     <UserChatMessage message={lastQuestionRef.current} />
                                     <div className={styles.chatMessageGptMinWidth}>
-                                        <AnswerError error={error.toString()} onRetry={() => makeApiRequest(lastQuestionRef.current)} />
+                                        <AnswerError error={error.toString()} onRetry={() => makeChatApiRequest(lastQuestionRef.current)} />
                                     </div>
                                 </>
                             ) : null}
@@ -385,6 +407,7 @@ const Chat = () => {
                         onRenderLabel={(props: ICheckboxProps | undefined) => (
                             <HelpCallout labelId={shouldStreamId} fieldId={shouldStreamFieldId} helpText={toolTipText.streamChat} label={props?.label} />
                         )}
+                        disabled={true}
                     />
                 </Panel>
             </div>

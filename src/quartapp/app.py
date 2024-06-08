@@ -88,6 +88,19 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
         else:
             return jsonify({"error": "Not Implemented!"}), 501
 
+    @app.route("/chat/stream", methods=["POST"])
+    async def stream_chat() -> Any:
+        if not request.is_json:
+            return jsonify({"error": "request must be json"}), 415
+
+        # Get the request body
+        body = await request.get_json()
+
+        if not body:
+            return jsonify({"error": "request body is empty"}), 400
+
+        return jsonify({"error": "Not Implemented!"}), 501
+
     return app
 
 
