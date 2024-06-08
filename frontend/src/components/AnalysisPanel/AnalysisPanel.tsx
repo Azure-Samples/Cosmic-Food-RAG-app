@@ -17,8 +17,8 @@ interface Props {
 const pivotItemDisabledStyle = { disabled: true, style: { color: "grey" } };
 
 export const AnalysisPanel = ({ answer, activeTab, className, onActiveTabChanged }: Props) => {
-    const isDisabledThoughtProcessTab: boolean = !answer.choices[0].context.thoughts;
-    const isDisabledSupportingContentTab: boolean = !answer.choices[0].context.data_points;
+    const isDisabledThoughtProcessTab: boolean = !answer.context.thoughts;
+    const isDisabledSupportingContentTab: boolean = !answer.context.data_points;
 
     return (
         <Pivot
@@ -31,14 +31,14 @@ export const AnalysisPanel = ({ answer, activeTab, className, onActiveTabChanged
                 headerText="Thought process"
                 headerButtonProps={isDisabledThoughtProcessTab ? pivotItemDisabledStyle : undefined}
             >
-                <ThoughtProcess thoughts={answer.choices[0].context.thoughts || []} />
+                <ThoughtProcess thoughts={answer.context.thoughts || []} />
             </PivotItem>
             <PivotItem
                 itemKey={AnalysisPanelTabs.SupportingContentTab}
                 headerText="Supporting content"
                 headerButtonProps={isDisabledSupportingContentTab ? pivotItemDisabledStyle : undefined}
             >
-                <SupportingContent supportingContent={answer.choices[0].context.data_points} />
+                <SupportingContent supportingContent={answer.context.data_points} />
             </PivotItem>
         </Pivot>
     );

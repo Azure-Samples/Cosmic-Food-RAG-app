@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Any
 from uuid import uuid4
 
 from pydantic.v1 import SecretStr
@@ -72,20 +73,18 @@ class AppConfig:
 
     async def run_vector(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
-    ) -> list[RetrievalResponse]:
+    ) -> RetrievalResponse:
         vector_response, answer = await self.setup.vector_search.run(messages, temperature, limit, score_threshold)
 
         new_session_state: str = session_state if session_state else str(uuid4())
 
         if vector_response is None or len(vector_response) == 0:
-            return [
-                RetrievalResponse(
-                    session_state=new_session_state,
-                    context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-                    index=0,
-                    message=Message(content="No results found", role="assistant"),
-                )
-            ]
+            return RetrievalResponse(
+                session_state=new_session_state,
+                context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                delta={"role": "assistant"},
+                message=Message(content="No results found", role="assistant"),
+            )
         top_result = json.loads(answer)
 
         message_content = f"""
@@ -113,7 +112,7 @@ class AppConfig:
 
         context: Context = Context(data_points=data_points, thoughts=thoughts)
 
-        index: int = vector_response[0].metadata.get("seq_num", 0)
+        delta: dict[str, Any] = {"role": "assistant"}
         message: Message = Message(content=message_content, role="assistant")
 
         self.add_to_cosmos(
@@ -123,34 +122,30 @@ class AppConfig:
             new_session_state=new_session_state,
         )
 
-        return [RetrievalResponse(context, index, message, new_session_state)]
+        return RetrievalResponse(context, delta, message, new_session_state)
 
     async def run_rag(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
-    ) -> list[RetrievalResponse]:
+    ) -> RetrievalResponse:
         rag_response, answer = await self.setup.rag.run(messages, temperature, limit, score_threshold)
 
         new_session_state: str = session_state if session_state else str(uuid4())
 
         if rag_response is None or len(rag_response) == 0:
             if answer:
-                return [
-                    RetrievalResponse(
+                return RetrievalResponse(
                         session_state=new_session_state,
                         context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-                        index=0,
+                        delta={"role": "assistant"},
                         message=Message(content=answer, role="assistant"),
                     )
-                ]
             else:
-                return [
-                    RetrievalResponse(
-                        session_state=new_session_state,
-                        context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-                        index=0,
-                        message=Message(content="No results found", role="assistant"),
-                    )
-                ]
+                return RetrievalResponse(
+                    session_state=new_session_state,
+                    context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                    delta={"role": "assistant"},
+                    message=Message(content="No results found", role="assistant"),
+                )
 
         data_points: DataPoint = DataPoint(json=[])
         thoughts: list[Thought] = []
@@ -169,7 +164,7 @@ class AppConfig:
 
         context: Context = Context(data_points=data_points, thoughts=thoughts)
 
-        index: int = rag_response[0].metadata.get("seq_num", 0)
+        delta: dict[str, Any] = {"role": "assistant"}
         message: Message = Message(content=answer, role="assistant")
 
         self.add_to_cosmos(
@@ -179,21 +174,19 @@ class AppConfig:
             new_session_state=new_session_state,
         )
 
-        return [RetrievalResponse(context, index, message, new_session_state)]
+        return RetrievalResponse(context, delta, message, new_session_state)
 
     async def run_keyword(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
-    ) -> list[RetrievalResponse]:
+    ) -> RetrievalResponse:
         keyword_response = None
 
         new_session_state: str = session_state if session_state else str(uuid4())
 
         if keyword_response is None or len(keyword_response) == 0:
-            return [
-                RetrievalResponse(
-                    session_state=new_session_state,
-                    context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-                    index=0,
-                    message=Message(content="No results found", role="assistant"),
-                )
-            ]
+            return RetrievalResponse(
+                session_state=new_session_state,
+                context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                delta={"role": "assistant"},
+                message=Message(content="No results found", role="assistant"),
+            )
