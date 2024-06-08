@@ -39,11 +39,11 @@ class RAG(ApproachesBase):
             history_chain = history_prompt_template | self._chat
 
             # Rephrase the question
-            rephrased_question = await history_chain.ainvoke(messages)
+            rephrased_question = await history_chain.ainvoke({"messages": messages})
 
             print(rephrased_question.content)
             # Perform vector search
-            vector_context = await retriever.ainvoke(rephrased_question.content)
+            vector_context = await retriever.ainvoke(str(rephrased_question.content))
 
             # Create a vector context aware chat retriever
             context_prompt_template = ChatPromptTemplate.from_template(context_prompt)
