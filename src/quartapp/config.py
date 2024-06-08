@@ -134,11 +134,11 @@ class AppConfig:
         if rag_response is None or len(rag_response) == 0:
             if answer:
                 return RetrievalResponse(
-                        session_state=new_session_state,
-                        context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-                        delta={"role": "assistant"},
-                        message=Message(content=answer, role="assistant"),
-                    )
+                    session_state=new_session_state,
+                    context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                    delta={"role": "assistant"},
+                    message=Message(content=answer, role="assistant"),
+                )
             else:
                 return RetrievalResponse(
                     session_state=new_session_state,
