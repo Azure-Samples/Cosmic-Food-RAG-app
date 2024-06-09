@@ -208,17 +208,61 @@ async def test_chat_keyword_option(client_mock):
             "data_points": {
                 "json": [
                     {
-                        "category": None,
-                        "collection": None,
-                        "description": None,
-                        "name": None,
-                        "price": None,
+                        "category": "test",
+                        "collection": "collection_name",
+                        "description": "test",
+                        "name": "test",
+                        "price": "5.0USD",
                     }
                 ]
             },
-            "thoughts": [{"description": None, "title": None}],
+            "thoughts": [{"description": "test", "title": "Source"}],
         },
         "delta": {"role": "assistant"},
-        "message": {"content": "No results found", "role": "assistant"},
+        "message": {
+            "content": "\n"
+            "            Name: test\n"
+            "            Description: test\n"
+            "            Price: 5.0USD\n"
+            "            Category: test\n"
+            "            Collection: collection_name\n"
+            "        ",
+            "role": "assistant",
+        },
         "session_state": "test",
     }
+
+
+@pytest.mark.asyncio
+async def test_chat_stream_non_json_415(client):
+    """test the chat route with a non-json request"""
+    response: Response = await client.post("/chat/stream")
+
+    assert response.status_code == 415
+    assert response.content_type == "application/json"
+    assert response.headers["Content-Length"] == "33"
+    assert b'{"error":"request must be json"}' in await response.data
+
+
+@pytest.mark.asyncio
+async def test_chat_stream_no_message_400(client):
+    """test the chat route with an empty request body"""
+    response: Response = await client.post("/chat/stream", json={})
+
+    assert response.status_code == 400
+    assert response.content_type == "application/json"
+    assert response.headers["Content-Length"] == "34"
+    assert b'{"error":"request body is empty"}' in await response.data
+
+
+@pytest.mark.asyncio
+async def test_chat_stream_not_implemented_501(client):
+    """test the chat route with a retrieval_mode not implemented"""
+    response: Response = await client.post(
+        "/chat/stream", json={"context": {"overrides": {"retrieval_mode": "not_implemented"}}}
+    )
+
+    assert response.status_code == 501
+    assert response.content_type == "application/json"
+    assert response.headers["Content-Length"] == "29"
+    assert b'{"error":"Not Implemented!"}' in await response.data
