@@ -9,6 +9,7 @@ from pydantic.v1 import SecretStr
 import quartapp
 from quartapp.app import create_app
 from quartapp.approaches.base import ApproachesBase
+from quartapp.approaches.keyword import KeyWord
 from quartapp.approaches.rag import RAG
 from quartapp.approaches.setup import DatabaseSetup, Setup
 from quartapp.approaches.vector import Vector
@@ -68,19 +69,45 @@ def approaches_base_mock():
 
     mock_chat.ainvoke = AsyncMock(return_value=mock_content)
 
-    return ApproachesBase(mock_vector_store, mock_embedding, mock_chat)  # type: ignore [abstract]
+    mock_mongo_document = {"textContent": mock_document.page_content, "source": "test"}
+    mock_data_collection = MagicMock()
+    mock_data_collection.find = MagicMock()
+    mock_data_collection.find.return_value.limit = MagicMock(return_value=[mock_mongo_document])
+
+    return ApproachesBase(mock_vector_store, mock_embedding, mock_chat, mock_data_collection)  # type: ignore [abstract]
+
+
+@pytest.fixture
+def keyword_mock(approaches_base_mock):
+    """Mock quartapp.approaches.keyword.KeyWord."""
+    return KeyWord(
+        approaches_base_mock._vector_store,
+        approaches_base_mock._embedding,
+        approaches_base_mock._chat,
+        approaches_base_mock._data_collection,
+    )
 
 
 @pytest.fixture
 def vector_mock(approaches_base_mock):
     """Mock quartapp.approaches.vector.Vector."""
-    return Vector(approaches_base_mock._vector_store, approaches_base_mock._embedding, approaches_base_mock._chat)
+    return Vector(
+        approaches_base_mock._vector_store,
+        approaches_base_mock._embedding,
+        approaches_base_mock._chat,
+        approaches_base_mock._data_collection,
+    )
 
 
 @pytest.fixture
 def rag_mock(approaches_base_mock):
     """Mock quartapp.approaches.rag.RAG."""
-    return RAG(approaches_base_mock._vector_store, approaches_base_mock._embedding, approaches_base_mock._chat)
+    return RAG(
+        approaches_base_mock._vector_store,
+        approaches_base_mock._embedding,
+        approaches_base_mock._chat,
+        approaches_base_mock._data_collection,
+    )
 
 
 @pytest.fixture
@@ -96,13 +123,14 @@ def database_mock(approaches_base_mock):
         index_name="index_name",
         vector_store_api=approaches_base_mock._vector_store,
         users_collection=mock_collection,
+        data_collection=approaches_base_mock._data_collection,
     )
 
     return database_setup
 
 
 @pytest.fixture
-def setup_mock(rag_mock, vector_mock, database_mock):
+def setup_mock(rag_mock, vector_mock, database_mock, keyword_mock):
     """Mock quartapp.approaches.setup.Setup."""
     setup = Setup(
         openai_embeddings_model="openai_embeddings_model",
@@ -121,6 +149,7 @@ def setup_mock(rag_mock, vector_mock, database_mock):
     setup._database_setup = database_mock
     setup.vector_search = vector_mock
     setup.rag = rag_mock
+    setup.keyword = keyword_mock
     return setup
 
 
@@ -140,6 +169,14 @@ def create_stuff_documents_chain_mock(monkeypatch):
     _mock = MagicMock()
     _mock.return_value = document_chain_mock
     monkeypatch.setattr(quartapp.approaches.rag, quartapp.approaches.rag.create_stuff_documents_chain.__name__, _mock)
+    return _mock
+
+
+@pytest.fixture(autouse=True)
+def setup_data_collection_mock(monkeypatch):
+    """Mock quartapp.approaches.setup.setup_data_collection."""
+    _mock = MagicMock()
+    monkeypatch.setattr(quartapp.approaches.setup, quartapp.approaches.setup.setup_data_collection.__name__, _mock)
     return _mock
 
 

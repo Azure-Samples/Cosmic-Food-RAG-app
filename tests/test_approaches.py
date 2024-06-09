@@ -10,9 +10,35 @@ async def test_approaches_base(approaches_base_mock):
     assert approaches_base_mock._vector_store
     assert approaches_base_mock._embedding
     assert approaches_base_mock._chat
+    assert approaches_base_mock._data_collection
 
     with pytest.raises(NotImplementedError):
         await approaches_base_mock.run([], 0.0, 0, 0.0)
+
+
+@pytest.mark.asyncio
+async def test_keyword_no_messages(keyword_mock):
+    """Test the keyword class."""
+    assert keyword_mock._vector_store
+    assert keyword_mock._embedding
+    assert keyword_mock._chat
+    assert keyword_mock._data_collection
+    assert await keyword_mock.run([], 0.0, 0, 0.0) == ([], "")
+
+
+@pytest.mark.asyncio
+async def test_keyword_run(keyword_mock):
+    """Test the Vector class run method."""
+    result = keyword_mock.run([{"content": "test"}], 0.0, 0, 0.0)
+    assert await result == (
+        [
+            Document(
+                page_content='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}',
+                metadata={"source": "test"},
+            )
+        ],
+        '{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}',
+    )
 
 
 @pytest.mark.asyncio
@@ -21,6 +47,7 @@ async def test_vector_no_messages(vector_mock):
     assert vector_mock._vector_store
     assert vector_mock._embedding
     assert vector_mock._chat
+    assert vector_mock._data_collection
     assert await vector_mock.run([], 0.0, 0, 0.0) == ([], "")
 
 
@@ -40,6 +67,7 @@ async def test_rag_no_messages(rag_mock):
     assert rag_mock._vector_store
     assert rag_mock._embedding
     assert rag_mock._chat
+    assert rag_mock._data_collection
     assert await rag_mock.run([], 0.0, 0, 0.0) == ([], "")
 
 
@@ -60,6 +88,7 @@ async def test_app_setup(setup_mock):
     assert setup_mock._database_setup
     assert setup_mock.vector_search
     assert setup_mock.rag
+    assert setup_mock.keyword
 
 
 @pytest.mark.asyncio
@@ -70,6 +99,36 @@ async def test_app_config(app_config_mock):
     assert app_config_mock.setup._database_setup
     assert app_config_mock.setup.vector_search
     assert app_config_mock.setup.rag
+    assert app_config_mock.setup.keyword
+
+
+@pytest.mark.asyncio
+async def test_app_config_run_keyword(app_config_mock):
+    """Test the AppConfig class run_keyword method."""
+    result = app_config_mock.run_keyword("test", [{"content": "test"}], 0.3, 1, 0.0)
+    assert await result == RetrievalResponse(
+        context=Context(
+            data_points=DataPoint(
+                json=[
+                    JSONDataPoint(
+                        name="test",
+                        description="test",
+                        price="5.0USD",
+                        category="test",
+                        collection="collection_name",
+                    )
+                ]
+            ),
+            thoughts=[Thought(title="Source", description="test")],
+        ),
+        delta={"role": "assistant"},
+        message=Message(
+            content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
+            "            Category: test\n            Collection: collection_name\n        ",
+            role="assistant",
+        ),
+        session_state="test",
+    )
 
 
 @pytest.mark.asyncio
@@ -127,9 +186,9 @@ async def test_app_config_run_rag(app_config_mock):
 
 
 @pytest.mark.asyncio
-async def test_app_config_run_keyword(app_config_mock):
-    """Test the AppConfig class run_keyword method."""
-    result = app_config_mock.run_keyword("test", [{"content": "test"}], 0.3, 1, 0.0)
+async def test_app_config_run_keyword_no_message(app_config_mock):
+    """Test the AppConfig class run_keyword method without messages."""
+    result = app_config_mock.run_keyword("test", [], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
         session_state="test",
         context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
