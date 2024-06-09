@@ -48,3 +48,11 @@ def setup_users_collection(connection_string: str, database_name: str) -> Collec
     db = mongo_client[database_name]
     collection: Collection = db["Users"]
     return collection
+
+
+def setup_data_collection(connection_string: str, database_name: str, collection_name: str) -> Collection:
+    mongo_client: MongoClient = MongoClient(connection_string)
+    db = mongo_client[database_name]
+    collection: Collection = db[collection_name]
+    collection.create_index({"textContent": "text"}, name="search_text_index")
+    return collection
