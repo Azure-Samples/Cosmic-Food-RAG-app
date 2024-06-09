@@ -12,7 +12,7 @@ class ApproachesBase(ABC):
         vector_store: AzureCosmosDBVectorSearch,
         embedding: AzureOpenAIEmbeddings,
         chat: AzureChatOpenAI,
-        data_collection: Collection,
+        data_collection: Collection | None,
     ):
         self._vector_store = vector_store
         self._embedding = embedding

@@ -3,6 +3,7 @@ from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
 from pydantic.v1 import SecretStr
 from pymongo import MongoClient
 from pymongo.collection import Collection
+from pymongo.errors import ServerSelectionTimeoutError
 
 
 def embeddings_api(
@@ -50,9 +51,12 @@ def setup_users_collection(connection_string: str, database_name: str) -> Collec
     return collection
 
 
-def setup_data_collection(connection_string: str, database_name: str, collection_name: str) -> Collection:
-    mongo_client: MongoClient = MongoClient(connection_string)
-    db = mongo_client[database_name]
-    collection: Collection = db[collection_name]
-    collection.create_index({"textContent": "text"}, name="search_text_index")
-    return collection
+def setup_data_collection(connection_string: str, database_name: str, collection_name: str) -> Collection | None:
+    try:
+        mongo_client: MongoClient = MongoClient(connection_string, serverSelectionTimeoutMS=1000)
+        db = mongo_client[database_name]
+        collection: Collection = db[collection_name]
+        collection.create_index({"textContent": "text"}, name="search_text_index")
+        return collection
+    except ServerSelectionTimeoutError:
+        return None

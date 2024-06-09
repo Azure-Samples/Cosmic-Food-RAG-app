@@ -36,7 +36,7 @@ class DatabaseSetup(ABC):
         index_name: str,
         vector_store_api: AzureCosmosDBVectorSearch,
         users_collection: Collection,
-        data_collection: Collection,
+        data_collection: Collection | None,
     ):
         self._connection_string = connection_string
         self._database_name = database_name

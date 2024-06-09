@@ -7,7 +7,7 @@ class KeyWord(ApproachesBase):
     async def run(
         self, messages: list, temperature: float, limit: int, score_threshold: float
     ) -> tuple[list[Document], str]:
-        if messages:
+        if messages and self._data_collection:
             query = messages[-1]["content"]
             keyword_response = self._data_collection.find({"$text": {"$search": query}}).limit(limit)
             documents_list: list[Document] = []
