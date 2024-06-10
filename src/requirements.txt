@@ -35,7 +35,7 @@ click==8.1.7
     # via
     #   flask
     #   quart
-dataclasses-json==0.6.6
+dataclasses-json==0.6.7
     # via langchain-community
 distro==1.9.0
     # via openai
@@ -86,13 +86,13 @@ jsonpatch==1.33
     # via langchain-core
 jsonpointer==2.4
     # via jsonpatch
-langchain==0.2.1
+langchain==0.2.3
     # via
     #   langchain-community
     #   quartapp (src/pyproject.toml)
-langchain-community==0.2.1
+langchain-community==0.2.4
     # via quartapp (src/pyproject.toml)
-langchain-core==0.2.3
+langchain-core==0.2.5
     # via
     #   langchain
     #   langchain-community
@@ -100,9 +100,9 @@ langchain-core==0.2.3
     #   langchain-text-splitters
 langchain-openai==0.1.8
     # via quartapp (src/pyproject.toml)
-langchain-text-splitters==0.2.0
+langchain-text-splitters==0.2.1
     # via langchain
-langsmith==0.1.67
+langsmith==0.1.75
     # via
     #   langchain
     #   langchain-community
@@ -112,7 +112,7 @@ markupsafe==2.1.5
     #   jinja2
     #   quart
     #   werkzeug
-marshmallow==3.21.2
+marshmallow==3.21.3
     # via dataclasses-json
 multidict==6.0.5
     # via
@@ -124,25 +124,25 @@ numpy==1.26.4
     # via
     #   langchain
     #   langchain-community
-openai==1.30.5
+openai==1.33.0
     # via langchain-openai
 orjson==3.10.3
     # via langsmith
-packaging==23.2
+packaging==24.1
     # via
     #   langchain-core
     #   marshmallow
 priority==2.0.0
     # via hypercorn
-pydantic==2.7.2
+pydantic==2.7.3
     # via
     #   langchain
     #   langchain-core
     #   langsmith
     #   openai
-pydantic-core==2.18.3
+pydantic-core==2.18.4
     # via pydantic
-pymongo==4.7.2
+pymongo==4.7.3
     # via quartapp (src/pyproject.toml)
 python-dotenv==1.0.1
     # via quartapp (src/pyproject.toml)
@@ -179,7 +179,7 @@ tiktoken==0.7.0
     # via langchain-openai
 tqdm==4.66.4
     # via openai
-typing-extensions==4.12.1
+typing-extensions==4.12.2
     # via
     #   openai
     #   pydantic
