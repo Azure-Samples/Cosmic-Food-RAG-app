@@ -95,12 +95,11 @@ const Chat = () => {
         try {
             setIsStreaming(true);
             for await (const event of readNDJSONStream(responseBody)) {
-                if (event["context"] && event["context"]["data_points"]) {
-                    event["message"] = event["delta"];
+                if (event["context"] && event["context"]["data_points"] && event["message"]) {
                     askResponse = event as ChatAppResponse;
-                } else if (event["delta"]["content"]) {
+                } else if (event["message"]["content"]) {
                     setIsLoading(false);
-                    await updateState(event["delta"]["content"]);
+                    await updateState(event["message"]["content"]);
                 } else if (event["context"]) {
                     // Update context with new keys from latest event
                     askResponse.context = { ...askResponse.context, ...event["context"] };
@@ -196,7 +195,7 @@ const Chat = () => {
     };
 
     const onExampleClicked = (example: string) => {
-        makeChatApiRequest(example);
+        checkthenMakeApiRequest(example);
     };
 
     const onToggleTab = (tab: AnalysisPanelTabs, index: number) => {
@@ -294,7 +293,7 @@ const Chat = () => {
                                 <>
                                     <UserChatMessage message={lastQuestionRef.current} />
                                     <div className={styles.chatMessageGptMinWidth}>
-                                        <AnswerError error={error.toString()} onRetry={() => makeChatApiRequest(lastQuestionRef.current)} />
+                                        <AnswerError error={error.toString()} onRetry={() => checkthenMakeApiRequest(lastQuestionRef.current)} />
                                     </div>
                                 </>
                             ) : null}
@@ -407,7 +406,6 @@ const Chat = () => {
                         onRenderLabel={(props: ICheckboxProps | undefined) => (
                             <HelpCallout labelId={shouldStreamId} fieldId={shouldStreamFieldId} helpText={toolTipText.streamChat} label={props?.label} />
                         )}
-                        disabled={true}
                     />
                 </Panel>
             </div>

@@ -121,7 +121,6 @@ async def test_app_config_run_keyword(app_config_mock):
             ),
             thoughts=[Thought(title="Source", description="test")],
         ),
-        delta={"role": "assistant"},
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
             "            Category: test\n            Collection: collection_name\n        ",
@@ -150,7 +149,6 @@ async def test_app_config_run_vector(app_config_mock):
             ),
             thoughts=[Thought(title="Source", description=None)],
         ),
-        delta={"role": "assistant"},
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
             "            Category: test\n            Collection: collection_name\n        ",
@@ -179,7 +177,6 @@ async def test_app_config_run_rag(app_config_mock):
             ),
             thoughts=[Thought(title="Source", description=None)],
         ),
-        delta={"role": "assistant"},
         message=Message(content="content", role="assistant"),
         session_state="test",
     )
@@ -192,7 +189,6 @@ async def test_app_config_run_keyword_no_message(app_config_mock):
     assert await result == RetrievalResponse(
         session_state="test",
         context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-        delta={"role": "assistant"},
         message=Message(content="No results found", role="assistant"),
     )
 
@@ -204,7 +200,6 @@ async def test_app_config_run_vector_no_message(app_config_mock):
     assert await result == RetrievalResponse(
         session_state="test",
         context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-        delta={"role": "assistant"},
         message=Message(content="No results found", role="assistant"),
     )
 
@@ -216,7 +211,6 @@ async def test_app_config_run_rag_no_message(app_config_mock):
     assert await result == RetrievalResponse(
         session_state="test",
         context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-        delta={"role": "assistant"},
         message=Message(content="No results found", role="assistant"),
     )
 

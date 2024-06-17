@@ -1,6 +1,8 @@
+import json
 import os
 from abc import ABC, abstractmethod
 
+from langchain_core.documents import Document
 from pydantic.v1 import SecretStr
 from pymongo.errors import (
     ConfigurationError,
@@ -9,7 +11,7 @@ from pymongo.errors import (
     OperationFailure,
 )
 
-from quartapp.approaches.schemas import RetrievalResponse
+from quartapp.approaches.schemas import Context, DataPoint, JSONDataPoint, RetrievalResponse, Thought
 from quartapp.approaches.setup import Setup
 
 
@@ -68,6 +70,30 @@ class AppConfigBase(ABC):
                 return True
             except (AttributeError, ConfigurationError, InvalidName, InvalidOperation, OperationFailure, IndexError):
                 return False
+
+    def _get_thoughts(self, documents: list[Document]) -> list[Thought]:
+        thoughts: list[Thought] = []
+        thoughts.append(Thought(description=documents[0].metadata.get("source"), title="Source"))
+        return thoughts
+
+    def _get_data_points(self, documents: list[Document]) -> DataPoint:
+        data_points: DataPoint = DataPoint(json=[])
+
+        for res in documents:
+            raw_data = json.loads(res.page_content)
+            json_data_point: JSONDataPoint = JSONDataPoint()
+            json_data_point.name = raw_data.get("name")
+            json_data_point.description = raw_data.get("description")
+            json_data_point.price = raw_data.get("price")
+            json_data_point.category = raw_data.get("category")
+            json_data_point.collection = self.setup._database_setup._collection_name
+            data_points.json.append(json_data_point)
+        return data_points
+
+    def get_context(self, documents: list[Document]):
+        data_points = self._get_data_points(documents)
+        thoughts = self._get_thoughts(documents)
+        return Context(data_points=data_points, thoughts=thoughts)
 
     @abstractmethod
     async def run_vector(

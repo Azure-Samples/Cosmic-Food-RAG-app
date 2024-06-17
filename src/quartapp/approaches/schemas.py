@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Any
 
 
 @dataclass
@@ -40,6 +39,5 @@ class Message:
 @dataclass
 class RetrievalResponse:
     context: Context
-    delta: dict[str, Any]
     message: Message
     session_state: str

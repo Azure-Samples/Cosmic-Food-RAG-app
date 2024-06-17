@@ -137,7 +137,6 @@ async def test_chat_rag_option(client_mock):
             },
             "thoughts": [{"description": None, "title": "Source"}],
         },
-        "delta": {"role": "assistant"},
         "message": {"content": "content", "role": "assistant"},
         "session_state": "test",
     }
@@ -173,7 +172,6 @@ async def test_chat_vector_option(client_mock):
             },
             "thoughts": [{"description": None, "title": "Source"}],
         },
-        "delta": {"role": "assistant"},
         "message": {
             "content": "\n"
             "            Name: test\n"
@@ -218,7 +216,6 @@ async def test_chat_keyword_option(client_mock):
             },
             "thoughts": [{"description": "test", "title": "Source"}],
         },
-        "delta": {"role": "assistant"},
         "message": {
             "content": "\n"
             "            Name: test\n"
