@@ -84,15 +84,15 @@ jinja2==3.1.4
     #   quart
 jsonpatch==1.33
     # via langchain-core
-jsonpointer==2.4
+jsonpointer==3.0.0
     # via jsonpatch
-langchain==0.2.3
+langchain==0.2.5
     # via
     #   langchain-community
     #   quartapp (src/pyproject.toml)
 langchain-community==0.2.5
     # via quartapp (src/pyproject.toml)
-langchain-core==0.2.5
+langchain-core==0.2.7
     # via
     #   langchain
     #   langchain-community
@@ -102,7 +102,7 @@ langchain-openai==0.1.8
     # via quartapp (src/pyproject.toml)
 langchain-text-splitters==0.2.1
     # via langchain
-langsmith==0.1.75
+langsmith==0.1.77
     # via
     #   langchain
     #   langchain-community
@@ -120,27 +120,27 @@ multidict==6.0.5
     #   yarl
 mypy-extensions==1.0.0
     # via typing-inspect
-numpy==1.26.4
+numpy==2.0.0
     # via
     #   langchain
     #   langchain-community
-openai==1.33.0
+openai==1.34.0
     # via langchain-openai
-orjson==3.10.3
+orjson==3.10.5
     # via langsmith
-packaging==23.2
+packaging==24.1
     # via
     #   langchain-core
     #   marshmallow
 priority==2.0.0
     # via hypercorn
-pydantic==2.7.3
+pydantic==2.7.4
     # via
     #   langchain
     #   langchain-core
     #   langsmith
     #   openai
-pydantic-core==2.18.4
+pydantic-core==2.19.0
     # via pydantic
 pymongo==4.7.3
     # via quartapp (src/pyproject.toml)
@@ -170,7 +170,7 @@ sqlalchemy==2.0.30
     # via
     #   langchain
     #   langchain-community
-tenacity==8.3.0
+tenacity==8.4.1
     # via
     #   langchain
     #   langchain-community
@@ -188,7 +188,7 @@ typing-extensions==4.12.2
     #   typing-inspect
 typing-inspect==0.9.0
     # via dataclasses-json
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 werkzeug==3.0.3
     # via
