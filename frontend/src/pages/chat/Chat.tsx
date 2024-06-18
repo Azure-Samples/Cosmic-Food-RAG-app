@@ -406,6 +406,7 @@ const Chat = () => {
                         onRenderLabel={(props: ICheckboxProps | undefined) => (
                             <HelpCallout labelId={shouldStreamId} fieldId={shouldStreamFieldId} helpText={toolTipText.streamChat} label={props?.label} />
                         )}
+                        disabled={true}
                     />
                 </Panel>
             </div>
