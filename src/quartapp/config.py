@@ -1,7 +1,7 @@
 import json
 from uuid import uuid4
 
-from quartapp.approaches.schemas import Context, DataPoint, JSONDataPoint, Message, RetrievalResponse, Thought
+from quartapp.approaches.schemas import Context, DataPoint, Message, RetrievalResponse, Thought
 from quartapp.config_base import AppConfigBase
 
 
@@ -16,7 +16,7 @@ class AppConfig(AppConfigBase):
         if keyword_response is None or len(keyword_response) == 0:
             return RetrievalResponse(
                 session_state=new_session_state,
-                context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                context=Context([DataPoint()], [Thought()]),
                 message=Message(content="No results found", role="assistant"),
             )
         top_result = json.loads(answer)
@@ -29,11 +29,11 @@ class AppConfig(AppConfigBase):
             Collection: {self.setup._database_setup._collection_name}
         """
 
-        context: Context = self.get_context(keyword_response)
+        context: Context = await self.get_context(keyword_response)
 
         message: Message = Message(content=message_content, role="assistant")
 
-        self.add_to_cosmos(
+        await self.add_to_cosmos(
             old_messages=messages,
             new_message=message.to_dict(),
             session_state=session_state,
@@ -52,7 +52,7 @@ class AppConfig(AppConfigBase):
         if vector_response is None or len(vector_response) == 0:
             return RetrievalResponse(
                 session_state=new_session_state,
-                context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                context=Context([DataPoint()], [Thought()]),
                 message=Message(content="No results found", role="assistant"),
             )
         top_result = json.loads(answer)
@@ -65,10 +65,10 @@ class AppConfig(AppConfigBase):
             Collection: {self.setup._database_setup._collection_name}
         """
 
-        context: Context = self.get_context(vector_response)
+        context: Context = await self.get_context(vector_response)
         message: Message = Message(content=message_content, role="assistant")
 
-        self.add_to_cosmos(
+        await self.add_to_cosmos(
             old_messages=messages,
             new_message=message.to_dict(),
             session_state=session_state,
@@ -88,20 +88,20 @@ class AppConfig(AppConfigBase):
             if answer:
                 return RetrievalResponse(
                     session_state=new_session_state,
-                    context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                    context=Context([DataPoint()], [Thought()]),
                     message=Message(content=answer, role="assistant"),
                 )
             else:
                 return RetrievalResponse(
                     session_state=new_session_state,
-                    context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
+                    context=Context([DataPoint()], [Thought()]),
                     message=Message(content="No results found", role="assistant"),
                 )
 
-        context: Context = self.get_context(rag_response)
+        context: Context = await self.get_context(rag_response)
         message: Message = Message(content=answer, role="assistant")
 
-        self.add_to_cosmos(
+        await self.add_to_cosmos(
             old_messages=messages,
             new_message=message.to_dict(),
             session_state=session_state,
