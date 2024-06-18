@@ -16,7 +16,13 @@ export type ResponseMessage = {
     role: string;
 };
 
-export type JSONDataPoint = {
+export type Thought = {
+    title: string;
+    description: any; // It can be any output from the api
+    props?: { [key: string]: string };
+};
+
+export type DataPoint = {
     name: string;
     description: string;
     price: string;
@@ -24,19 +30,9 @@ export type JSONDataPoint = {
     collection: string;
 };
 
-export type Thoughts = {
-    title: string;
-    description: any; // It can be any output from the api
-    props?: { [key: string]: string };
-};
-
-export type DataPoint = {
-    json: JSONDataPoint[];
-};
-
 export type ResponseContext = {
-    data_points: DataPoint;
-    thoughts: Thoughts[];
+    data_points: DataPoint[];
+    thoughts: Thought[];
 };
 
 export type ChatAppResponseOrError = {

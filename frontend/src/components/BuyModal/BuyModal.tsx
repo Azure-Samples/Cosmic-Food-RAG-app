@@ -3,14 +3,14 @@ import { useState } from "react";
 import { Modal, IconButton, DefaultButton, TextField, Dropdown, IDropdownOption } from "@fluentui/react";
 
 import styles from "./BuyModal.module.css";
-import { JSONDataPoint } from "../../api";
+import { DataPoint } from "../../api";
 
 interface Props {
     isBuy: boolean;
     setIsBuy: (isBuy: boolean) => void;
     address: string;
     setAddress: (address: string) => void;
-    latestItems: JSONDataPoint[];
+    latestItems: DataPoint[];
     cartItems: string[];
     setCartItems: (cartItems: string[]) => void;
 }

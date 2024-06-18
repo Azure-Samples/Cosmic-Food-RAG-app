@@ -6,7 +6,7 @@ import readNDJSONStream from "ndjson-readablestream";
 
 import styles from "./Chat.module.css";
 
-import { chatApi, chatStreamApi, RetrievalMode, ChatAppResponse, ChatAppRequest, ResponseMessage, JSONDataPoint } from "../../api";
+import { chatApi, chatStreamApi, RetrievalMode, ChatAppResponse, ChatAppRequest, ResponseMessage, DataPoint } from "../../api";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
@@ -42,7 +42,7 @@ const Chat = () => {
     const [activeAnalysisPanelTab, setActiveAnalysisPanelTab] = useState<AnalysisPanelTabs | undefined>(undefined);
 
     const [selectedAnswer, setSelectedAnswer] = useState<number>(0);
-    const [latestItems, setLatestItems] = useState<JSONDataPoint[]>([]);
+    const [latestItems, setLatestItems] = useState<DataPoint[]>([]);
     const [answers, setAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
     const [sessionState, setSessionState] = useState<string | null>(null);
 
@@ -124,7 +124,7 @@ const Chat = () => {
             const parsedResponse: ChatAppResponse = await chatApi(request);
             setAnswers([...answers, [question, parsedResponse]]);
             setSessionState(parsedResponse?.session_state ? parsedResponse.session_state : null);
-            setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points.json : []);
+            setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points : []);
         } catch (e) {
             setError(e);
         } finally {
@@ -143,7 +143,7 @@ const Chat = () => {
             const parsedResponse: ChatAppResponse = await handleAsyncResponse(question, answers, response.body);
             setAnswers([...answers, [question, parsedResponse]]);
             setSessionState(parsedResponse?.session_state ? parsedResponse.session_state : null);
-            setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points.json : []);
+            setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points : []);
         } catch (e) {
             setError(e);
         } finally {

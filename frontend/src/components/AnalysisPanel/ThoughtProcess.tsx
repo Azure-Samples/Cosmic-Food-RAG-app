@@ -3,10 +3,10 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 
 import styles from "./AnalysisPanel.module.css";
 
-import { Thoughts } from "../../api";
+import { Thought } from "../../api";
 
 interface Props {
-    thoughts: Thoughts[];
+    thoughts: Thought[];
 }
 
 export const ThoughtProcess = ({ thoughts }: Props) => {
