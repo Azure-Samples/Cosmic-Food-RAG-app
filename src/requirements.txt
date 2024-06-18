@@ -92,7 +92,7 @@ langchain==0.2.5
     #   quartapp (src/pyproject.toml)
 langchain-community==0.2.5
     # via quartapp (src/pyproject.toml)
-langchain-core==0.2.7
+langchain-core==0.2.8
     # via
     #   langchain
     #   langchain-community
@@ -102,7 +102,7 @@ langchain-openai==0.1.8
     # via quartapp (src/pyproject.toml)
 langchain-text-splitters==0.2.1
     # via langchain
-langsmith==0.1.77
+langsmith==0.1.79
     # via
     #   langchain
     #   langchain-community
