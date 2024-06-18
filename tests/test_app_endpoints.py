@@ -124,20 +124,17 @@ async def test_chat_rag_option(client_mock):
     assert response.content_type == "application/json"
     assert data == {
         "context": {
-            "data_points": {
-                "json": [
-                    {
-                        "category": "test",
-                        "collection": "collection_name",
-                        "description": "test",
-                        "name": "test",
-                        "price": "5.0USD",
-                    }
-                ]
-            },
+            "data_points": [
+                {
+                    "category": "test",
+                    "collection": "collection_name",
+                    "description": "test",
+                    "name": "test",
+                    "price": "5.0USD",
+                }
+            ],
             "thoughts": [{"description": None, "title": "Source"}],
         },
-        "delta": {"role": "assistant"},
         "message": {"content": "content", "role": "assistant"},
         "session_state": "test",
     }
@@ -160,20 +157,17 @@ async def test_chat_vector_option(client_mock):
     assert response.content_type == "application/json"
     assert data == {
         "context": {
-            "data_points": {
-                "json": [
-                    {
-                        "category": "test",
-                        "collection": "collection_name",
-                        "description": "test",
-                        "name": "test",
-                        "price": "5.0USD",
-                    }
-                ]
-            },
+            "data_points": [
+                {
+                    "category": "test",
+                    "collection": "collection_name",
+                    "description": "test",
+                    "name": "test",
+                    "price": "5.0USD",
+                }
+            ],
             "thoughts": [{"description": None, "title": "Source"}],
         },
-        "delta": {"role": "assistant"},
         "message": {
             "content": "\n"
             "            Name: test\n"
@@ -205,20 +199,17 @@ async def test_chat_keyword_option(client_mock):
     assert response.content_type == "application/json"
     assert data == {
         "context": {
-            "data_points": {
-                "json": [
-                    {
-                        "category": "test",
-                        "collection": "collection_name",
-                        "description": "test",
-                        "name": "test",
-                        "price": "5.0USD",
-                    }
-                ]
-            },
+            "data_points": [
+                {
+                    "category": "test",
+                    "collection": "collection_name",
+                    "description": "test",
+                    "name": "test",
+                    "price": "5.0USD",
+                }
+            ],
             "thoughts": [{"description": "test", "title": "Source"}],
         },
-        "delta": {"role": "assistant"},
         "message": {
             "content": "\n"
             "            Name: test\n"

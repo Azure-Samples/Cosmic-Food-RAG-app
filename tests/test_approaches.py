@@ -1,7 +1,7 @@
 import pytest
 from langchain_core.documents import Document
 
-from quartapp.approaches.schemas import Context, DataPoint, JSONDataPoint, Message, RetrievalResponse, Thought
+from quartapp.approaches.schemas import Context, DataPoint, Message, RetrievalResponse, Thought
 
 
 @pytest.mark.asyncio
@@ -108,20 +108,17 @@ async def test_app_config_run_keyword(app_config_mock):
     result = app_config_mock.run_keyword("test", [{"content": "test"}], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
         context=Context(
-            data_points=DataPoint(
-                json=[
-                    JSONDataPoint(
-                        name="test",
-                        description="test",
-                        price="5.0USD",
-                        category="test",
-                        collection="collection_name",
-                    )
-                ]
-            ),
+            data_points=[
+                DataPoint(
+                    name="test",
+                    description="test",
+                    price="5.0USD",
+                    category="test",
+                    collection="collection_name",
+                )
+            ],
             thoughts=[Thought(title="Source", description="test")],
         ),
-        delta={"role": "assistant"},
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
             "            Category: test\n            Collection: collection_name\n        ",
@@ -137,20 +134,17 @@ async def test_app_config_run_vector(app_config_mock):
     result = app_config_mock.run_vector("test", [{"content": "test"}], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
         context=Context(
-            data_points=DataPoint(
-                json=[
-                    JSONDataPoint(
-                        name="test",
-                        description="test",
-                        price="5.0USD",
-                        category="test",
-                        collection="collection_name",
-                    )
-                ]
-            ),
+            data_points=[
+                DataPoint(
+                    name="test",
+                    description="test",
+                    price="5.0USD",
+                    category="test",
+                    collection="collection_name",
+                )
+            ],
             thoughts=[Thought(title="Source", description=None)],
         ),
-        delta={"role": "assistant"},
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
             "            Category: test\n            Collection: collection_name\n        ",
@@ -166,20 +160,17 @@ async def test_app_config_run_rag(app_config_mock):
     result = app_config_mock.run_rag("test", [{"content": "test"}], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
         context=Context(
-            data_points=DataPoint(
-                json=[
-                    JSONDataPoint(
-                        name="test",
-                        description="test",
-                        price="5.0USD",
-                        category="test",
-                        collection="collection_name",
-                    )
-                ]
-            ),
+            data_points=[
+                DataPoint(
+                    name="test",
+                    description="test",
+                    price="5.0USD",
+                    category="test",
+                    collection="collection_name",
+                )
+            ],
             thoughts=[Thought(title="Source", description=None)],
         ),
-        delta={"role": "assistant"},
         message=Message(content="content", role="assistant"),
         session_state="test",
     )
@@ -191,8 +182,7 @@ async def test_app_config_run_keyword_no_message(app_config_mock):
     result = app_config_mock.run_keyword("test", [], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
         session_state="test",
-        context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-        delta={"role": "assistant"},
+        context=Context([DataPoint()], [Thought()]),
         message=Message(content="No results found", role="assistant"),
     )
 
@@ -203,8 +193,7 @@ async def test_app_config_run_vector_no_message(app_config_mock):
     result = app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
         session_state="test",
-        context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-        delta={"role": "assistant"},
+        context=Context([DataPoint()], [Thought()]),
         message=Message(content="No results found", role="assistant"),
     )
 
@@ -215,8 +204,7 @@ async def test_app_config_run_rag_no_message(app_config_mock):
     result = app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
         session_state="test",
-        context=Context(DataPoint([JSONDataPoint()]), [Thought()]),
-        delta={"role": "assistant"},
+        context=Context([DataPoint()], [Thought()]),
         message=Message(content="No results found", role="assistant"),
     )
 
@@ -224,7 +212,7 @@ async def test_app_config_run_rag_no_message(app_config_mock):
 @pytest.mark.asyncio
 async def test_add_to_cosmos_with_session_id(app_config_mock):
     """Test the AppConfig class add_to_cosmos method with session_id."""
-    is_added = app_config_mock.add_to_cosmos(
+    is_added = await app_config_mock.add_to_cosmos(
         old_messages=[{"content": "test"}],
         new_message={"content": "test"},
         session_state="test",
@@ -236,7 +224,7 @@ async def test_add_to_cosmos_with_session_id(app_config_mock):
 @pytest.mark.asyncio
 async def test_add_to_cosmos_without_session_id(app_config_mock):
     """Test the AppConfig class add_to_cosmos method without session_id."""
-    is_added = app_config_mock.add_to_cosmos(
+    is_added = await app_config_mock.add_to_cosmos(
         old_messages=[{"content": "test"}],
         new_message={"content": "test"},
         session_state=None,
@@ -248,7 +236,7 @@ async def test_add_to_cosmos_without_session_id(app_config_mock):
 @pytest.mark.asyncio
 async def test_add_to_cosmos_without_messages(app_config_mock):
     """Test the AppConfig class add_to_cosmos method without messages."""
-    is_added = app_config_mock.add_to_cosmos(
+    is_added = await app_config_mock.add_to_cosmos(
         old_messages=[],
         new_message={},
         session_state=None,
@@ -260,7 +248,7 @@ async def test_add_to_cosmos_without_messages(app_config_mock):
 @pytest.mark.asyncio
 async def test_add_to_cosmos_without_id(app_config_mock):
     """Test the AppConfig class add_to_cosmos method without id."""
-    is_added = app_config_mock.add_to_cosmos(
+    is_added = await app_config_mock.add_to_cosmos(
         old_messages=[],
         new_message={},
         session_state=None,
@@ -272,7 +260,7 @@ async def test_add_to_cosmos_without_id(app_config_mock):
 @pytest.mark.asyncio
 async def test_add_to_cosmos_with_id_and_without_messages(app_config_mock):
     """Test the AppConfig class add_to_cosmos method with id and  without messages."""
-    is_added = app_config_mock.add_to_cosmos(
+    is_added = await app_config_mock.add_to_cosmos(
         old_messages=[],
         new_message={},
         session_state="test",

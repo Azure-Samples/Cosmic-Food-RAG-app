@@ -43,7 +43,7 @@ export const Answer = ({ answer, isSelected, isStreaming, onThoughtProcessClicke
                             title="Show supporting content"
                             ariaLabel="Show supporting content"
                             onClick={() => onSupportingContentClicked()}
-                            disabled={!answer.context.data_points}
+                            disabled={!answer.context.data_points?.length}
                         />
                         <SpeechOutput answer={sanitizedAnswerHtml} />
                     </div>

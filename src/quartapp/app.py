@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -6,6 +7,12 @@ from quart import Quart, Response, jsonify, request, send_file, send_from_direct
 from quartapp.approaches.schemas import RetrievalResponse
 from quartapp.config import AppConfig
 
+logging.basicConfig(
+    handlers=[logging.StreamHandler()],
+    format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
+    level=logging.INFO,
+)
+
 
 def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None) -> Quart:
     app = Quart(__name__, static_folder="static")
@@ -13,6 +20,12 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
     if test_config:
         # load the test config if passed in
         app.config.from_mapping(test_config)
+
+    available_approaches = {
+        "vector": app_config.run_vector,
+        "rag": app_config.run_rag,
+        "keyword": app_config.run_keyword,
+    }
 
     @app.route("/")
     async def index() -> Any:
@@ -55,38 +68,16 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
         top: int = override.get("top", 3)
         score_threshold: float = override.get("score_threshold", 0.5)
 
-        if retrieval_mode == "vector":
-            vector_answer: RetrievalResponse = await app_config.run_vector(
+        if approach := available_approaches.get(retrieval_mode):
+            response: RetrievalResponse = await approach(
                 session_state=session_state,
                 messages=messages,
                 temperature=temperature,
                 limit=top,
                 score_threshold=score_threshold,
             )
-            return jsonify(vector_answer)
-
-        elif retrieval_mode == "rag":
-            rag_answer: RetrievalResponse = await app_config.run_rag(
-                session_state=session_state,
-                messages=messages,
-                temperature=temperature,
-                limit=top,
-                score_threshold=score_threshold,
-            )
-            return jsonify(rag_answer)
-
-        elif retrieval_mode == "keyword":
-            keyword_answer: RetrievalResponse = await app_config.run_keyword(
-                session_state=session_state,
-                messages=messages,
-                temperature=temperature,
-                limit=top,
-                score_threshold=score_threshold,
-            )
-            return jsonify(keyword_answer)
-
-        else:
-            return jsonify({"error": "Not Implemented!"}), 501
+            return jsonify(response)
+        return jsonify({"error": "Not Implemented!"}), 501
 
     @app.route("/chat/stream", methods=["POST"])
     async def stream_chat() -> Any:

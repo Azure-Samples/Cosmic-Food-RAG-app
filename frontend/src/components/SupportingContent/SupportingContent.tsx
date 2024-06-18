@@ -3,11 +3,11 @@ import styles from "./SupportingContent.module.css";
 import { DataPoint } from "../../api";
 
 interface Props {
-    supportingContent: DataPoint;
+    supportingContent: DataPoint[];
 }
 
 export const SupportingContent = ({ supportingContent }: Props) => {
-    const textItems = supportingContent.json ? supportingContent.json : [];
+    const textItems = supportingContent ? supportingContent : [];
     return (
         <ul className={styles.supportingContentNavList}>
             {textItems.map((c, ind) => {
