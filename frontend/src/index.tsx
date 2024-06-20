@@ -8,14 +8,12 @@ import "./index.css";
 import Layout from "./pages/layout/Layout";
 import Chat from "./pages/chat/Chat";
 
-var layout = <Layout />;
-
 initializeIcons();
 
 const router = createHashRouter([
     {
         path: "/",
-        element: layout,
+        element: <Layout />,
         children: [
             {
                 index: true,

@@ -18,8 +18,7 @@ export type ResponseMessage = {
 
 export type Thought = {
     title: string;
-    description: any; // It can be any output from the api
-    props?: { [key: string]: string };
+    description: string;
 };
 
 export type DataPoint = {
