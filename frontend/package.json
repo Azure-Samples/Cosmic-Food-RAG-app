@@ -11,7 +11,8 @@
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "format": "prettier --write \"**/*.{js,ts,tsx,css.scss,html}\""
+        "format": "prettier --write \"**/*.{js,ts,tsx,css.scss,html}\"",
+        "check-format": "prettier --check \"**/*.{js,ts,tsx,css.scss,html}\""
     },
     "dependencies": {
         "@fluentui/react": "^8.112.5",
