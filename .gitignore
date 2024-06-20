@@ -152,7 +152,3 @@ static/
 data/**/*.md5
 
 .DS_Store
-
-# Ignore lock files
-package-lock.json
-*.lock
