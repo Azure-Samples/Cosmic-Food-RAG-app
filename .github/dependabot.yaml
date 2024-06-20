@@ -11,6 +11,12 @@ updates:
         patterns:
           - "*"
 
+  # Maintain dependencies for npm
+  - package-ecosystem: "npm"
+    directory: "frontend/"
+    schedule:
+      interval: "weekly"
+
   # Maintain dependencies for pip
   - package-ecosystem: "pip"
     directory: "/"
