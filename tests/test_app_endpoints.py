@@ -98,7 +98,12 @@ async def test_chat_no_message_400(client):
 async def test_chat_not_implemented_501(client):
     """test the chat route with a retrieval_mode not implemented"""
     response: Response = await client.post(
-        "/chat", json={"context": {"overrides": {"retrieval_mode": "not_implemented"}}}
+        "/chat",
+        json={
+            "session_state": "test",
+            "messages": [{"content": "test"}],
+            "context": {"overrides": {"retrieval_mode": "not_implemented"}},
+        },
     )
 
     assert response.status_code == 501
@@ -114,7 +119,7 @@ async def test_chat_rag_option(client_mock):
         "/chat",
         json={
             "session_state": "test",
-            "messages": [{"content": "test"}],
+            "messages": [{"content": "test"}, {"content": "test2"}],
             "context": {"overrides": {"retrieval_mode": "rag"}},
         },
     )
@@ -250,7 +255,12 @@ async def test_chat_stream_no_message_400(client):
 async def test_chat_stream_not_implemented_501(client):
     """test the chat route with a retrieval_mode not implemented"""
     response: Response = await client.post(
-        "/chat/stream", json={"context": {"overrides": {"retrieval_mode": "not_implemented"}}}
+        "/chat/stream",
+        json={
+            "session_state": "test",
+            "messages": [{"content": "test"}],
+            "context": {"overrides": {"retrieval_mode": "not_implemented"}},
+        },
     )
 
     assert response.status_code == 501
