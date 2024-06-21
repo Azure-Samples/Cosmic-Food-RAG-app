@@ -33,7 +33,7 @@ const Chat = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isStreaming, setIsStreaming] = useState<boolean>(false);
-    const [shouldStream, setShouldStream] = useState<boolean>(true);
+    const [shouldStream, setShouldStream] = useState<boolean>(false);
     const [isBuy, setIsBuy] = useState<boolean>(false);
     const [address, setAddress] = useState<string>("");
     const [cartItems, setCartItems] = useState<string[]>([]);
