@@ -1,7 +1,6 @@
 import logging
 from collections.abc import AsyncGenerator
-from dataclasses import asdict, is_dataclass
-from json import JSONEncoder, dumps
+from json import dumps
 from pathlib import Path
 from typing import Any
 
@@ -17,20 +16,13 @@ logging.basicConfig(
 )
 
 
-class CustomJSONEncoder(JSONEncoder):
-    def default(self, o: Any) -> Any:
-        if is_dataclass(o):
-            return asdict(o)
-        return super().default(o)
-
-
 async def format_as_ndjson(r: AsyncGenerator[RetrievalResponse | Message, None]) -> AsyncGenerator[str, None]:
     """
     Format the response as NDJSON
     """
     try:
         async for event in r:
-            yield dumps(event.to_dict(), ensure_ascii=False, cls=CustomJSONEncoder) + "\n"
+            yield dumps(event.to_dict(), ensure_ascii=False) + "\n"
     except Exception as error:
         logging.exception("Exception while generating response stream: %s", error)
         yield dumps({"error": str(error)}, ensure_ascii=False) + "\n"

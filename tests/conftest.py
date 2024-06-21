@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import langchain_core
 import mongomock
 import pytest
 import pytest_asyncio
@@ -47,24 +48,13 @@ def approaches_base_mock():
 
     # Mock Vector Store
     mock_vector_store = MagicMock()
-    mock_retriever = MagicMock()
     mock_document = Document(
         page_content='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}'
     )
-    mock_retriever.ainvoke = AsyncMock(return_value=[mock_document])  # Assume there is always a response
-    mock_vector_store.as_retriever.return_value = mock_retriever
+    mock_vector_store.as_retriever.return_value.ainvoke = AsyncMock(return_value=[mock_document])
 
     # Mock Chat
     mock_chat = MagicMock()
-
-    @dataclass
-    class MockContent:
-        content: str
-
-    mock_content = MockContent(content="content")
-
-    mock_chat.__or__ = MagicMock()
-    mock_chat.__or__.return_value.ainvoke = AsyncMock(return_value=mock_content)
 
     # Mock Data Collection
     mock_mongo_document = {"textContent": mock_document.page_content, "source": "test"}
@@ -165,6 +155,24 @@ def setup_data_collection_mock(monkeypatch):
     _mock = MagicMock()
     monkeypatch.setattr(quartapp.approaches.setup, quartapp.approaches.setup.setup_data_collection.__name__, _mock)
     return _mock
+
+
+@pytest.fixture(autouse=True)
+def mock_runnable_or(monkeypatch):
+    """Mock langchain_core.runnables.base.Runnable.__or__."""
+
+    @dataclass
+    class MockContent:
+        content: str
+
+    or_return = MagicMock()
+    or_return.ainvoke = AsyncMock(return_value=MockContent(content="content"))
+    or_mock = MagicMock()
+    or_mock.return_value = or_return
+    monkeypatch.setattr(
+        langchain_core.runnables.base.Runnable, langchain_core.runnables.base.Runnable.__or__.__name__, or_mock
+    )
+    return or_mock
 
 
 @pytest_asyncio.fixture
