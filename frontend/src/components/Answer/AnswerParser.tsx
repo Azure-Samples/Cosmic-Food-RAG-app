@@ -23,7 +23,7 @@ export function parseAnswerToHtml(answer: string, isStreaming: boolean): HtmlPar
 
     const parts = parsedAnswer.split(/\[([^\]]+)\]/g);
 
-    const fragments: string[] = parts.map((part, index) => {
+    const fragments: string[] = parts.map(part => {
         return part;
     });
 
