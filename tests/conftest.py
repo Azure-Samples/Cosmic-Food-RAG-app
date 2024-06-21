@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import mongomock
@@ -56,19 +57,16 @@ def approaches_base_mock():
     # Mock Chat
     mock_chat = MagicMock()
 
-    mock_content = MagicMock()
-    mock_content.content = "content"
+    @dataclass
+    class MockContent:
+        content: str
 
-    runnable_return = MagicMock()
-    runnable_return.to_json = MagicMock(return_value={"kwargs": {"messages": [mock_content]}})
+    mock_content = MockContent(content="content")
 
-    mock_runnable = MagicMock()
-    mock_runnable.ainvoke = AsyncMock(return_value=runnable_return)
+    mock_chat.__or__ = MagicMock()
+    mock_chat.__or__.return_value.ainvoke = AsyncMock(return_value=mock_content)
 
-    mock_chat.__or__.return_value = mock_runnable
-
-    mock_chat.ainvoke = AsyncMock(return_value=mock_content)
-
+    # Mock Data Collection
     mock_mongo_document = {"textContent": mock_document.page_content, "source": "test"}
     mock_data_collection = MagicMock()
     mock_data_collection.find = MagicMock()
@@ -159,17 +157,6 @@ def app_config_mock(setup_mock):
     app_config = AppConfig()
     app_config.setup = setup_mock
     return app_config
-
-
-@pytest.fixture(autouse=True)
-def create_stuff_documents_chain_mock(monkeypatch):
-    """Mock quartapp.approaches.rag.create_stuff_documents_chain."""
-    document_chain_mock = MagicMock()
-    document_chain_mock.ainvoke = AsyncMock(return_value="content")
-    _mock = MagicMock()
-    _mock.return_value = document_chain_mock
-    monkeypatch.setattr(quartapp.approaches.rag, quartapp.approaches.rag.create_stuff_documents_chain.__name__, _mock)
-    return _mock
 
 
 @pytest.fixture(autouse=True)
