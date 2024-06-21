@@ -33,7 +33,7 @@ const Chat = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isStreaming, setIsStreaming] = useState<boolean>(false);
-    const [shouldStream, setShouldStream] = useState<boolean>(false);
+    const [shouldStream, setShouldStream] = useState<boolean>(true);
     const [isBuy, setIsBuy] = useState<boolean>(false);
     const [address, setAddress] = useState<string>("");
     const [cartItems, setCartItems] = useState<string[]>([]);
@@ -97,12 +97,9 @@ const Chat = () => {
             for await (const event of readNDJSONStream(responseBody)) {
                 if (event["context"] && event["context"]["data_points"] && event["message"]) {
                     askResponse = event as ChatAppResponse;
-                } else if (event["message"]["content"]) {
+                } else if (event["content"]) {
                     setIsLoading(false);
-                    await updateState(event["message"]["content"]);
-                } else if (event["context"]) {
-                    // Update context with new keys from latest event
-                    askResponse.context = { ...askResponse.context, ...event["context"] };
+                    await updateState(event["content"]);
                 } else if (event["error"]) {
                     throw Error(event["error"]);
                 }
@@ -406,7 +403,6 @@ const Chat = () => {
                         onRenderLabel={(props: ICheckboxProps | undefined) => (
                             <HelpCallout labelId={shouldStreamId} fieldId={shouldStreamFieldId} helpText={toolTipText.streamChat} label={props?.label} />
                         )}
-                        disabled={true}
                     />
                 </Panel>
             </div>

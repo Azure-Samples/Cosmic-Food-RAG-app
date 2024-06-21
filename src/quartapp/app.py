@@ -1,10 +1,13 @@
 import logging
+from collections.abc import AsyncGenerator
+from dataclasses import asdict, is_dataclass
+from json import JSONEncoder, dumps
 from pathlib import Path
 from typing import Any
 
-from quart import Quart, Response, jsonify, request, send_file, send_from_directory
+from quart import Quart, Response, jsonify, make_response, request, send_file, send_from_directory
 
-from quartapp.approaches.schemas import RetrievalResponse
+from quartapp.approaches.schemas import Message, RetrievalResponse
 from quartapp.config import AppConfig
 
 logging.basicConfig(
@@ -12,6 +15,25 @@ logging.basicConfig(
     format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
     level=logging.INFO,
 )
+
+
+class CustomJSONEncoder(JSONEncoder):
+    def default(self, o: Any) -> Any:
+        if is_dataclass(o):
+            return asdict(o)
+        return super().default(o)
+
+
+async def format_as_ndjson(r: AsyncGenerator[RetrievalResponse | Message, None]) -> AsyncGenerator[str, None]:
+    """
+    Format the response as NDJSON
+    """
+    try:
+        async for event in r:
+            yield dumps(event.to_dict(), ensure_ascii=False, cls=CustomJSONEncoder) + "\n"
+    except Exception as error:
+        logging.exception("Exception while generating response stream: %s", error)
+        yield dumps({"error": str(error)}, ensure_ascii=False) + "\n"
 
 
 def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None) -> Quart:
@@ -56,8 +78,13 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
         if not body:
             return jsonify({"error": "request body is empty"}), 400
 
-        # Get the request message, session_state, context from the request body
+        # Get the request message
         messages: list = body.get("messages", [])
+
+        if not messages:
+            return jsonify({"error": "request must have a message"}), 400
+
+        # Get the request session_state, context from the request body
         session_state = body.get("session_state", None)
         context = body.get("context", {})
 
@@ -90,6 +117,34 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
         if not body:
             return jsonify({"error": "request body is empty"}), 400
 
+        # Get the request message
+        messages: list = body.get("messages", [])
+
+        if not messages:
+            return jsonify({"error": "request must have a message"}), 400
+
+        # Get the request session_state, context from the request body
+        session_state = body.get("session_state", None)
+        context = body.get("context", {})
+
+        # Get the overrides from the context
+        override = context.get("overrides", {})
+        retrieval_mode: str = override.get("retrieval_mode", "vector")
+        temperature: float = override.get("temperature", 0.3)
+        top: int = override.get("top", 3)
+        score_threshold: float = override.get("score_threshold", 0.5)
+
+        if retrieval_mode == "rag":
+            result: AsyncGenerator[RetrievalResponse | Message, None] = app_config.run_rag_stream(
+                session_state=session_state,
+                messages=messages,
+                temperature=temperature,
+                limit=top,
+                score_threshold=score_threshold,
+            )
+            response = await make_response(format_as_ndjson(result))
+            response.mimetype = "application/x-ndjson"
+            return response
         return jsonify({"error": "Not Implemented!"}), 501
 
     return app
