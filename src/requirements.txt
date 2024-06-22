@@ -92,17 +92,17 @@ langchain==0.2.5
     #   quartapp (src/pyproject.toml)
 langchain-community==0.2.5
     # via quartapp (src/pyproject.toml)
-langchain-core==0.2.8
+langchain-core==0.2.9
     # via
     #   langchain
     #   langchain-community
     #   langchain-openai
     #   langchain-text-splitters
-langchain-openai==0.1.8
+langchain-openai==0.1.9
     # via quartapp (src/pyproject.toml)
 langchain-text-splitters==0.2.1
     # via langchain
-langsmith==0.1.79
+langsmith==0.1.81
     # via
     #   langchain
     #   langchain-community
@@ -124,7 +124,7 @@ numpy==1.26.4
     # via
     #   langchain
     #   langchain-community
-openai==1.34.0
+openai==1.35.3
     # via langchain-openai
 orjson==3.10.5
     # via langsmith
@@ -166,7 +166,7 @@ sniffio==1.3.1
     #   anyio
     #   httpx
     #   openai
-sqlalchemy==2.0.30
+sqlalchemy==2.0.31
     # via
     #   langchain
     #   langchain-community
