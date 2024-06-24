@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=./src/requirements.txt ./src/pyproject.toml
 #
-aiofiles==23.2.1
+aiofiles==24.1.0
     # via quart
 aiohttp==3.9.5
     # via
@@ -120,7 +120,7 @@ multidict==6.0.5
     #   yarl
 mypy-extensions==1.0.0
     # via typing-inspect
-numpy==1.26.4
+numpy==2.0.0
     # via
     #   langchain
     #   langchain-community
@@ -140,7 +140,7 @@ pydantic==2.7.4
     #   langchain-core
     #   langsmith
     #   openai
-pydantic-core==2.18.4
+pydantic-core==2.19.0
     # via pydantic
 pymongo==4.7.3
     # via quartapp (src/pyproject.toml)
