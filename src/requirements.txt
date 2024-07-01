@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=./src/requirements.txt ./src/pyproject.toml
 #
-aiofiles==23.2.1
+aiofiles==24.1.0
     # via quart
 aiohttp==3.9.5
     # via
@@ -86,23 +86,23 @@ jsonpatch==1.33
     # via langchain-core
 jsonpointer==3.0.0
     # via jsonpatch
-langchain==0.2.5
+langchain==0.2.6
     # via
     #   langchain-community
     #   quartapp (src/pyproject.toml)
-langchain-community==0.2.5
+langchain-community==0.2.6
     # via quartapp (src/pyproject.toml)
-langchain-core==0.2.9
+langchain-core==0.2.10
     # via
     #   langchain
     #   langchain-community
     #   langchain-openai
     #   langchain-text-splitters
-langchain-openai==0.1.9
+langchain-openai==0.1.13
     # via quartapp (src/pyproject.toml)
-langchain-text-splitters==0.2.1
+langchain-text-splitters==0.2.2
     # via langchain
-langsmith==0.1.81
+langsmith==0.1.82
     # via
     #   langchain
     #   langchain-community
@@ -120,11 +120,11 @@ multidict==6.0.5
     #   yarl
 mypy-extensions==1.0.0
     # via typing-inspect
-numpy==1.26.4
+numpy==2.0.0
     # via
     #   langchain
     #   langchain-community
-openai==1.35.3
+openai==1.35.7
     # via langchain-openai
 orjson==3.10.5
     # via langsmith
@@ -140,9 +140,9 @@ pydantic==2.7.4
     #   langchain-core
     #   langsmith
     #   openai
-pydantic-core==2.18.4
+pydantic-core==2.20.0
     # via pydantic
-pymongo==4.7.3
+pymongo==4.8.0
     # via quartapp (src/pyproject.toml)
 python-dotenv==1.0.1
     # via quartapp (src/pyproject.toml)
@@ -170,7 +170,7 @@ sqlalchemy==2.0.31
     # via
     #   langchain
     #   langchain-community
-tenacity==8.4.1
+tenacity==8.4.2
     # via
     #   langchain
     #   langchain-community
