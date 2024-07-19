@@ -11,6 +11,9 @@ param location string
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
 
+@description('SKU to use for App Service Plan')
+param appServiceSku string
+
 var mongoClusterName = '${uniqueString(resourceGroup.id)}-mvcore'
 var mongoAdminUser = 'admin${uniqueString(resourceGroup.id)}'
 @secure()
@@ -109,7 +112,7 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
     location: location
     tags: tags
     sku: {
-      name: 'B1'
+      name: appServiceSku
     }
     reserved: true
   }
@@ -133,12 +136,12 @@ module mongoCluster 'core/database/cosmos/mongo/cosmos-mongo-cluster.bicep' = {
 
 module keyVaultSecrets './core/security/keyvault-secret.bicep' = {
   dependsOn: [ mongoCluster ]
-  name: 'keyvault-secret-mongo-connstr'
+  name: 'keyvault-secret-mongo-password'
   scope: resourceGroup
   params: {
-    name: 'mongoConnectionStr'
+    name: 'mongoAdminPassword'
     keyVaultName: keyVault.outputs.name
-    secretValue: replace(replace(mongoCluster.outputs.connectionStringKey, '<user>', mongoAdminUser), '<password>', mongoAdminPassword)
+    secretValue: mongoAdminPassword
   }
 }
 
@@ -153,10 +156,12 @@ module web 'core/host/appservice.bicep' = {
     appServicePlanId: appServicePlan.outputs.id
     appCommandLine: 'entrypoint.sh'
     runtimeName: 'python'
-    runtimeVersion: '3.10'
+    runtimeVersion: '3.12'
     scmDoBuildDuringDeployment: true
     ftpsState: 'Disabled'
     managedIdentity: true
+    use32BitWorkerProcess: appServiceSku == 'F1'
+    alwaysOn: appServiceSku != 'F1'
     appSettings: {
       AZURE_OPENAI_DEPLOYMENT_NAME: openAIDeploymentName
       AZURE_OPENAI_ENDPOINT: openAi.outputs.endpoint
@@ -165,7 +170,9 @@ module web 'core/host/appservice.bicep' = {
       AZURE_OPENAI_EMBEDDINGS_MODEL_NAME: embeddingModelName
       AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME: embeddingDeploymentName
       AZURE_OPENAI_API_KEY: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)'
-      AZURE_COSMOS_CONNECTION_STRING: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoConnectionStr)'
+      AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
+      AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey
+      AZURE_COSMOS_USERNAME: mongoAdminUser
       AZURE_COSMOS_DATABASE_NAME: 'lc_database'
       AZURE_COSMOS_COLLECTION_NAME: 'lc_collection'
     }
