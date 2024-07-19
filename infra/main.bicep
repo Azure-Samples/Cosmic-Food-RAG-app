@@ -11,6 +11,9 @@ param location string
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
 
+@description('SKU to use for App Service Plan')
+param appServiceSku string
+
 var mongoClusterName = '${uniqueString(resourceGroup.id)}-mvcore'
 var mongoAdminUser = 'admin${uniqueString(resourceGroup.id)}'
 @secure()
@@ -109,7 +112,7 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
     location: location
     tags: tags
     sku: {
-      name: 'B1'
+      name: appServiceSku
     }
     reserved: true
   }
@@ -157,6 +160,8 @@ module web 'core/host/appservice.bicep' = {
     scmDoBuildDuringDeployment: true
     ftpsState: 'Disabled'
     managedIdentity: true
+    use32BitWorkerProcess: appServiceSku == 'F1'
+    alwaysOn: appServiceSku != 'F1'
     appSettings: {
       AZURE_OPENAI_DEPLOYMENT_NAME: openAIDeploymentName
       AZURE_OPENAI_ENDPOINT: openAi.outputs.endpoint

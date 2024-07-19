@@ -13,6 +13,9 @@
       },
       "mongoAdminPassword": {
         "value": "$(secretOrRandomPassword ${AZURE_KEY_VAULT_NAME} mongoAdminPassword)"
+      },
+      "appServiceSku": {
+        "value": "${AZURE_APP_SERVICE_SKU=B1}"
       }
     }
   }
