@@ -133,12 +133,12 @@ module mongoCluster 'core/database/cosmos/mongo/cosmos-mongo-cluster.bicep' = {
 
 module keyVaultSecrets './core/security/keyvault-secret.bicep' = {
   dependsOn: [ mongoCluster ]
-  name: 'keyvault-secret-mongo-connstr'
+  name: 'keyvault-secret-mongo-password'
   scope: resourceGroup
   params: {
-    name: 'mongoConnectionStr'
+    name: 'mongoAdminPassword'
     keyVaultName: keyVault.outputs.name
-    secretValue: replace(replace(mongoCluster.outputs.connectionStringKey, '<user>', mongoAdminUser), '<password>', mongoAdminPassword)
+    secretValue: mongoAdminPassword
   }
 }
 
@@ -165,7 +165,9 @@ module web 'core/host/appservice.bicep' = {
       AZURE_OPENAI_EMBEDDINGS_MODEL_NAME: embeddingModelName
       AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME: embeddingDeploymentName
       AZURE_OPENAI_API_KEY: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)'
-      AZURE_COSMOS_CONNECTION_STRING: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoConnectionStr)'
+      AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
+      AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey
+      AZURE_COSMOS_USERNAME: mongoAdminUser
       AZURE_COSMOS_DATABASE_NAME: 'lc_database'
       AZURE_COSMOS_COLLECTION_NAME: 'lc_collection'
     }

@@ -1,6 +1,7 @@
 import json
 import os
 from abc import ABC, abstractmethod
+from urllib.parse import quote_plus
 
 from langchain_core.documents import Document
 from pydantic.v1 import SecretStr
@@ -15,13 +16,23 @@ from quartapp.approaches.schemas import Context, DataPoint, RetrievalResponse, T
 from quartapp.approaches.setup import Setup
 
 
+def read_and_parse_connection_string() -> str:
+    mongo_connection_string = os.getenv("AZURE_COSMOS_CONNECTION_STRING", "YOUR-COSMOS-DB-CONNECTION-STRING")
+    mongo_username = quote_plus(os.getenv("AZURE_COSMOS_USERNAME", "YOUR-COSMOS-DB-USERNAME"))
+    mongo_password = quote_plus(os.getenv("AZURE_COSMOS_PASSWORD", "YOUR-COSMOS-DB-PASSWORD"))
+    mongo_connection_string = mongo_connection_string.replace("<user>", mongo_username).replace(
+        "<password>", mongo_password
+    )
+    return mongo_connection_string
+
+
 class AppConfigBase(ABC):
     def __init__(self) -> None:
         openai_embeddings_model = os.getenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-ada-002")
         openai_embeddings_deployment = os.getenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding")
         openai_chat_model = os.getenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-35-turbo")
         openai_chat_deployment = os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "chat-gpt")
-        connection_string = os.getenv("AZURE_COSMOS_CONNECTION_STRING", "<YOUR-COSMOS-DB-CONNECTION-STRING>")
+        connection_string = read_and_parse_connection_string()
         database_name = os.getenv("AZURE_COSMOS_DATABASE_NAME", "<COSMOS-DB-NEW-UNIQUE-DATABASE-NAME>")
         collection_name = os.getenv("AZURE_COSMOS_COLLECTION_NAME", "<COSMOS-DB-NEW-UNIQUE-DATABASE-NAME>")
         index_name = os.getenv("AZURE_COSMOS_INDEX_NAME", "<COSMOS-DB-NEW-UNIQUE-INDEX-NAME>")
