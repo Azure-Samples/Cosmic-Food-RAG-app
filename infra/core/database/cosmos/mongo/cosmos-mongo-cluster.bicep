@@ -4,29 +4,45 @@ param name string
 param location string = resourceGroup().location
 param tags object = {}
 
+@description('Username for admin user')
 param administratorLogin string
-param sku string
-param storage int
-param nodeCount int
 @secure()
+@description('Password for admin user')
+@minLength(8)
+@maxLength(128)
 param administratorLoginPassword string
-param highAvailabilityMode bool = false
-param allowAzureIPsFirewall bool = false
+@description('Whether to allow all IPs or not. Warning: No IP addresses will be blocked and any host on the Internet can access the coordinator in this server group. It is strongly recommended to use this rule only temporarily and only on test clusters that do not contain sensitive data.')
 param allowAllIPsFirewall bool = false
+@description('Whether to allow Azure internal IPs or not')
+param allowAzureIPsFirewall bool = false
+@description('IP addresses to allow access to the cluster from')
 param allowedSingleIPs array = []
+@description('Mode to create the mongo cluster')
+param createMode string = 'Default'
+@description('Whether high availability is enabled on the node group')
+param highAvailabilityMode bool = false
+@description('Number of nodes in the node group')
+param nodeCount int
+@description('Deployed Node type in the node group')
+param nodeType string = 'Shard'
+@description('SKU defines the CPU and memory that is provisioned for each node')
+param sku string
+@description('Disk storage size for the node group in GB')
+param storage int
 
-resource mognoCluster 'Microsoft.DocumentDB/mongoClusters@2023-03-01-preview' = {
+resource mognoCluster 'Microsoft.DocumentDB/mongoClusters@2024-02-15-preview' = {
   name: name
   tags: tags
   location: location
   properties: {
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
+    createMode: createMode
     nodeGroupSpecs: [
         {
             diskSizeGB: storage
             enableHa: highAvailabilityMode
-            kind: 'Shard'
+            kind: nodeType
             nodeCount: nodeCount
             sku: sku
         }
