@@ -153,7 +153,7 @@ module web 'core/host/appservice.bicep' = {
     appServicePlanId: appServicePlan.outputs.id
     appCommandLine: 'entrypoint.sh'
     runtimeName: 'python'
-    runtimeVersion: '3.10'
+    runtimeVersion: '3.12'
     scmDoBuildDuringDeployment: true
     ftpsState: 'Disabled'
     managedIdentity: true
