@@ -173,8 +173,9 @@ module web 'core/host/appservice.bicep' = {
       AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
       AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey
       AZURE_COSMOS_USERNAME: mongoAdminUser
-      AZURE_COSMOS_DATABASE_NAME: 'lc_database'
-      AZURE_COSMOS_COLLECTION_NAME: 'lc_collection'
+      AZURE_COSMOS_DATABASE_NAME: 'CosmicDB'
+      AZURE_COSMOS_COLLECTION_NAME: 'CosmicFoodCollection'
+      AZURE_COSMOS_INDEX_NAME: 'CosmicIndex'
     }
   }
 }
