@@ -45,10 +45,10 @@ If there is nothing in the context relevant to the question at hand, just say "H
 I'm not sure." Don't try to make up an answer.
 
 Anything between the following `context` html blocks is retrieved from a knowledge \
-bank, not part of the conversation with the user. 
+bank, not part of the conversation with the user.
 
 <context>
-    {context} 
+    {context}
 <context/>
 
 REMEMBER: If there is no relevant information within the context, just say "Hmm, I'm \
@@ -65,43 +65,41 @@ class RAG(ApproachesBase):
     async def run(
         self, messages: list, temperature: float, limit: int, score_threshold: float
     ) -> tuple[list[Document], str]:
-        if messages:
-            # Create a vector store retriever
-            retriever = self._vector_store.as_retriever(
-                search_type="similarity", search_kwargs={"k": limit, "score_threshold": score_threshold}
+        # Create a vector store retriever
+        retriever = self._vector_store.as_retriever(
+            search_type="similarity", search_kwargs={"k": limit, "score_threshold": score_threshold}
+        )
+
+        self._chat.temperature = 0.3
+
+        # Create a vector context aware chat retriever
+        rephrase_prompt_template = ChatPromptTemplate.from_template(REPHRASE_PROMPT)
+        rephrase_chain = rephrase_prompt_template | self._chat
+
+        # Rephrase the question
+        rephrased_question = await rephrase_chain.ainvoke({"chat_history": messages[:-1], "question": messages[-1]})
+
+        print(rephrased_question.content)
+        # Perform vector search
+        vector_context = await retriever.ainvoke(str(rephrased_question.content))
+        data_points: list[DataPoint] = get_data_points(vector_context)
+
+        # Create a vector context aware chat retriever
+        context_prompt_template = ChatPromptTemplate.from_template(CONTEXT_PROMPT)
+        self._chat.temperature = temperature
+        context_chain = context_prompt_template | self._chat
+
+        if data_points:
+            # Perform RAG search
+            response = await context_chain.ainvoke(
+                {"context": [dp.to_dict() for dp in data_points], "input": rephrased_question.content}
             )
 
-            self._chat.temperature = 0.3
+            return vector_context, str(response.content)
 
-            # Create a vector context aware chat retriever
-            rephrase_prompt_template = ChatPromptTemplate.from_template(REPHRASE_PROMPT)
-            rephrase_chain = rephrase_prompt_template | self._chat
-
-            # Rephrase the question
-            rephrased_question = await rephrase_chain.ainvoke({"chat_history": messages[:-1], "question": messages[-1]})
-
-            print(rephrased_question.content)
-            # Perform vector search
-            vector_context = await retriever.ainvoke(str(rephrased_question.content))
-            data_points: list[DataPoint] = get_data_points(vector_context)
-
-            # Create a vector context aware chat retriever
-            context_prompt_template = ChatPromptTemplate.from_template(CONTEXT_PROMPT)
-            self._chat.temperature = temperature
-            context_chain = context_prompt_template | self._chat
-
-            if data_points:
-                # Perform RAG search
-                response = await context_chain.ainvoke(
-                    {"context": [dp.to_dict() for dp in data_points], "input": rephrased_question.content}
-                )
-
-                return vector_context, str(response.content)
-
-            # Perform RAG search with no context
-            response = await context_chain.ainvoke({"context": [], "input": rephrased_question.content})
-            return [], str(response.content)
-        return [], ""
+        # Perform RAG search with no context
+        response = await context_chain.ainvoke({"context": [], "input": rephrased_question.content})
+        return [], str(response.content)
 
     async def run_stream(
         self, messages: list, temperature: float, limit: int, score_threshold: float

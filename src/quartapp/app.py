@@ -73,7 +73,7 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
         # Get the request message
         messages: list = body.get("messages", [])
 
-        if not messages:
+        if not messages and len(messages) == 0:
             return jsonify({"error": "request must have a message"}), 400
 
         # Get the request session_state, context from the request body

@@ -51,7 +51,7 @@ def setup_users_collection(connection_string: str, database_name: str) -> Collec
     return collection
 
 
-def setup_data_collection(connection_string: str, database_name: str, collection_name: str) -> Collection | None:
+def setup_data_collection(connection_string: str, database_name: str, collection_name: str) -> Collection:
     try:
         mongo_client: MongoClient = MongoClient(connection_string, serverSelectionTimeoutMS=1000)
         db = mongo_client[database_name]
@@ -59,4 +59,4 @@ def setup_data_collection(connection_string: str, database_name: str, collection
         collection.create_index({"textContent": "text"}, name="search_text_index")
         return collection
     except ServerSelectionTimeoutError:
-        return None
+        raise ServerSelectionTimeoutError

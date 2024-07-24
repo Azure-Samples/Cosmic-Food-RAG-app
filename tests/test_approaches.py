@@ -23,7 +23,8 @@ async def test_keyword_no_messages(keyword_mock):
     assert keyword_mock._embedding
     assert keyword_mock._chat
     assert keyword_mock._data_collection
-    assert await keyword_mock.run([], 0.0, 0, 0.0) == ([], "")
+    with pytest.raises(IndexError):
+        await keyword_mock.run([], 0.0, 0, 0.0) == ([], "")
 
 
 @pytest.mark.asyncio
@@ -48,7 +49,8 @@ async def test_vector_no_messages(vector_mock):
     assert vector_mock._embedding
     assert vector_mock._chat
     assert vector_mock._data_collection
-    assert await vector_mock.run([], 0.0, 0, 0.0) == ([], "")
+    with pytest.raises(IndexError):
+        await vector_mock.run([], 0.0, 0, 0.0) == ([], "")
 
 
 @pytest.mark.asyncio
@@ -68,7 +70,8 @@ async def test_rag_no_messages(rag_mock):
     assert rag_mock._embedding
     assert rag_mock._chat
     assert rag_mock._data_collection
-    assert await rag_mock.run([], 0.0, 0, 0.0) == ([], "")
+    with pytest.raises(IndexError):
+        await rag_mock.run([], 0.0, 0, 0.0) == ([], "")
 
 
 @pytest.mark.asyncio
@@ -179,34 +182,22 @@ async def test_app_config_run_rag(app_config_mock):
 @pytest.mark.asyncio
 async def test_app_config_run_keyword_no_message(app_config_mock):
     """Test the AppConfig class run_keyword method without messages."""
-    result = app_config_mock.run_keyword("test", [], 0.3, 1, 0.0)
-    assert await result == RetrievalResponse(
-        sessionState="test",
-        context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
-    )
+    with pytest.raises(IndexError):
+        await app_config_mock.run_keyword("test", [], 0.3, 1, 0.0)
 
 
 @pytest.mark.asyncio
 async def test_app_config_run_vector_no_message(app_config_mock):
     """Test the AppConfig class run_vector method without messages."""
-    result = app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
-    assert await result == RetrievalResponse(
-        sessionState="test",
-        context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
-    )
+    with pytest.raises(IndexError):
+        await app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
 
 
 @pytest.mark.asyncio
 async def test_app_config_run_rag_no_message(app_config_mock):
     """Test the AppConfig class run_rag method without messages."""
-    result = app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
-    assert await result == RetrievalResponse(
-        sessionState="test",
-        context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
-    )
+    with pytest.raises(IndexError):
+        await app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
 
 
 @pytest.mark.asyncio
