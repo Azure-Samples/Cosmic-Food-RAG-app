@@ -28,7 +28,9 @@ async def format_as_ndjson(r: AsyncGenerator[RetrievalResponseDelta, None]) -> A
         yield dumps({"error": str(error)}, ensure_ascii=False) + "\n"
 
 
-def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None) -> Quart:
+def create_app(test_config: dict[str, Any] | None = None) -> Quart:
+    app_config = AppConfig()
+
     app = Quart(__name__, static_folder="static")
 
     if test_config:
