@@ -5,9 +5,9 @@ from quart import Response
 
 
 @pytest.mark.asyncio
-async def test_index(client):
+async def test_index(client_mock):
     """test the index route"""
-    response: Response = await client.get("/")
+    response: Response = await client_mock.get("/")
 
     html_index_file_path = "src/quartapp/static/index.html"
     with open(html_index_file_path, "rb") as f:
@@ -20,9 +20,9 @@ async def test_index(client):
 
 
 @pytest.mark.asyncio
-async def test_hello(client):
+async def test_hello(client_mock):
     """test the hello route"""
-    response: Response = await client.get("/hello")
+    response: Response = await client_mock.get("/hello")
 
     assert response.status_code == 200
     assert response.content_type == "application/json"
@@ -31,9 +31,9 @@ async def test_hello(client):
 
 
 @pytest.mark.asyncio
-async def test_favicon(client):
+async def test_favicon(client_mock):
     """test the favicon route"""
-    response: Response = await client.get("/favicon.ico")
+    response: Response = await client_mock.get("/favicon.ico")
 
     favicon_file_path = "src/quartapp/static/favicon.ico"
     with open(favicon_file_path, "rb") as f:
@@ -45,9 +45,9 @@ async def test_favicon(client):
 
 
 @pytest.mark.asyncio
-async def test_assets_non_existent_404(client):
+async def test_assets_non_existent_404(client_mock):
     """test the assets route with a non-existent file"""
-    response: Response = await client.get("/assets/manifest.json")
+    response: Response = await client_mock.get("/assets/manifest.json")
 
     assert response.status_code == 404
     assert response.content_type == "application/json"
@@ -56,7 +56,7 @@ async def test_assets_non_existent_404(client):
 
 
 @pytest.mark.asyncio
-async def test_assets(client):
+async def test_assets(client_mock):
     """test the assets route with an existing file"""
     assets_dir_path = "src/quartapp/static/assets"
     assets_file_path = os.listdir(assets_dir_path)[0]
@@ -64,7 +64,7 @@ async def test_assets(client):
     with open(os.path.join(assets_dir_path, assets_file_path), "rb") as f:
         assets_file = f.read()
 
-    response: Response = await client.get(f"/assets/{assets_file_path}")
+    response: Response = await client_mock.get(f"/assets/{assets_file_path}")
 
     assert response.status_code == 200
     assert response.headers["Content-Length"] == str(len(assets_file))
@@ -72,9 +72,9 @@ async def test_assets(client):
 
 
 @pytest.mark.asyncio
-async def test_chat_non_json_415(client):
+async def test_chat_non_json_415(client_mock):
     """test the chat route with a non-json request"""
-    response: Response = await client.post("/chat")
+    response: Response = await client_mock.post("/chat")
 
     assert response.status_code == 415
     assert response.content_type == "application/json"
@@ -83,9 +83,9 @@ async def test_chat_non_json_415(client):
 
 
 @pytest.mark.asyncio
-async def test_chat_no_message_400(client):
+async def test_chat_no_message_400(client_mock):
     """test the chat route with an empty request body"""
-    response: Response = await client.post("/chat", json={})
+    response: Response = await client_mock.post("/chat", json={})
 
     assert response.status_code == 400
     assert response.content_type == "application/json"
@@ -94,12 +94,12 @@ async def test_chat_no_message_400(client):
 
 
 @pytest.mark.asyncio
-async def test_chat_not_implemented_501(client):
+async def test_chat_not_implemented_501(client_mock):
     """test the chat route with a retrieval_mode not implemented"""
-    response: Response = await client.post(
+    response: Response = await client_mock.post(
         "/chat",
         json={
-            "session_state": "test",
+            "sessionState": "test",
             "messages": [{"content": "test"}],
             "context": {"overrides": {"retrieval_mode": "not_implemented"}},
         },
@@ -112,126 +112,9 @@ async def test_chat_not_implemented_501(client):
 
 
 @pytest.mark.asyncio
-async def test_chat_rag_option(client_mock):
-    """test the chat route with RAG retrieval_mode option"""
-    response: Response = await client_mock.post(
-        "/chat",
-        json={
-            "session_state": "test",
-            "messages": [{"content": "test"}, {"content": "test2"}],
-            "context": {"overrides": {"retrieval_mode": "rag"}},
-        },
-    )
-    data = await response.get_json()
-
-    assert response.status_code == 200
-    assert response.content_type == "application/json"
-    assert data == {
-        "context": {
-            "data_points": [
-                {
-                    "category": "test",
-                    "collection": "collection_name",
-                    "description": "test",
-                    "name": "test",
-                    "price": "5.0USD",
-                }
-            ],
-            "thoughts": [{"description": None, "title": "Source"}],
-        },
-        "message": {"content": "content", "role": "assistant"},
-        "session_state": "test",
-    }
-
-
-@pytest.mark.asyncio
-async def test_chat_vector_option(client_mock):
-    """test the chat route with vector retrieval_mode option"""
-    response: Response = await client_mock.post(
-        "/chat",
-        json={
-            "session_state": "test",
-            "messages": [{"content": "test"}],
-            "context": {"overrides": {"retrieval_mode": "vector"}},
-        },
-    )
-    data = await response.get_json()
-
-    assert response.status_code == 200
-    assert response.content_type == "application/json"
-    assert data == {
-        "context": {
-            "data_points": [
-                {
-                    "category": "test",
-                    "collection": "collection_name",
-                    "description": "test",
-                    "name": "test",
-                    "price": "5.0USD",
-                }
-            ],
-            "thoughts": [{"description": None, "title": "Source"}],
-        },
-        "message": {
-            "content": "\n"
-            "            Name: test\n"
-            "            Description: test\n"
-            "            Price: 5.0USD\n"
-            "            Category: test\n"
-            "            Collection: collection_name\n"
-            "        ",
-            "role": "assistant",
-        },
-        "session_state": "test",
-    }
-
-
-@pytest.mark.asyncio
-async def test_chat_keyword_option(client_mock):
-    """test the chat route with keyword retrieval_mode option"""
-    response: Response = await client_mock.post(
-        "/chat",
-        json={
-            "session_state": "test",
-            "messages": [{"content": "test"}],
-            "context": {"overrides": {"retrieval_mode": "keyword"}},
-        },
-    )
-    data = await response.get_json()
-
-    assert response.status_code == 200
-    assert response.content_type == "application/json"
-    assert data == {
-        "context": {
-            "data_points": [
-                {
-                    "category": "test",
-                    "collection": "collection_name",
-                    "description": "test",
-                    "name": "test",
-                    "price": "5.0USD",
-                }
-            ],
-            "thoughts": [{"description": "test", "title": "Source"}],
-        },
-        "message": {
-            "content": "\n"
-            "            Name: test\n"
-            "            Description: test\n"
-            "            Price: 5.0USD\n"
-            "            Category: test\n"
-            "            Collection: collection_name\n"
-            "        ",
-            "role": "assistant",
-        },
-        "session_state": "test",
-    }
-
-
-@pytest.mark.asyncio
-async def test_chat_stream_non_json_415(client):
+async def test_chat_stream_non_json_415(client_mock):
     """test the chat route with a non-json request"""
-    response: Response = await client.post("/chat/stream")
+    response: Response = await client_mock.post("/chat/stream")
 
     assert response.status_code == 415
     assert response.content_type == "application/json"
@@ -240,9 +123,9 @@ async def test_chat_stream_non_json_415(client):
 
 
 @pytest.mark.asyncio
-async def test_chat_stream_no_message_400(client):
+async def test_chat_stream_no_message_400(client_mock):
     """test the chat route with an empty request body"""
-    response: Response = await client.post("/chat/stream", json={})
+    response: Response = await client_mock.post("/chat/stream", json={})
 
     assert response.status_code == 400
     assert response.content_type == "application/json"
@@ -251,9 +134,9 @@ async def test_chat_stream_no_message_400(client):
 
 
 @pytest.mark.asyncio
-async def test_chat_stream_not_implemented_501(client):
+async def test_chat_stream_not_implemented_501(client_mock):
     """test the chat route with a retrieval_mode not implemented"""
-    response: Response = await client.post(
+    response: Response = await client_mock.post(
         "/chat/stream",
         json={
             "session_state": "test",

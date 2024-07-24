@@ -1,4 +1,17 @@
 from dataclasses import dataclass
+from enum import Enum
+
+
+class AIChatRoles(str, Enum):
+    USER = "user"
+    ASSISTANT = "assistant"
+    SYSTEM = "system"
+
+
+class RetrievalMode(str, Enum):
+    HYBRID = "rag"
+    VECTOR = "vector"
+    KEYWORD = "keyword"
 
 
 @dataclass
@@ -77,7 +90,7 @@ class Message:
     """
 
     content: str | None = None
-    role: str | None = None
+    role: AIChatRoles = AIChatRoles.ASSISTANT
 
     def to_dict(self) -> dict[str, str | None]:
         """
@@ -97,7 +110,7 @@ class RetrievalResponse:
 
     context: Context
     message: Message
-    session_state: str
+    sessionState: str
 
     def to_dict(self) -> dict[str, dict[str, list[dict[str, str | None]]] | dict[str, str | None] | str]:
         """
@@ -109,5 +122,29 @@ class RetrievalResponse:
         return {
             "context": self.context.to_dict(),
             "message": self.message.to_dict(),
-            "session_state": self.session_state,
+            "sessionState": self.sessionState,
+        }
+
+
+@dataclass
+class RetrievalResponseDelta:
+    """
+    Class to represent a retrieval response for streaming.
+    """
+
+    context: Context | None = None
+    delta: Message | None = None
+    sessionState: str | None = None
+
+    def to_dict(self) -> dict[str, dict[str, list[dict[str, str | None]]] | dict[str, str | None] | str | None]:
+        """
+        Converts the object to a dictionary representation.
+
+        Returns:
+            A dictionary representation of the object.
+        """
+        return {
+            "context": self.context.to_dict() if self.context else None,
+            "delta": self.delta.to_dict() if self.delta else None,
+            "sessionState": self.sessionState if self.sessionState else None,
         }

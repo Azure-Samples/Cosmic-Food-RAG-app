@@ -1,11 +1,22 @@
+import os
 from dataclasses import dataclass
+from unittest import mock
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import langchain_core
 import mongomock
+import openai
+import openai.resources
 import pytest
 import pytest_asyncio
 from langchain_core.documents import Document
+from openai.types import CreateEmbeddingResponse, Embedding
+from openai.types.chat import ChatCompletion, ChatCompletionChunk
+from openai.types.chat.chat_completion import (
+    ChatCompletionMessage,
+    Choice,
+)
+from openai.types.create_embedding_response import Usage
 from pydantic.v1 import SecretStr
 
 import quartapp
@@ -18,24 +29,42 @@ from quartapp.approaches.vector import Vector
 from quartapp.config import AppConfig
 
 
-@pytest_asyncio.fixture
-async def app():
-    """Create a test app with the test config."""
-    app_config = AppConfig()
-    app = create_app(app_config=app_config)
-    app.config.update(
-        {
-            "TESTING": True,
-        }
-    )
-    async with app.test_app() as test_app:
-        yield test_app
+@pytest.fixture(scope="session")
+def monkeypatch_session():
+    with pytest.MonkeyPatch.context() as monkeypatch_session:
+        yield monkeypatch_session
 
 
-@pytest.fixture
-def client(app):
-    """Create a test client for the test app."""
-    return app.test_client()
+@pytest.fixture(scope="session")
+def mock_session_env(monkeypatch_session):
+    """Mock the environment variables for testing."""
+    with mock.patch.dict(os.environ, clear=True):
+        # Database
+        monkeypatch_session.setenv("AZURE_COSMOS_CONNECTION_STRING", "test-connection-string")
+        monkeypatch_session.setenv("AZURE_COSMOS_USERNAME", "test-username")
+        monkeypatch_session.setenv("AZURE_COSMOS_PASSWORD", "test-password")
+        monkeypatch_session.setenv("AZURE_COSMOS_DATABASE_NAME", "test-database")
+        monkeypatch_session.setenv("AZURE_COSMOS_COLLECTION_NAME", "test-collection")
+        monkeypatch_session.setenv("AZURE_COSMOS_INDEX_NAME", "test-index")
+        # Azure Subscription
+        monkeypatch_session.setenv("AZURE_SUBSCRIPTION_ID", "test-storage-subid")
+        # Azure OpenAI
+        monkeypatch_session.setenv("OPENAI_CHAT_HOST", "azure")
+        monkeypatch_session.setenv("OPENAI_EMBED_HOST", "azure")
+        monkeypatch_session.setenv("AZURE_OPENAI_ENDPOINT", "https://api.openai.com")
+        monkeypatch_session.setenv("OPENAI_API_VERSION", "2024-03-01-preview")
+        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-35-turbo")
+        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-35-turbo")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-ada-002")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding-ada-002")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBED_MODEL_DIMENSIONS", "1536")
+        monkeypatch_session.setenv("AZURE_OPENAI_KEY", "fakekey")
+        # Allowed Origin
+        monkeypatch_session.setenv("ALLOWED_ORIGIN", "https://frontend.com")
+
+        if os.getenv("AZURE_USE_AUTHENTICATION") is not None:
+            monkeypatch_session.delenv("AZURE_USE_AUTHENTICATION")
+        yield
 
 
 @pytest.fixture
@@ -175,10 +204,139 @@ def mock_runnable_or(monkeypatch):
     return or_mock
 
 
+@pytest.fixture(scope="session")
+def mock_openai_embedding(monkeypatch_session):
+    async def mock_acreate(*args, **kwargs):
+        return CreateEmbeddingResponse(
+            object="list",
+            data=[
+                Embedding(
+                    embedding=[-124] * 768,
+                    index=0,
+                    object="embedding",
+                )
+            ],
+            model="text-embedding-ada-002",
+            usage=Usage(prompt_tokens=8, total_tokens=8),
+        )
+
+    monkeypatch_session.setattr(openai.resources.AsyncEmbeddings, "create", mock_acreate)
+
+    yield
+
+
+@pytest.fixture(scope="session")
+def mock_openai_chatcompletion(monkeypatch_session):
+    class AsyncChatCompletionIterator:
+        def __init__(self, answer: str):
+            chunk_id = "test-id"
+            model = "gpt-35-turbo"
+            self.responses = [
+                {"object": "chat.completion.chunk", "choices": [], "id": chunk_id, "model": model, "created": 1},
+                {
+                    "object": "chat.completion.chunk",
+                    "choices": [{"delta": {"role": "assistant"}, "index": 0, "finish_reason": None}],
+                    "id": chunk_id,
+                    "model": model,
+                    "created": 1,
+                },
+            ]
+            # Split at << to simulate chunked responses
+            if answer.find("<<") > -1:
+                parts = answer.split("<<")
+                self.responses.append(
+                    {
+                        "object": "chat.completion.chunk",
+                        "choices": [
+                            {
+                                "delta": {"role": "assistant", "content": parts[0] + "<<"},
+                                "index": 0,
+                                "finish_reason": None,
+                            }
+                        ],
+                        "id": chunk_id,
+                        "model": model,
+                        "created": 1,
+                    }
+                )
+                self.responses.append(
+                    {
+                        "object": "chat.completion.chunk",
+                        "choices": [
+                            {"delta": {"role": "assistant", "content": parts[1]}, "index": 0, "finish_reason": None}
+                        ],
+                        "id": chunk_id,
+                        "model": model,
+                        "created": 1,
+                    }
+                )
+                self.responses.append(
+                    {
+                        "object": "chat.completion.chunk",
+                        "choices": [{"delta": {"role": None, "content": None}, "index": 0, "finish_reason": "stop"}],
+                        "id": chunk_id,
+                        "model": model,
+                        "created": 1,
+                    }
+                )
+            else:
+                self.responses.append(
+                    {
+                        "object": "chat.completion.chunk",
+                        "choices": [{"delta": {"content": answer}, "index": 0, "finish_reason": None}],
+                        "id": chunk_id,
+                        "model": model,
+                        "created": 1,
+                    }
+                )
+
+        def __aiter__(self):
+            return self
+
+        async def __anext__(self):
+            if self.responses:
+                return ChatCompletionChunk.model_validate(self.responses.pop(0))
+            else:
+                raise StopAsyncIteration
+
+    async def mock_acreate(*args, **kwargs):
+        messages = kwargs["messages"]
+        last_question = messages[-1]["content"]
+        if last_question == "Generate search query for: What is the capital of France?":
+            answer = "capital of France"
+        elif last_question == "Generate search query for: Are interest rates high?":
+            answer = "interest rates"
+        elif isinstance(last_question, list) and last_question[2].get("image_url"):
+            answer = "From the provided sources, the impact of interest rates and GDP growth on "
+            "financial markets can be observed through the line graph. [Financial Market Analysis Report 2023-7.png]"
+        else:
+            answer = "The capital of France is Paris. [Benefit_Options-2.pdf]."
+            if messages[0]["content"].find("Generate 3 very brief follow-up questions") > -1:
+                answer = "The capital of France is Paris. [Benefit_Options-2.pdf]. <<What is the capital of Spain?>>"
+        if "stream" in kwargs and kwargs["stream"] is True:
+            return AsyncChatCompletionIterator(answer)
+        else:
+            return ChatCompletion(
+                object="chat.completion",
+                choices=[
+                    Choice(
+                        message=ChatCompletionMessage(role="assistant", content=answer), finish_reason="stop", index=0
+                    )
+                ],
+                id="test-123",
+                created=0,
+                model="test-model",
+            )
+
+    monkeypatch_session.setattr(openai.resources.chat.completions.AsyncCompletions, "create", mock_acreate)
+
+    yield
+
+
 @pytest_asyncio.fixture
-async def app_mock(app_config_mock):
+async def app_mock(mock_session_env, mock_openai_embedding, mock_openai_chatcompletion):
     """Create a test app with the test config mock."""
-    app_mock = create_app(app_config=app_config_mock)
+    app_mock = create_app()
     app_mock.config.update(
         {
             "TESTING": True,

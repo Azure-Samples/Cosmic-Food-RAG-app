@@ -2,7 +2,15 @@ import json
 from collections.abc import AsyncGenerator
 from uuid import uuid4
 
-from quartapp.approaches.schemas import Context, DataPoint, Message, RetrievalResponse, Thought
+from quartapp.approaches.schemas import (
+    AIChatRoles,
+    Context,
+    DataPoint,
+    Message,
+    RetrievalResponse,
+    RetrievalResponseDelta,
+    Thought,
+)
 from quartapp.config_base import AppConfigBase
 
 
@@ -16,9 +24,9 @@ class AppConfig(AppConfigBase):
 
         if keyword_response is None or len(keyword_response) == 0:
             return RetrievalResponse(
-                session_state=new_session_state,
+                sessionState=new_session_state,
                 context=Context([DataPoint()], [Thought()]),
-                message=Message(content="No results found", role="assistant"),
+                message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
             )
         top_result = json.loads(answer)
 
@@ -32,7 +40,7 @@ class AppConfig(AppConfigBase):
 
         context: Context = await self.get_context(keyword_response)
 
-        message: Message = Message(content=message_content, role="assistant")
+        message: Message = Message(content=message_content, role=AIChatRoles.ASSISTANT)
 
         await self.add_to_cosmos(
             old_messages=messages,
@@ -52,9 +60,9 @@ class AppConfig(AppConfigBase):
 
         if vector_response is None or len(vector_response) == 0:
             return RetrievalResponse(
-                session_state=new_session_state,
+                sessionState=new_session_state,
                 context=Context([DataPoint()], [Thought()]),
-                message=Message(content="No results found", role="assistant"),
+                message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
             )
         top_result = json.loads(answer)
 
@@ -67,7 +75,7 @@ class AppConfig(AppConfigBase):
         """
 
         context: Context = await self.get_context(vector_response)
-        message: Message = Message(content=message_content, role="assistant")
+        message: Message = Message(content=message_content, role=AIChatRoles.ASSISTANT)
 
         await self.add_to_cosmos(
             old_messages=messages,
@@ -88,19 +96,19 @@ class AppConfig(AppConfigBase):
         if rag_response is None or len(rag_response) == 0:
             if answer:
                 return RetrievalResponse(
-                    session_state=new_session_state,
+                    sessionState=new_session_state,
                     context=Context([DataPoint()], [Thought()]),
-                    message=Message(content=answer, role="assistant"),
+                    message=Message(content=answer, role=AIChatRoles.ASSISTANT),
                 )
             else:
                 return RetrievalResponse(
-                    session_state=new_session_state,
+                    sessionState=new_session_state,
                     context=Context([DataPoint()], [Thought()]),
-                    message=Message(content="No results found", role="assistant"),
+                    message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
                 )
 
         context: Context = await self.get_context(rag_response)
-        message: Message = Message(content=answer, role="assistant")
+        message: Message = Message(content=answer, role=AIChatRoles.ASSISTANT)
 
         await self.add_to_cosmos(
             old_messages=messages,
@@ -113,20 +121,20 @@ class AppConfig(AppConfigBase):
 
     async def run_rag_stream(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
-    ) -> AsyncGenerator[RetrievalResponse | Message, None]:
+    ) -> AsyncGenerator[RetrievalResponseDelta, None]:
         rag_response, answer = await self.setup.rag.run_stream(messages, temperature, limit, score_threshold)
 
         new_session_state: str = session_state if session_state else str(uuid4())
 
         context: Context = await self.get_context(rag_response)
 
-        empty_message: Message = Message(content="", role="assistant")
-
-        yield RetrievalResponse(context, empty_message, new_session_state)
+        yield RetrievalResponseDelta(context=context, sessionState=new_session_state)
 
         async for message_chunk in answer:
-            message: Message = Message(content=str(message_chunk.content), role="assistant")
-            yield message
+            message: Message = Message(content=str(message_chunk.content), role=AIChatRoles.ASSISTANT)
+            yield RetrievalResponseDelta(
+                delta=message,
+            )
 
         await self.add_to_cosmos(
             old_messages=messages,

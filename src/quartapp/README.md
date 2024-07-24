@@ -19,5 +19,5 @@ pip install -e .
 To start the application run inside the `src/` directory:
 
 ```bash
-quart --app quartapp run -h localhost -p 50505
+quart --app quartapp.app run -h localhost -p 50505
 ```

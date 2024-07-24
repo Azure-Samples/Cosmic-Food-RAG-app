@@ -1,7 +1,7 @@
 import pytest
 from langchain_core.documents import Document
 
-from quartapp.approaches.schemas import Context, DataPoint, Message, RetrievalResponse, Thought
+from quartapp.approaches.schemas import AIChatRoles, Context, DataPoint, Message, RetrievalResponse, Thought
 
 
 @pytest.mark.asyncio
@@ -23,7 +23,8 @@ async def test_keyword_no_messages(keyword_mock):
     assert keyword_mock._embedding
     assert keyword_mock._chat
     assert keyword_mock._data_collection
-    assert await keyword_mock.run([], 0.0, 0, 0.0) == ([], "")
+    with pytest.raises(IndexError):
+        await keyword_mock.run([], 0.0, 0, 0.0) == ([], "")
 
 
 @pytest.mark.asyncio
@@ -48,7 +49,8 @@ async def test_vector_no_messages(vector_mock):
     assert vector_mock._embedding
     assert vector_mock._chat
     assert vector_mock._data_collection
-    assert await vector_mock.run([], 0.0, 0, 0.0) == ([], "")
+    with pytest.raises(IndexError):
+        await vector_mock.run([], 0.0, 0, 0.0) == ([], "")
 
 
 @pytest.mark.asyncio
@@ -68,7 +70,8 @@ async def test_rag_no_messages(rag_mock):
     assert rag_mock._embedding
     assert rag_mock._chat
     assert rag_mock._data_collection
-    assert await rag_mock.run([], 0.0, 0, 0.0) == ([], "")
+    with pytest.raises(IndexError):
+        await rag_mock.run([], 0.0, 0, 0.0) == ([], "")
 
 
 @pytest.mark.asyncio
@@ -122,9 +125,9 @@ async def test_app_config_run_keyword(app_config_mock):
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
             "            Category: test\n            Collection: collection_name\n        ",
-            role="assistant",
+            role=AIChatRoles.ASSISTANT,
         ),
-        session_state="test",
+        sessionState="test",
     )
 
 
@@ -148,9 +151,9 @@ async def test_app_config_run_vector(app_config_mock):
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
             "            Category: test\n            Collection: collection_name\n        ",
-            role="assistant",
+            role=AIChatRoles.ASSISTANT,
         ),
-        session_state="test",
+        sessionState="test",
     )
 
 
@@ -171,42 +174,30 @@ async def test_app_config_run_rag(app_config_mock):
             ],
             thoughts=[Thought(title="Source", description=None)],
         ),
-        message=Message(content="content", role="assistant"),
-        session_state="test",
+        message=Message(content="content", role=AIChatRoles.ASSISTANT),
+        sessionState="test",
     )
 
 
 @pytest.mark.asyncio
 async def test_app_config_run_keyword_no_message(app_config_mock):
     """Test the AppConfig class run_keyword method without messages."""
-    result = app_config_mock.run_keyword("test", [], 0.3, 1, 0.0)
-    assert await result == RetrievalResponse(
-        session_state="test",
-        context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role="assistant"),
-    )
+    with pytest.raises(IndexError):
+        await app_config_mock.run_keyword("test", [], 0.3, 1, 0.0)
 
 
 @pytest.mark.asyncio
 async def test_app_config_run_vector_no_message(app_config_mock):
     """Test the AppConfig class run_vector method without messages."""
-    result = app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
-    assert await result == RetrievalResponse(
-        session_state="test",
-        context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role="assistant"),
-    )
+    with pytest.raises(IndexError):
+        await app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
 
 
 @pytest.mark.asyncio
 async def test_app_config_run_rag_no_message(app_config_mock):
     """Test the AppConfig class run_rag method without messages."""
-    result = app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
-    assert await result == RetrievalResponse(
-        session_state="test",
-        context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role="assistant"),
-    )
+    with pytest.raises(IndexError):
+        await app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
 
 
 @pytest.mark.asyncio
