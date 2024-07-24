@@ -90,7 +90,7 @@ langchain==0.2.6
     # via
     #   langchain-community
     #   quartapp (src/pyproject.toml)
-langchain-community==0.2.6
+langchain-community==0.2.9
     # via quartapp (src/pyproject.toml)
 langchain-core==0.2.11
     # via
