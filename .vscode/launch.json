@@ -12,7 +12,7 @@
             "cwd": "${workspaceFolder}/src",
             "python": "${workspaceFolder}/.venv/bin/python",
             "env": {
-                "QUART_APP": "quartapp",
+                "QUART_APP": "quartapp.app",
                 "QUART_ENV": "development",
                 "QUART_DEBUG": "0"
             },

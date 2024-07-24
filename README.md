@@ -80,7 +80,7 @@ urlFragment: cosmic-food-rag-app
 1. **Execute the following command in your terminal to start the quart app**
 
     ```bash
-    export QUART_APP=src.quartapp
+    export QUART_APP=src.quartapp.app
     export QUART_ENV=development
     export QUART_DEBUG=true
     quart run -h localhost -p 50505
@@ -89,7 +89,7 @@ urlFragment: cosmic-food-rag-app
     **For Windows, use [`setx`](https://learn.microsoft.com/windows-server/administration/windows-commands/setx) command shown below:**
 
    ```powershell
-    setx QUART_APP src.quartapp
+    setx QUART_APP src.quartapp.app
     setx QUART_ENV development
     setx QUART_DEBUG true
     quart run -h localhost -p 50505
