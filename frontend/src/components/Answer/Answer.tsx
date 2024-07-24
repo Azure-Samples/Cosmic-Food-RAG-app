@@ -4,13 +4,13 @@ import DOMPurify from "dompurify";
 
 import styles from "./Answer.module.css";
 
-import { ChatAppResponse } from "../../api";
+import { ChatCompletionResponse } from "../../api";
 import { parseAnswerToHtml } from "./AnswerParser";
 import { AnswerIcon } from "./AnswerIcon";
 import { SpeechOutput } from "./SpeechOutput";
 
 interface Props {
-    answer: ChatAppResponse;
+    answer: ChatCompletionResponse;
     isSelected?: boolean;
     isStreaming: boolean;
     onThoughtProcessClicked: () => void;

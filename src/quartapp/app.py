@@ -6,7 +6,7 @@ from typing import Any
 
 from quart import Quart, Response, jsonify, make_response, request, send_file, send_from_directory
 
-from quartapp.approaches.schemas import Message, RetrievalResponse
+from quartapp.approaches.schemas import RetrievalResponse, RetrievalResponseDelta
 from quartapp.config import AppConfig
 
 logging.basicConfig(
@@ -16,7 +16,7 @@ logging.basicConfig(
 )
 
 
-async def format_as_ndjson(r: AsyncGenerator[RetrievalResponse | Message, None]) -> AsyncGenerator[str, None]:
+async def format_as_ndjson(r: AsyncGenerator[RetrievalResponseDelta, None]) -> AsyncGenerator[str, None]:
     """
     Format the response as NDJSON
     """
@@ -77,7 +77,7 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
             return jsonify({"error": "request must have a message"}), 400
 
         # Get the request session_state, context from the request body
-        session_state = body.get("session_state", None)
+        session_state = body.get("sessionState", None)
         context = body.get("context", {})
 
         # Get the overrides from the context
@@ -112,7 +112,7 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
         # Get the request message
         messages: list = body.get("messages", [])
 
-        if not messages:
+        if not messages and len(messages) == 0:
             return jsonify({"error": "request must have a message"}), 400
 
         # Get the request session_state, context from the request body
@@ -127,7 +127,7 @@ def create_app(app_config: AppConfig, test_config: dict[str, Any] | None = None)
         score_threshold: float = override.get("score_threshold", 0.5)
 
         if retrieval_mode == "rag":
-            result: AsyncGenerator[RetrievalResponse | Message, None] = app_config.run_rag_stream(
+            result: AsyncGenerator[RetrievalResponseDelta, None] = app_config.run_rag_stream(
                 session_state=session_state,
                 messages=messages,
                 temperature=temperature,

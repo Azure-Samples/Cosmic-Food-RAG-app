@@ -99,7 +99,7 @@ async def test_chat_not_implemented_501(client):
     response: Response = await client.post(
         "/chat",
         json={
-            "session_state": "test",
+            "sessionState": "test",
             "messages": [{"content": "test"}],
             "context": {"overrides": {"retrieval_mode": "not_implemented"}},
         },
@@ -117,7 +117,7 @@ async def test_chat_rag_option(client_mock):
     response: Response = await client_mock.post(
         "/chat",
         json={
-            "session_state": "test",
+            "sessionState": "test",
             "messages": [{"content": "test"}, {"content": "test2"}],
             "context": {"overrides": {"retrieval_mode": "rag"}},
         },
@@ -140,7 +140,7 @@ async def test_chat_rag_option(client_mock):
             "thoughts": [{"description": None, "title": "Source"}],
         },
         "message": {"content": "content", "role": "assistant"},
-        "session_state": "test",
+        "sessionState": "test",
     }
 
 
@@ -150,7 +150,7 @@ async def test_chat_vector_option(client_mock):
     response: Response = await client_mock.post(
         "/chat",
         json={
-            "session_state": "test",
+            "sessionState": "test",
             "messages": [{"content": "test"}],
             "context": {"overrides": {"retrieval_mode": "vector"}},
         },
@@ -182,7 +182,7 @@ async def test_chat_vector_option(client_mock):
             "        ",
             "role": "assistant",
         },
-        "session_state": "test",
+        "sessionState": "test",
     }
 
 
@@ -192,7 +192,7 @@ async def test_chat_keyword_option(client_mock):
     response: Response = await client_mock.post(
         "/chat",
         json={
-            "session_state": "test",
+            "sessionState": "test",
             "messages": [{"content": "test"}],
             "context": {"overrides": {"retrieval_mode": "keyword"}},
         },
@@ -224,7 +224,7 @@ async def test_chat_keyword_option(client_mock):
             "        ",
             "role": "assistant",
         },
-        "session_state": "test",
+        "sessionState": "test",
     }
 
 

@@ -2,11 +2,11 @@ import { useRef, useState, useEffect } from "react";
 import { Checkbox, Panel, DefaultButton, TextField, ITextFieldProps, ICheckboxProps } from "@fluentui/react";
 import cosmos from "../../assets/FeaturedDefault.png";
 import { useId } from "@fluentui/react-hooks";
-import readNDJSONStream from "ndjson-readablestream";
 
 import styles from "./Chat.module.css";
 
-import { chatApi, chatStreamApi, RetrievalMode, ChatAppResponse, ChatAppRequest, ResponseMessage, DataPoint } from "../../api";
+import { RetrievalMode, ChatCompletionResponse, ChatCompletionDeltaResponse, ChatAppRequestOptions, DataPoint } from "../../api";
+import { AIChatProtocolClient, AIChatMessage } from "@microsoft/ai-chat-protocol";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
@@ -43,104 +43,94 @@ const Chat = () => {
 
     const [selectedAnswer, setSelectedAnswer] = useState<number>(0);
     const [latestItems, setLatestItems] = useState<DataPoint[]>([]);
-    const [answers, setAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
-    const [sessionState, setSessionState] = useState<string | null>(null);
+    const [answers, setAnswers] = useState<[user: string, response: ChatCompletionResponse][]>([]);
+    const [sessionState, setSessionState] = useState<object | null>(null);
 
-    const [streamedAnswers, setStreamedAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
+    const [streamedAnswers, setStreamedAnswers] = useState<[user: string, response: ChatCompletionResponse][]>([]);
 
-    const prepareRequest = (question: string) => {
-        lastQuestionRef.current = question;
-
-        error && setError(undefined);
-        setIsLoading(true);
-        setActiveAnalysisPanelTab(undefined);
-
-        const messages: ResponseMessage[] = answers.flatMap(a => [
-            { content: a[0], role: "user" },
-            { content: a[1].message.content, role: "assistant" }
-        ]);
-
-        const request: ChatAppRequest = {
-            messages: [...messages, { content: question, role: "user" }],
+    const handleAsyncResponse = async (question: string, answers: [string, ChatCompletionResponse][], result: AsyncIterable<ChatCompletionDeltaResponse>) => {
+        let answer = "";
+        const chatCompletion: ChatCompletionResponse = {
             context: {
-                overrides: {
-                    top: retrieveCount,
-                    temperature: temperature,
-                    score_threshold: scoreThreshold,
-                    retrieval_mode: retrievalMode
-                }
+                data_points: [],
+                thoughts: []
             },
-            session_state: sessionState ? sessionState : null
+            message: { content: "", role: "assistant" }
         };
-        return request;
-    };
-
-    const handleAsyncResponse = async (question: string, answers: [string, ChatAppResponse][], responseBody: ReadableStream<any>) => {
-        let answer: string = "";
-        let askResponse: ChatAppResponse = {} as ChatAppResponse;
-
         const updateState = (newContent: string) => {
             return new Promise(resolve => {
                 setTimeout(() => {
                     answer += newContent;
-                    const latestResponse: ChatAppResponse = {
-                        ...askResponse,
-                        message: { content: answer, role: askResponse.message.role }
+                    // We need to create a new object to trigger a re-render
+                    const latestCompletion: ChatCompletionResponse = {
+                        ...chatCompletion,
+                        message: { content: answer, role: chatCompletion.message.role }
                     };
-                    setStreamedAnswers([...answers, [question, latestResponse]]);
+                    setStreamedAnswers([...answers, [question, latestCompletion]]);
                     resolve(null);
                 }, 33);
             });
         };
         try {
             setIsStreaming(true);
-            for await (const event of readNDJSONStream(responseBody)) {
-                if (event["context"] && event["context"]["data_points"] && event["message"]) {
-                    askResponse = event as ChatAppResponse;
-                } else if (event["content"]) {
+            for await (const response of result) {
+                if (response.context) {
+                    chatCompletion.context = {
+                        ...chatCompletion.context,
+                        ...response.context
+                    };
+                }
+                if (response.delta && response.delta.role) {
+                    chatCompletion.message.role = response.delta.role;
+                }
+                if (response.delta && response.delta.content) {
                     setIsLoading(false);
-                    await updateState(event["content"]);
-                } else if (event["error"]) {
-                    throw Error(event["error"]);
+                    await updateState(response.delta.content);
                 }
             }
         } finally {
             setIsStreaming(false);
         }
-        const fullResponse: ChatAppResponse = {
-            ...askResponse,
-            message: { content: answer, role: askResponse.message.role }
-        };
-        return fullResponse;
+        chatCompletion.message.content = answer;
+        return chatCompletion;
     };
+    const makeApiRequest = async (question: string) => {
+        lastQuestionRef.current = question;
 
-    const makeChatApiRequest = async (question: string) => {
+        error && setError(undefined);
+        setIsLoading(true);
+        setActiveAnalysisPanelTab(undefined);
         try {
-            const request = prepareRequest(question);
+            const messages: AIChatMessage[] = answers.flatMap(a => [
+                { content: a[0], role: "user" },
+                { content: a[1].message.content, role: "assistant" }
+            ]);
 
-            const parsedResponse: ChatAppResponse = await chatApi(request);
-            setAnswers([...answers, [question, parsedResponse]]);
-            setSessionState(parsedResponse?.session_state ? parsedResponse.session_state : null);
-            setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points : []);
-        } catch (e) {
-            setError(e);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const makeChatStreamApiRequest = async (question: string) => {
-        try {
-            const request = prepareRequest(question);
-            const response = await chatStreamApi(request);
-
-            if (!response.body) {
-                throw Error("No response body");
+            const allMessages: AIChatMessage[] = [...messages, { content: question, role: "user" }];
+            const options: ChatAppRequestOptions = {
+                context: {
+                    overrides: {
+                        top: retrieveCount,
+                        retrieval_mode: retrievalMode,
+                        temperature: temperature,
+                        score_threshold: scoreThreshold
+                    }
+                },
+                sessionState: sessionState ? sessionState : null
+            };
+            const chatClient: AIChatProtocolClient = new AIChatProtocolClient("/chat");
+            if (shouldStream) {
+                const result = (await chatClient.getStreamedCompletion(allMessages, options)) as AsyncIterable<ChatCompletionDeltaResponse>;
+                const parsedResponse = await handleAsyncResponse(question, answers, result);
+                setAnswers([...answers, [question, parsedResponse]]);
+                setSessionState(parsedResponse?.sessionState ? parsedResponse.sessionState : null);
+                setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points : []);
+            } else {
+                const result = (await chatClient.getCompletion(allMessages, options)) as ChatCompletionResponse;
+                setAnswers([...answers, [question, result]]);
+                setSessionState(result?.sessionState ? result.sessionState : null);
+                setLatestItems(result?.context ? result.context.data_points : []);
             }
-            const parsedResponse: ChatAppResponse = await handleAsyncResponse(question, answers, response.body);
-            setAnswers([...answers, [question, parsedResponse]]);
-            setSessionState(parsedResponse?.session_state ? parsedResponse.session_state : null);
-            setLatestItems(parsedResponse?.context ? parsedResponse.context.data_points : []);
         } catch (e) {
             setError(e);
         } finally {
@@ -148,18 +138,14 @@ const Chat = () => {
         }
     };
 
-    const checkthenMakeApiRequest = async (question: string) => {
+    const checkThenMakeApiRequest = async (question: string) => {
         lastQuestionRef.current = question;
         if (question.match(/buy/)) {
             setIsBuy(true);
             return;
         }
 
-        if (shouldStream) {
-            makeChatStreamApiRequest(question);
-        } else {
-            makeChatApiRequest(question);
-        }
+        makeApiRequest(question);
     };
 
     const clearChat = () => {
@@ -192,7 +178,7 @@ const Chat = () => {
     };
 
     const onExampleClicked = (example: string) => {
-        checkthenMakeApiRequest(example);
+        checkThenMakeApiRequest(example);
     };
 
     const onToggleTab = (tab: AnalysisPanelTabs, index: number) => {
@@ -290,7 +276,7 @@ const Chat = () => {
                                 <>
                                     <UserChatMessage message={lastQuestionRef.current} />
                                     <div className={styles.chatMessageGptMinWidth}>
-                                        <AnswerError error={error.toString()} onRetry={() => checkthenMakeApiRequest(lastQuestionRef.current)} />
+                                        <AnswerError error={error.toString()} onRetry={() => checkThenMakeApiRequest(lastQuestionRef.current)} />
                                     </div>
                                 </>
                             ) : null}
@@ -303,7 +289,7 @@ const Chat = () => {
                             clearOnSend
                             placeholder="Type a new question (e.g. Are there any high protein dishes available?)"
                             disabled={isLoading}
-                            onSend={question => checkthenMakeApiRequest(question)}
+                            onSend={question => checkThenMakeApiRequest(question)}
                         />
                     </div>
                 </div>

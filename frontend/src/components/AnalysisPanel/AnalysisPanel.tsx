@@ -1,7 +1,7 @@
 import { Pivot, PivotItem } from "@fluentui/react";
 
 import { SupportingContent } from "../SupportingContent";
-import { ChatAppResponse } from "../../api";
+import { ChatCompletionResponse } from "../../api";
 import { AnalysisPanelTabs } from "./AnalysisPanelTabs";
 import { ThoughtProcess } from "./ThoughtProcess";
 
@@ -9,7 +9,7 @@ interface Props {
     className: string;
     activeTab: AnalysisPanelTabs;
     onActiveTabChanged: (tab: AnalysisPanelTabs) => void;
-    answer: ChatAppResponse;
+    answer: ChatCompletionResponse;
 }
 
 const pivotItemDisabledStyle = { disabled: true, style: { color: "grey" } };

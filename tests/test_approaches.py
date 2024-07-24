@@ -1,7 +1,7 @@
 import pytest
 from langchain_core.documents import Document
 
-from quartapp.approaches.schemas import Context, DataPoint, Message, RetrievalResponse, Thought
+from quartapp.approaches.schemas import AIChatRoles, Context, DataPoint, Message, RetrievalResponse, Thought
 
 
 @pytest.mark.asyncio
@@ -122,9 +122,9 @@ async def test_app_config_run_keyword(app_config_mock):
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
             "            Category: test\n            Collection: collection_name\n        ",
-            role="assistant",
+            role=AIChatRoles.ASSISTANT,
         ),
-        session_state="test",
+        sessionState="test",
     )
 
 
@@ -148,9 +148,9 @@ async def test_app_config_run_vector(app_config_mock):
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
             "            Category: test\n            Collection: collection_name\n        ",
-            role="assistant",
+            role=AIChatRoles.ASSISTANT,
         ),
-        session_state="test",
+        sessionState="test",
     )
 
 
@@ -171,8 +171,8 @@ async def test_app_config_run_rag(app_config_mock):
             ],
             thoughts=[Thought(title="Source", description=None)],
         ),
-        message=Message(content="content", role="assistant"),
-        session_state="test",
+        message=Message(content="content", role=AIChatRoles.ASSISTANT),
+        sessionState="test",
     )
 
 
@@ -181,9 +181,9 @@ async def test_app_config_run_keyword_no_message(app_config_mock):
     """Test the AppConfig class run_keyword method without messages."""
     result = app_config_mock.run_keyword("test", [], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
-        session_state="test",
+        sessionState="test",
         context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role="assistant"),
+        message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
     )
 
 
@@ -192,9 +192,9 @@ async def test_app_config_run_vector_no_message(app_config_mock):
     """Test the AppConfig class run_vector method without messages."""
     result = app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
-        session_state="test",
+        sessionState="test",
         context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role="assistant"),
+        message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
     )
 
 
@@ -203,9 +203,9 @@ async def test_app_config_run_rag_no_message(app_config_mock):
     """Test the AppConfig class run_rag method without messages."""
     result = app_config_mock.run_vector("test", [], 0.3, 1, 0.0)
     assert await result == RetrievalResponse(
-        session_state="test",
+        sessionState="test",
         context=Context([DataPoint()], [Thought()]),
-        message=Message(content="No results found", role="assistant"),
+        message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
     )
 
 
