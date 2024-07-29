@@ -86,19 +86,19 @@ jsonpatch==1.33
     # via langchain-core
 jsonpointer==3.0.0
     # via jsonpatch
-langchain==0.2.10
+langchain==0.2.11
     # via
     #   langchain-community
     #   quartapp (src/pyproject.toml)
-langchain-community==0.2.9
+langchain-community==0.2.10
     # via quartapp (src/pyproject.toml)
-langchain-core==0.2.22
+langchain-core==0.2.24
     # via
     #   langchain
     #   langchain-community
     #   langchain-openai
     #   langchain-text-splitters
-langchain-openai==0.1.17
+langchain-openai==0.1.19
     # via quartapp (src/pyproject.toml)
 langchain-text-splitters==0.2.2
     # via langchain
@@ -120,11 +120,11 @@ multidict==6.0.5
     #   yarl
 mypy-extensions==1.0.0
     # via typing-inspect
-numpy==1.26.4
+numpy==2.0.1
     # via
     #   langchain
     #   langchain-community
-openai==1.36.1
+openai==1.37.1
     # via langchain-openai
 orjson==3.10.6
     # via langsmith
@@ -153,7 +153,7 @@ pyyaml==6.0.1
     #   langchain-core
 quart==0.19.6
     # via quartapp (src/pyproject.toml)
-regex==2024.5.15
+regex==2024.7.24
     # via tiktoken
 requests==2.32.3
     # via
@@ -170,7 +170,7 @@ sqlalchemy==2.0.31
     # via
     #   langchain
     #   langchain-community
-tenacity==8.5.0
+tenacity==9.0.0
     # via
     #   langchain
     #   langchain-community
