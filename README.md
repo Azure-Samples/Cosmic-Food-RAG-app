@@ -37,6 +37,20 @@ urlFragment: cosmic-food-rag-app
 
 1. 📝 Start here 👉 [CBD_Mongo_vCore.ipynb](./CBD_Mongo_vCore.ipynb)
 
+### Cost estimation
+
+Pricing varies per region and usage, so it isn't possible to predict exact costs for your usage.
+However, you can try the [Azure pricing calculator](https://azure.com/e/eb597434d2e74f6b947369079e7a6d27) for the resources below.
+
+- Azure App Service: `B1` Basic Tier with 1 CPU core, 1.75 GB RAM. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/app-service/linux/)
+- Azure OpenAI: `S0` Standard tier, GPT and Ada models. Pricing per 1K tokens used, and at least 1K tokens are used per question. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
+- Azure Cosmos DB for MongoDB vCore: `M25` tier, 2 (Burstable) vCores per Node, 8 GB Memory per Node. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/cosmos-db/mongodb/)
+
+To reduce costs, you can switch to free SKUs for various services, but those SKUs have limitations.
+
+⚠️ To avoid unnecessary costs, remember to take down your app if it's no longer in use,
+either by deleting the resource group in the Portal or running `azd down`.
+
 ## Local development
 
 1. **Download the project starter code locally**
