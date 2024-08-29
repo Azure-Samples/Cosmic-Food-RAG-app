@@ -20,6 +20,9 @@ var mongoAdminUser = 'admin${uniqueString(resourceGroup.id)}'
 @description('Mongo Server administrator password')
 param mongoAdminPassword string
 
+@description('SKU to use for Cosmos DB for MongoDB vCore Plan')
+param mongoServiceSku string
+
 param openAIDeploymentName string = '${name}-openai'
 param chatGptDeploymentName string = 'chat-gpt'
 param chatGptDeploymentCapacity int = 30
@@ -129,7 +132,7 @@ module mongoCluster 'core/database/cosmos/mongo/cosmos-mongo-cluster.bicep' = {
     administratorLoginPassword: mongoAdminPassword
     storage: 32
     nodeCount: 1
-    sku: 'M25'
+    sku: mongoServiceSku
     allowAzureIPsFirewall: true
   }
 }

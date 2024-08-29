@@ -16,6 +16,9 @@
       },
       "appServiceSku": {
         "value": "${AZURE_APP_SERVICE_SKU=B1}"
+      },
+      "mongoServiceSku":{
+        "value": "${AZURE_MONGO_SERVICE_SKU=M25}"
       }
     }
   }
