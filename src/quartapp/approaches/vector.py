@@ -12,6 +12,13 @@ class Vector(ApproachesBase):
             search_type="similarity", search_kwargs={"k": limit, "score_threshold": score_threshold}
         )
         vector_response = await retriever.ainvoke(query)
+        documents_list: list[Document] = []
+
         if vector_response:
-            return vector_response, vector_response[0].page_content
+            for document in vector_response:
+                documents_list.append(
+                    Document(page_content=document.page_content, metadata={"source": document.metadata["source"]})
+                )
+            if documents_list:
+                return documents_list, documents_list[0].page_content
         return [], ""

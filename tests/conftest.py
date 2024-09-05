@@ -78,7 +78,8 @@ def approaches_base_mock():
     # Mock Vector Store
     mock_vector_store = MagicMock()
     mock_document = Document(
-        page_content='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}'
+        page_content='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}',
+        metadata={"source": "test"},
     )
     mock_vector_store.as_retriever.return_value.ainvoke = AsyncMock(return_value=[mock_document])
 
