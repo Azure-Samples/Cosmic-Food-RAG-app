@@ -181,7 +181,7 @@ sqlalchemy==2.0.32
     #   langchain-community
 taskgroup==0.0.0a4
     # via hypercorn
-tenacity==9.0.0
+tenacity==8.5.0
     # via
     #   langchain
     #   langchain-community
