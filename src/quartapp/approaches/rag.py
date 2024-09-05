@@ -88,14 +88,20 @@ class RAG(ApproachesBase):
         context_prompt_template = ChatPromptTemplate.from_template(CONTEXT_PROMPT)
         self._chat.temperature = temperature
         context_chain = context_prompt_template | self._chat
-
+        documents_list: list[Document] = []
         if data_points:
             # Perform RAG search
             response = await context_chain.ainvoke(
                 {"context": [dp.to_dict() for dp in data_points], "input": rephrased_question.content}
             )
-
-            return vector_context, str(response.content)
+            for document in vector_context:
+                documents_list.append(
+                    Document(page_content=document.page_content, metadata={"source": document.metadata["source"]})
+                )
+            formatted_response = (
+                f'{{"response": "{response.content}", "rephrased_response": "{rephrased_question.content}"}}'
+            )
+            return documents_list, str(formatted_response)
 
         # Perform RAG search with no context
         response = await context_chain.ainvoke({"context": [], "input": rephrased_question.content})
@@ -127,14 +133,18 @@ class RAG(ApproachesBase):
         context_prompt_template = ChatPromptTemplate.from_template(CONTEXT_PROMPT)
         self._chat.temperature = temperature
         context_chain = context_prompt_template | self._chat
+        documents_list: list[Document] = []
 
         if data_points:
             # Perform RAG search
             response = context_chain.astream(
                 {"context": [dp.to_dict() for dp in data_points], "input": rephrased_question.content}
             )
-
-            return vector_context, response
+            for document in vector_context:
+                documents_list.append(
+                    Document(page_content=document.page_content, metadata={"source": document.metadata["source"]})
+                )
+            return documents_list, response
 
         # Perform RAG search with no context
         response = context_chain.astream({"context": [], "input": rephrased_question.content})

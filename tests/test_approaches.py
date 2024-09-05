@@ -58,7 +58,12 @@ async def test_vector_run(vector_mock):
     """Test the Vector class run method."""
     result = vector_mock.run([{"content": "test"}], 0.0, 0, 0.0)
     assert await result == (
-        [Document(page_content='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}')],
+        [
+            Document(
+                metadata={"source": "test"},
+                page_content='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}',
+            )
+        ],
         '{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}',
     )
 
@@ -79,8 +84,13 @@ async def test_rag_run(rag_mock):
     """Test the RAG class run method."""
     result = rag_mock.run([{"content": "test"}], 0.0, 0, 0.0)
     assert await result == (
-        [Document(page_content='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}')],
-        "content",
+        [
+            Document(
+                metadata={"source": "test"},
+                page_content='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}',
+            )
+        ],
+        '{"response": "content", "rephrased_response": "content"}',
     )
 
 
@@ -120,7 +130,23 @@ async def test_app_config_run_keyword(app_config_mock):
                     collection="collection_name",
                 )
             ],
-            thoughts=[Thought(title="Source", description="test")],
+            thoughts=[
+                Thought(
+                    title="Cosmos Text Search Query",
+                    description="test",
+                ),
+                Thought(
+                    title="Cosmos Text Search Result",
+                    description="[Document(metadata={'source': 'test'}, "
+                    'page_content=\'{"name": "test", "description": "test", '
+                    '"price": "5.0USD", "category": "test"}\')]',
+                ),
+                Thought(
+                    title="Cosmos Text Search Top Result",
+                    description='{"name": "test", "description": "test", "price": ' '"5.0USD", "category": "test"}',
+                ),
+                Thought(title="Source", description="test"),
+            ],
         ),
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
@@ -146,7 +172,23 @@ async def test_app_config_run_vector(app_config_mock):
                     collection="collection_name",
                 )
             ],
-            thoughts=[Thought(title="Source", description=None)],
+            thoughts=[
+                Thought(
+                    title="Cosmos Vector Search Query",
+                    description="test",
+                ),
+                Thought(
+                    title="Cosmos Vector Search Result",
+                    description="[Document(metadata={'source': 'test'}, "
+                    'page_content=\'{"name": "test", "description": "test", '
+                    '"price": "5.0USD", "category": "test"}\')]',
+                ),
+                Thought(
+                    title="Cosmos Vector Search Top Result",
+                    description='{"name": "test", "description": "test", "price": ' '"5.0USD", "category": "test"}',
+                ),
+                Thought(title="Source", description="test"),
+            ],
         ),
         message=Message(
             content="\n            Name: test\n            Description: test\n            Price: 5.0USD\n"
@@ -172,7 +214,27 @@ async def test_app_config_run_rag(app_config_mock):
                     collection="collection_name",
                 )
             ],
-            thoughts=[Thought(title="Source", description=None)],
+            thoughts=[
+                Thought(
+                    title="Cosmos RAG Query",
+                    description="test",
+                ),
+                Thought(
+                    title="Cosmos RAG OpenAI Rephrased Query",
+                    description="content",
+                ),
+                Thought(
+                    title="Cosmos RAG Search Vector Search Result",
+                    description="[Document(metadata={'source': 'test'}, "
+                    'page_content=\'{"name": "test", "description": "test", '
+                    '"price": "5.0USD", "category": "test"}\')]',
+                ),
+                Thought(
+                    title="Cosmos RAG OpenAI Rephrased Response",
+                    description="content",
+                ),
+                Thought(title="Source", description="test"),
+            ],
         ),
         message=Message(content="content", role=AIChatRoles.ASSISTANT),
         sessionState="test",

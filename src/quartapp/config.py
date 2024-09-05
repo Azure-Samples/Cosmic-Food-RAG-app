@@ -39,7 +39,9 @@ class AppConfig(AppConfigBase):
         """
 
         context: Context = await self.get_context(keyword_response)
-
+        context.thoughts.insert(0, Thought(description=answer, title="Cosmos Text Search Top Result"))
+        context.thoughts.insert(0, Thought(description=str(keyword_response), title="Cosmos Text Search Result"))
+        context.thoughts.insert(0, Thought(description=messages[-1]["content"], title="Cosmos Text Search Query"))
         message: Message = Message(content=message_content, role=AIChatRoles.ASSISTANT)
 
         await self.add_to_cosmos(
@@ -75,6 +77,9 @@ class AppConfig(AppConfigBase):
         """
 
         context: Context = await self.get_context(vector_response)
+        context.thoughts.insert(0, Thought(description=answer, title="Cosmos Vector Search Top Result"))
+        context.thoughts.insert(0, Thought(description=str(vector_response), title="Cosmos Vector Search Result"))
+        context.thoughts.insert(0, Thought(description=messages[-1]["content"], title="Cosmos Vector Search Query"))
         message: Message = Message(content=message_content, role=AIChatRoles.ASSISTANT)
 
         await self.add_to_cosmos(
@@ -90,6 +95,7 @@ class AppConfig(AppConfigBase):
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
     ) -> RetrievalResponse:
         rag_response, answer = await self.setup.rag.run(messages, temperature, limit, score_threshold)
+        json_answer = json.loads(answer)
 
         new_session_state: str = session_state if session_state else str(uuid4())
 
@@ -98,7 +104,7 @@ class AppConfig(AppConfigBase):
                 return RetrievalResponse(
                     sessionState=new_session_state,
                     context=Context([DataPoint()], [Thought()]),
-                    message=Message(content=answer, role=AIChatRoles.ASSISTANT),
+                    message=Message(content=json_answer.get("response"), role=AIChatRoles.ASSISTANT),
                 )
             else:
                 return RetrievalResponse(
@@ -108,7 +114,17 @@ class AppConfig(AppConfigBase):
                 )
 
         context: Context = await self.get_context(rag_response)
-        message: Message = Message(content=answer, role=AIChatRoles.ASSISTANT)
+        context.thoughts.insert(
+            0, Thought(description=json_answer.get("response"), title="Cosmos RAG OpenAI Rephrased Response")
+        )
+        context.thoughts.insert(
+            0, Thought(description=str(rag_response), title="Cosmos RAG Search Vector Search Result")
+        )
+        context.thoughts.insert(
+            0, Thought(description=json_answer.get("rephrased_response"), title="Cosmos RAG OpenAI Rephrased Query")
+        )
+        context.thoughts.insert(0, Thought(description=messages[-1]["content"], title="Cosmos RAG Query"))
+        message: Message = Message(content=json_answer.get("response"), role=AIChatRoles.ASSISTANT)
 
         await self.add_to_cosmos(
             old_messages=messages,
@@ -127,6 +143,10 @@ class AppConfig(AppConfigBase):
         new_session_state: str = session_state if session_state else str(uuid4())
 
         context: Context = await self.get_context(rag_response)
+        context.thoughts.insert(
+            0, Thought(description=str(rag_response), title="Cosmos RAG Search Vector Search Result")
+        )
+        context.thoughts.insert(0, Thought(description=messages[-1]["content"], title="Cosmos RAG Query"))
 
         yield RetrievalResponseDelta(context=context, sessionState=new_session_state)
 
