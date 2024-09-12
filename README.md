@@ -167,4 +167,9 @@ When azd has finished deploying, you'll see an endpoint URI in the command outpu
 
 1. Select **SSH** from the left menu then, select **Go**.
 
-1. In the SSH terminal, run `python ./scripts/add_data.py  --file="./data/food_items.json"`.
+1. In the SSH terminal, execute the following commands:
+
+    ```bash
+    pip install -e .
+    python ./scripts/add_data.py  --file="./data/food_items.json"
+    ```
