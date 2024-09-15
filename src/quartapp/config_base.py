@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from urllib.parse import quote_plus
 
 from langchain_core.documents import Document
-from pydantic.v1 import SecretStr
+from pydantic.types import SecretStr
 from pymongo.errors import (
     ConfigurationError,
     InvalidName,

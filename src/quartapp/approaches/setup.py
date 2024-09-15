@@ -2,7 +2,7 @@ from abc import ABC
 
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
-from pydantic.v1 import SecretStr
+from pydantic.types import SecretStr
 from pymongo.collection import Collection
 
 from quartapp.approaches.keyword import KeyWord
