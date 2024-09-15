@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-    checks-format:
+    check-static-analysis:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v4
