@@ -1,6 +1,6 @@
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
+from langchain_core.pydantic_v1 import SecretStr
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
-from pydantic.types import SecretStr
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.errors import ServerSelectionTimeoutError
