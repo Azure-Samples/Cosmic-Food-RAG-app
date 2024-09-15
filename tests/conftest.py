@@ -10,7 +10,6 @@ import openai.resources
 import pytest
 import pytest_asyncio
 from langchain_core.documents import Document
-from langchain_core.pydantic_v1 import SecretStr
 from openai.types import CreateEmbeddingResponse, Embedding
 from openai.types.chat import ChatCompletion, ChatCompletionChunk
 from openai.types.chat.chat_completion import (
@@ -18,6 +17,7 @@ from openai.types.chat.chat_completion import (
     Choice,
 )
 from openai.types.create_embedding_response import Usage
+from pydantic import SecretStr
 
 import quartapp
 from quartapp.app import create_app
