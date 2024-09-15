@@ -1,10 +1,11 @@
 import json
 import os
 from abc import ABC, abstractmethod
+from datetime import datetime, timezone
 from urllib.parse import quote_plus
 
 from langchain_core.documents import Document
-from pydantic.v1 import SecretStr
+from pydantic.types import SecretStr
 from pymongo.errors import (
     ConfigurationError,
     InvalidName,
@@ -63,7 +64,12 @@ class AppConfigBase(ABC):
                     raise IndexError
                 old_messages.append(new_message)
                 self.setup._database_setup._users_collection.insert_one(
-                    {"_id": new_session_state, "messages": old_messages}
+                    {
+                        "_id": new_session_state,
+                        "messages": old_messages,
+                        "created_at": datetime.now(timezone.utc),  # noqa: UP017
+                        "updated_at": datetime.now(timezone.utc),  # noqa: UP017
+                    }
                 )
                 return True
             except (AttributeError, ConfigurationError, InvalidName, InvalidOperation, OperationFailure, IndexError):
@@ -73,10 +79,12 @@ class AppConfigBase(ABC):
                 if len(old_messages) == 0 or len(new_message) == 0 or len(new_session_state) == 0:
                     raise IndexError
                 self.setup._database_setup._users_collection.update_one(
-                    {"_id": new_session_state}, {"$push": {"messages": old_messages[-1]}}
+                    {"_id": new_session_state},
+                    {"$push": {"messages": {"$each": [old_messages[-1], new_message]}}},  # noqa: UP017
                 )
                 self.setup._database_setup._users_collection.update_one(
-                    {"_id": new_session_state}, {"$push": {"messages": new_message}}
+                    {"_id": new_session_state},
+                    {"$set": {"updated_at": datetime.now(timezone.utc)}},  # noqa: UP017
                 )
                 return True
             except (AttributeError, ConfigurationError, InvalidName, InvalidOperation, OperationFailure, IndexError):

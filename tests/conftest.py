@@ -17,7 +17,7 @@ from openai.types.chat.chat_completion import (
     Choice,
 )
 from openai.types.create_embedding_response import Usage
-from pydantic.v1 import SecretStr
+from pydantic.types import SecretStr
 
 import quartapp
 from quartapp.app import create_app

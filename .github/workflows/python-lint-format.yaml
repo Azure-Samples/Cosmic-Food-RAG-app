@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-    checks-format:
+    check-format-lint:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v4
