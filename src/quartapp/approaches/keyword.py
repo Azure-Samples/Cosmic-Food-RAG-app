@@ -13,7 +13,7 @@ class KeyWord(ApproachesBase):
         if keyword_response:
             for document in keyword_response:
                 documents_list.append(
-                    Document(page_content=document["textContent"], metadata={"source": document["source"]})
+                    Document(page_content=document["textContent"], metadata={"source": document["metadata"]["source"]})
                 )
             if documents_list:
                 return documents_list, documents_list[0].page_content

@@ -17,7 +17,7 @@ from openai.types.chat.chat_completion import (
     Choice,
 )
 from openai.types.create_embedding_response import Usage
-from pydantic.types import SecretStr
+from pydantic import SecretStr
 
 import quartapp
 from quartapp.app import create_app
@@ -87,7 +87,7 @@ def approaches_base_mock():
     mock_chat = MagicMock()
 
     # Mock Data Collection
-    mock_mongo_document = {"textContent": mock_document.page_content, "source": "test"}
+    mock_mongo_document = {"textContent": mock_document.page_content, "metadata": {"source": "test"}}
     mock_data_collection = MagicMock()
     mock_data_collection.find = MagicMock()
     mock_data_collection.find.return_value.limit = MagicMock(return_value=[mock_mongo_document])
