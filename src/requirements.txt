@@ -79,7 +79,7 @@ hypercorn==0.17.3
     #   quartapp (src/pyproject.toml)
 hyperframe==6.0.1
     # via h2
-idna==3.9
+idna==3.10
     # via
     #   anyio
     #   httpx
@@ -115,7 +115,7 @@ langchain-openai==0.2.0
     # via quartapp (src/pyproject.toml)
 langchain-text-splitters==0.3.0
     # via langchain
-langsmith==0.1.120
+langsmith==0.1.121
     # via
     #   langchain
     #   langchain-community
@@ -137,7 +137,7 @@ numpy==1.26.4
     # via
     #   langchain
     #   langchain-community
-openai==1.45.0
+openai==1.45.1
     # via langchain-openai
 orjson==3.10.7
     # via langsmith
