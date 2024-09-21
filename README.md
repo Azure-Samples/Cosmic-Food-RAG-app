@@ -35,7 +35,7 @@ urlFragment: cosmic-food-rag-app
 
     [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Azure-Samples/Cosmic-Food-RAG-app?devcontainer_path=.devcontainer/devcontainer.json)
 
-1. 📝 Start here 👉 [CBD_Mongo_vCore.ipynb](./CBD_Mongo_vCore.ipynb)
+1. 📝 Start here 👉 [rag-azure-openai-cosmosdb-langchain-notebook.ipynb](./rag-azure-openai-cosmosdb-langchain-notebook.ipynb)
 
 ### Cost estimation
 
@@ -79,7 +79,7 @@ either by deleting the resource group in the Portal or running `azd down`.
     python3 -m pip install -e 'src[dev]'
     ```
 
-1. **Run the [notebook](./CBD_Mongo_vCore.ipynb) to generate the .env file and test out everything**
+1. **Run the [notebook](./rag-azure-openai-cosmosdb-langchain-notebook.ipynb) to generate the .env file and test out everything**
 
 ### Running the website locally
 
@@ -115,7 +115,7 @@ Navigate to project homepage [http://127.0.0.1:50505/](http://127.0.0.1:50505/) 
 
 ## `azd` Deployment
 
-![architecture-thumbnail](https://github.com/khelanmodi/build-24-langchain-vcore/assets/64026625/4c5845d4-d4ab-4342-b559-60ba65943f45)
+![architecture thumbnail rag-langchain-mongodb-vcore](https://github.com/user-attachments/assets/95a50a47-80fd-4a35-bfbd-4f0d497602ea)
 
 This repository is set up for deployment on Azure App Service (w/Azure Cosmos DB for MongoDB vCore) using the configuration files in the `infra` folder.
 
