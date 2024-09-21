@@ -115,7 +115,7 @@ Navigate to project homepage [http://127.0.0.1:50505/](http://127.0.0.1:50505/) 
 
 ## `azd` Deployment
 
-![architecture-thumbnail]()
+![architecture thumbnail rag-langchain-mongodb-vcore](https://github.com/user-attachments/assets/95a50a47-80fd-4a35-bfbd-4f0d497602ea)
 
 This repository is set up for deployment on Azure App Service (w/Azure Cosmos DB for MongoDB vCore) using the configuration files in the `infra` folder.
 
