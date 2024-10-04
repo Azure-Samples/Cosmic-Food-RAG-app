@@ -20,10 +20,6 @@ anyio==4.6.0
     # via
     #   httpx
     #   openai
-async-timeout==4.0.3
-    # via
-    #   aiohttp
-    #   langchain
 attrs==24.2.0
     # via aiohttp
 blinker==1.8.2
@@ -47,17 +43,14 @@ distro==1.9.0
     # via openai
 dnspython==2.6.1
     # via pymongo
-exceptiongroup==1.2.2
-    # via
-    #   anyio
-    #   hypercorn
-    #   taskgroup
 flask==3.0.3
     # via quart
 frozenlist==1.4.1
     # via
     #   aiohttp
     #   aiosignal
+greenlet==3.1.1
+    # via sqlalchemy
 h11==0.14.0
     # via
     #   httpcore
@@ -153,12 +146,17 @@ pydantic==2.9.2
     #   langchain-core
     #   langsmith
     #   openai
+    #   pydantic-settings
 pydantic-core==2.23.4
     # via pydantic
+pydantic-settings==2.5.2
+    # via langchain-community
 pymongo==4.9.1
     # via quartapp (src/pyproject.toml)
 python-dotenv==1.0.1
-    # via quartapp (src/pyproject.toml)
+    # via
+    #   pydantic-settings
+    #   quartapp (src/pyproject.toml)
 pyyaml==6.0.2
     # via
     #   langchain
@@ -183,8 +181,6 @@ sqlalchemy==2.0.35
     # via
     #   langchain
     #   langchain-community
-taskgroup==0.0.0a4
-    # via hypercorn
 tenacity==8.5.0
     # via
     #   langchain
@@ -192,14 +188,10 @@ tenacity==8.5.0
     #   langchain-core
 tiktoken==0.7.0
     # via langchain-openai
-tomli==2.0.1
-    # via hypercorn
 tqdm==4.66.5
     # via openai
 typing-extensions==4.12.2
     # via
-    #   anyio
-    #   hypercorn
     #   langchain-core
     #   openai
     #   pydantic
