@@ -17,11 +17,11 @@
     },
     "dependencies": {
         "@fluentui/react": "^8.112.5",
-        "@fluentui/react-components": "^9.37.3",
-        "@fluentui/react-icons": "^2.0.221",
+        "@fluentui/react-components": "^9.54.13",
+        "@fluentui/react-icons": "^2.0.249",
         "@react-spring/web": "^9.7.3",
         "@microsoft/ai-chat-protocol": "1.0.0-beta.20240610.1",
-        "dompurify": "^3.0.6",
+        "dompurify": "^3.1.6",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^6.23.1",
@@ -31,17 +31,18 @@
     "devDependencies": {
         "@eslint/js": "^9.5.0",
         "@types/dom-speech-recognition": "^0.0.4",
-        "@types/dompurify": "^3.0.4",
+        "@types/dompurify": "^3.0.5",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
         "@types/react-syntax-highlighter": "^15.5.13",
-        "@vitejs/plugin-react": "^4.1.1",
+        "@vitejs/plugin-react": "^4.3.1",
         "eslint": "^8.57.0",
         "eslint-plugin-react": "^7.34.3",
         "globals": "^15.6.0",
         "prettier": "^3.0.3",
-        "typescript": "^5.4.5",
+        "typescript": "^5.5.3",
         "typescript-eslint": "^7.13.1",
-        "vite": "^4.5.3"
+        "vite": "^5.4.8",
+        "rollup-plugin-visualizer": "^5.12.0"
     }
 }

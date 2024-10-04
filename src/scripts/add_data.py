@@ -84,14 +84,14 @@ async def add_data(input_args: Namespace) -> None:
     num_lists = 100
     dimensions = 1536
     similarity_algorithm = CosmosDBSimilarityType.COS
-    kind = CosmosDBVectorSearchType.VECTOR_HNSW
+    kind = CosmosDBVectorSearchType.VECTOR_IVF
     m = 16
     ef_construction = 64
 
     # Create the index overt the collection
     index_creation = vector_store.create_index(num_lists, dimensions, similarity_algorithm, kind, m, ef_construction)
 
-    logging.info(f"✨ Successfully Created the HNSW Index Over the data...{index_creation}")
+    logging.info(f"✨ Successfully Created the IVF Index Over the data...{index_creation}")
     logging.info("✅✅ Done! ✅✅")
 
 
