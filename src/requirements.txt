@@ -8,7 +8,7 @@ aiofiles==24.1.0
     # via quart
 aiohappyeyeballs==2.4.3
     # via aiohttp
-aiohttp==3.10.10
+aiohttp==3.11.7
     # via
     #   langchain
     #   langchain-community
@@ -22,7 +22,7 @@ anyio==4.6.2.post1
     #   openai
 attrs==24.2.0
     # via aiohttp
-blinker==1.8.2
+blinker==1.9.0
     # via
     #   flask
     #   quart
@@ -43,13 +43,13 @@ distro==1.9.0
     # via openai
 dnspython==2.7.0
     # via pymongo
-flask==3.0.3
+flask==3.1.0
     # via quart
 frozenlist==1.5.0
     # via
     #   aiohttp
     #   aiosignal
-greenlet==3.0.3
+greenlet==3.1.1
     # via sqlalchemy
 h11==0.14.0
     # via
@@ -60,7 +60,7 @@ h2==4.1.0
     # via hypercorn
 hpack==4.0.0
     # via h2
-httpcore==1.0.6
+httpcore==1.0.7
     # via httpx
 httpx==0.27.2
     # via
@@ -86,29 +86,29 @@ jinja2==3.1.4
     # via
     #   flask
     #   quart
-jiter==0.6.1
+jiter==0.7.1
     # via openai
 jsonpatch==1.33
     # via langchain-core
 jsonpointer==3.0.0
     # via jsonpatch
-langchain==0.3.4
+langchain==0.3.8
     # via
     #   langchain-community
     #   quartapp (src/pyproject.toml)
-langchain-community==0.3.3
+langchain-community==0.3.8
     # via quartapp (src/pyproject.toml)
-langchain-core==0.3.13
+langchain-core==0.3.21
     # via
     #   langchain
     #   langchain-community
     #   langchain-openai
     #   langchain-text-splitters
-langchain-openai==0.2.3
+langchain-openai==0.2.9
     # via quartapp (src/pyproject.toml)
-langchain-text-splitters==0.3.0
+langchain-text-splitters==0.3.2
     # via langchain
-langsmith==0.1.137
+langsmith==0.1.145
     # via
     #   langchain
     #   langchain-community
@@ -118,7 +118,7 @@ markupsafe==3.0.2
     #   jinja2
     #   quart
     #   werkzeug
-marshmallow==3.23.0
+marshmallow==3.23.1
     # via dataclasses-json
 multidict==6.1.0
     # via
@@ -130,26 +130,26 @@ numpy==1.26.4
     # via
     #   langchain
     #   langchain-community
-openai==1.52.2
+openai==1.55.0
     # via langchain-openai
-orjson==3.10.10
+orjson==3.10.12
     # via langsmith
-packaging==24.1
+packaging==24.2
     # via
     #   langchain-core
     #   marshmallow
 priority==2.0.0
     # via hypercorn
-pydantic==2.9.2
+pydantic==2.10.1
     # via
     #   langchain
     #   langchain-core
     #   langsmith
     #   openai
     #   pydantic-settings
-pydantic-core==2.23.4
+pydantic-core==2.27.1
     # via pydantic
-pydantic-settings==2.5.2
+pydantic-settings==2.6.1
     # via langchain-community
 pymongo==4.10.1
     # via quartapp (src/pyproject.toml)
@@ -162,9 +162,9 @@ pyyaml==6.0.2
     #   langchain
     #   langchain-community
     #   langchain-core
-quart==0.19.8
+quart==0.19.9
     # via quartapp (src/pyproject.toml)
-regex==2024.9.11
+regex==2024.11.6
     # via tiktoken
 requests==2.32.3
     # via
@@ -188,7 +188,7 @@ tenacity==8.5.0
     #   langchain-core
 tiktoken==0.8.0
     # via langchain-openai
-tqdm==4.66.5
+tqdm==4.67.1
     # via openai
 typing-extensions==4.12.2
     # via
@@ -202,11 +202,11 @@ typing-inspect==0.9.0
     # via dataclasses-json
 urllib3==2.2.3
     # via requests
-werkzeug==3.0.6
+werkzeug==3.1.3
     # via
     #   flask
     #   quart
 wsproto==1.2.0
     # via hypercorn
-yarl==1.16.0
+yarl==1.18.0
     # via aiohttp
