@@ -20,7 +20,7 @@ anyio==4.8.0
     # via
     #   httpx
     #   openai
-async-timeout==4.0.3
+async-timeout==5.0.1
     # via
     #   aiohttp
     #   langchain
@@ -115,7 +115,7 @@ langchain-core==0.3.29
     #   langchain-text-splitters
 langchain-openai==0.2.14
     # via quartapp (src/pyproject.toml)
-langchain-text-splitters==0.3.4
+langchain-text-splitters==0.3.5
     # via langchain
 langsmith==0.2.10
     # via
@@ -127,7 +127,7 @@ markupsafe==3.0.2
     #   jinja2
     #   quart
     #   werkzeug
-marshmallow==3.23.3
+marshmallow==3.24.1
     # via dataclasses-json
 multidict==6.1.0
     # via
@@ -139,7 +139,7 @@ numpy==1.26.4
     # via
     #   langchain
     #   langchain-community
-openai==1.59.3
+openai==1.59.5
     # via langchain-openai
 orjson==3.10.13
     # via langsmith
