@@ -162,7 +162,7 @@ pyyaml==6.0.2
     #   langchain
     #   langchain-community
     #   langchain-core
-quart==0.19.8
+quart==0.20.0
     # via quartapp (src/pyproject.toml)
 regex==2024.9.11
     # via tiktoken
