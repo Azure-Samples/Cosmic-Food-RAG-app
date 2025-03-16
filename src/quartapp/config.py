@@ -31,10 +31,10 @@ class AppConfig(AppConfigBase):
         top_result = json.loads(answer)
 
         message_content = f"""
-            Name: {top_result.get('name')}
-            Description: {top_result.get('description')}
-            Price: {top_result.get('price')}
-            Category: {top_result.get('category')}
+            Name: {top_result.get("name")}
+            Description: {top_result.get("description")}
+            Price: {top_result.get("price")}
+            Category: {top_result.get("category")}
             Collection: {self.setup._database_setup._collection_name}
         """
 
@@ -69,10 +69,10 @@ class AppConfig(AppConfigBase):
         top_result = json.loads(answer)
 
         message_content = f"""
-            Name: {top_result.get('name')}
-            Description: {top_result.get('description')}
-            Price: {top_result.get('price')}
-            Category: {top_result.get('category')}
+            Name: {top_result.get("name")}
+            Description: {top_result.get("description")}
+            Price: {top_result.get("price")}
+            Category: {top_result.get("category")}
             Collection: {self.setup._database_setup._collection_name}
         """
 

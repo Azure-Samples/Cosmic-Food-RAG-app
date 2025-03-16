@@ -21,7 +21,6 @@ dev = [
     "pip-tools",
     "pre-commit",
     "ruff",
-    "black",
     "mypy",
     "mongomock",
 ]

@@ -28,10 +28,10 @@ jobs:
         - name: Install dependencies
           run: |
             python3 -m pip install --upgrade pip
-            python3 -m pip install ruff black
+            python3 -m pip install ruff
         - name: Check linting with ruff
           run: |
             ruff check .
-        - name: Check formatting with black
+        - name: Check formatting with ruff
           run: |
-            black . --verbose
+            ruff format --check .

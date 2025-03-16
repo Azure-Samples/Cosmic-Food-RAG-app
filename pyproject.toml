@@ -7,10 +7,6 @@ src = ["src/quartapp"]
 [tool.ruff.lint.isort]
 known-first-party = ["quartapp"]
 
-[tool.black]
-line-length = 120
-target-version = ["py312"]
-
 [tool.mypy]
 check_untyped_defs = true
 python_version = 3.12

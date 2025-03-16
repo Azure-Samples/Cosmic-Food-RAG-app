@@ -19,6 +19,9 @@
       },
       "mongoServiceSku":{
         "value": "${AZURE_MONGO_SERVICE_SKU=M25}"
+      },
+      "openAiLocation": {
+        "value": "${AZURE_OPENAI_LOCATION}"
       }
     }
   }

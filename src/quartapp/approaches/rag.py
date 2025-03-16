@@ -99,7 +99,7 @@ class RAG(ApproachesBase):
                     Document(page_content=document.page_content, metadata={"source": document.metadata["source"]})
                 )
             formatted_response = (
-                f'{{"response": "{response.content}", "rephrased_response": "{rephrased_question.content}"}}'
+                f'{{"response": "{str(response.content)}", "rephrased_response": "{str(rephrased_question.content)}"}}'
             )
             return documents_list, str(formatted_response)
 
