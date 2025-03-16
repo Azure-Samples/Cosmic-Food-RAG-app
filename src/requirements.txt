@@ -148,7 +148,7 @@ pydantic==2.10.6
     #   langsmith
     #   openai
     #   pydantic-settings
-pydantic-core==2.27.2
+pydantic-core==2.32.0
     # via pydantic
 pydantic-settings==2.8.1
     # via langchain-community
