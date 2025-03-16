@@ -143,7 +143,7 @@ async def test_app_config_run_keyword(app_config_mock):
                 ),
                 Thought(
                     title="Cosmos Text Search Top Result",
-                    description='{"name": "test", "description": "test", "price": ' '"5.0USD", "category": "test"}',
+                    description='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}',
                 ),
                 Thought(title="Source", description="test"),
             ],
@@ -185,7 +185,7 @@ async def test_app_config_run_vector(app_config_mock):
                 ),
                 Thought(
                     title="Cosmos Vector Search Top Result",
-                    description='{"name": "test", "description": "test", "price": ' '"5.0USD", "category": "test"}',
+                    description='{"name": "test", "description": "test", "price": "5.0USD", "category": "test"}',
                 ),
                 Thought(title="Source", description="test"),
             ],

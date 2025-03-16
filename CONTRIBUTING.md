@@ -115,7 +115,7 @@ python3 -m pytest --cov
 This codebase includes several languages: TypeScript, Python, Bicep, and Bash.
 Code should follow the standard conventions of each language.
 
-For Python, you can enforce the conventions using `ruff` and `black`.
+For Python, you can enforce the conventions using `ruff`.
 
 Install the development dependencies:
 
@@ -126,13 +126,13 @@ python3 -m pip install -e 'src[dev]'
 Run `ruff` to lint a file:
 
 ```shell
-python3 -m ruff <path-to-file>
+python3 -m ruff check <path-to-file> --fix
 ```
 
-Run `black` to format a file:
+Run `ruff` to format a file:
 
 ```shell
-python3 -m black <path-to-file>
+python3 -m ruff format <path-to-file>
 ```
 
-If you followed the steps above to install the pre-commit hooks, then you can just wait for those hooks to run `ruff` and `black` for you.
+If you followed the steps above to install the pre-commit hooks, then you can just wait for those hooks to run `ruff` for you.

@@ -23,12 +23,32 @@ param mongoAdminPassword string
 @description('SKU to use for Cosmos DB for MongoDB vCore Plan')
 param mongoServiceSku string
 
+// https://learn.microsoft.com/azure/ai-services/openai/concepts/models?tabs=python-secure%2Cstandard%2Cstandard-chat-completions#standard-deployment-model-availability
+@description('Location for the OpenAI resource group')
+@allowed([
+  'canadaeast'
+  'eastus'
+  'eastus2'
+  'francecentral'
+  'switzerlandnorth'
+  'uksouth'
+  'japaneast'
+  'northcentralus'
+  'australiaeast'
+  'swedencentral'
+])
+@metadata({
+  azd: {
+    type: 'location'
+  }
+})
+param openAiLocation string
 param openAIDeploymentName string = '${name}-openai'
-param chatGptDeploymentName string = 'chat-gpt'
-param chatGptDeploymentCapacity int = 30
-param chatGptModelName string = 'gpt-35-turbo'
-param chatGptModelVersion string = '0613'
-param embeddingDeploymentName string = 'text-embedding'
+param chatGptDeploymentName string = 'gpt-4o'
+param chatGptDeploymentCapacity int = 8
+param chatGptModelName string = 'gpt-4o'
+param chatGptModelVersion string = '2024-11-20'
+param embeddingDeploymentName string = 'text-embedding-ada-002'
 param embeddingDeploymentCapacity int = 30
 param embeddingModelName string = 'text-embedding-ada-002'
 
@@ -87,7 +107,7 @@ module openAi 'core/ai/cognitiveservices.bicep' = {
   scope: resourceGroup
   params: {
     name: openAIDeploymentName
-    location: location
+    location: openAiLocation
     tags: tags
     sku: {
       name: 'S0'
@@ -149,7 +169,6 @@ module keyVaultSecrets './core/security/keyvault-secret.bicep' = {
 }
 
 module web 'core/host/appservice.bicep' = {
-  dependsOn: [ mongoCluster ]
   name: 'appservice'
   scope: resourceGroup
   params: {
@@ -184,7 +203,6 @@ module web 'core/host/appservice.bicep' = {
 }
 
 module webKeyVaultAccess 'core/security/keyvault-access.bicep' = {
-  dependsOn: [ mongoCluster ]
   name: 'web-keyvault-access'
   scope: resourceGroup
   params: {

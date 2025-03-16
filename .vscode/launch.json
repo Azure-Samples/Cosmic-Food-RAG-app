@@ -35,5 +35,15 @@
             "command": "npm run dev",
             "cwd": "${workspaceFolder}/frontend",
         },
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack",
+            "configurations": [
+                "Python: Quart",
+                "Frontend: watch"
+            ],
+            "stopAll": true,
+        }
     ]
 }
