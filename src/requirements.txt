@@ -8,13 +8,13 @@ aiofiles==24.1.0
     # via quart
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.11.13
+aiohttp==3.11.14
     # via langchain-community
 aiosignal==1.3.2
     # via aiohttp
 annotated-types==0.7.0
     # via pydantic
-anyio==4.8.0
+anyio==4.9.0
     # via
     #   httpx
     #   openai
@@ -148,7 +148,7 @@ pydantic==2.10.6
     #   langsmith
     #   openai
     #   pydantic-settings
-pydantic-core==2.27.2
+pydantic-core==2.32.0
     # via pydantic
 pydantic-settings==2.8.1
     # via langchain-community
