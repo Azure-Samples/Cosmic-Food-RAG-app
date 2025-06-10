@@ -167,7 +167,7 @@ quart==0.20.0
     # via quartapp (src/pyproject.toml)
 regex==2024.11.6
     # via tiktoken
-requests==2.32.3
+requests==2.32.4
     # via
     #   langchain
     #   langchain-community
