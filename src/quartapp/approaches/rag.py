@@ -105,7 +105,10 @@ class RAG(ApproachesBase):
 
         # Perform RAG search with no context
         response = await context_chain.ainvoke({"context": [], "input": rephrased_question.content})
-        return [], str(response.content)
+        formatted_response = (
+            f'{{"response": "{str(response.content)}", "rephrased_response": "{str(rephrased_question.content)}"}}'
+        )
+        return [], str(formatted_response)
 
     async def run_stream(
         self, messages: list, temperature: float, limit: int, score_threshold: float
