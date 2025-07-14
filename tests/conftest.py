@@ -53,10 +53,10 @@ def mock_session_env(monkeypatch_session):
         monkeypatch_session.setenv("OPENAI_EMBED_HOST", "azure")
         monkeypatch_session.setenv("AZURE_OPENAI_ENDPOINT", "https://api.openai.com")
         monkeypatch_session.setenv("OPENAI_API_VERSION", "2024-03-01-preview")
-        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-35-turbo")
-        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-35-turbo")
-        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-ada-002")
-        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding-ada-002")
+        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-4o-mini")
+        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-4o-mini")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-3-small")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding-3-small")
         monkeypatch_session.setenv("AZURE_OPENAI_EMBED_MODEL_DIMENSIONS", "1536")
         monkeypatch_session.setenv("AZURE_OPENAI_KEY", "fakekey")
         # Allowed Origin
@@ -217,7 +217,7 @@ def mock_openai_embedding(monkeypatch_session):
                     object="embedding",
                 )
             ],
-            model="text-embedding-ada-002",
+            model="text-embedding-3-small",
             usage=Usage(prompt_tokens=8, total_tokens=8),
         )
 

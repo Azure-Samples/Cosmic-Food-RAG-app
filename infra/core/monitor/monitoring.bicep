@@ -1,50 +1,31 @@
 metadata description = 'Creates an Application Insights instance and a Log Analytics workspace.'
 param logAnalyticsName string
 param applicationInsightsName string
-param applicationInsightsDashboardName string = ''
 param location string = resourceGroup().location
 param tags object = {}
-@allowed([ 'Enabled', 'Disabled' ])
-param publicNetworkAccess string = 'Enabled'
 
-module logAnalytics 'br/public:avm/res/operational-insights/workspace:0.4.0' = {
+module logAnalytics 'loganalytics.bicep' = {
   name: 'loganalytics'
   params: {
     name: logAnalyticsName
     location: location
     tags: tags
-    skuName: 'PerGB2018'
-    dataRetention: 30
-    publicNetworkAccessForIngestion: publicNetworkAccess
-    publicNetworkAccessForQuery: publicNetworkAccess
-    useResourcePermissions: true
   }
 }
 
-module applicationInsights 'br/public:avm/res/insights/component:0.3.1' = {
+module applicationInsights 'applicationinsights.bicep' = {
   name: 'applicationinsights'
   params: {
     name: applicationInsightsName
     location: location
     tags: tags
-    workspaceResourceId: logAnalytics.outputs.resourceId
-    publicNetworkAccessForIngestion: publicNetworkAccess
-    publicNetworkAccessForQuery: publicNetworkAccess
-  }
-}
-
-module applicationInsightsDashboard 'applicationinsights-dashboard.bicep' = if (!empty(applicationInsightsDashboardName)) {
-  name: 'application-insights-dashboard'
-  params: {
-    name: applicationInsightsDashboardName
-    location: location
-    applicationInsightsName: applicationInsights.name
+    logAnalyticsWorkspaceId: logAnalytics.outputs.id
   }
 }
 
 output applicationInsightsConnectionString string = applicationInsights.outputs.connectionString
-output applicationInsightsId string = applicationInsights.outputs.resourceId
+output applicationInsightsId string = applicationInsights.outputs.id
 output applicationInsightsInstrumentationKey string = applicationInsights.outputs.instrumentationKey
 output applicationInsightsName string = applicationInsights.outputs.name
-output logAnalyticsWorkspaceId string = logAnalytics.outputs.resourceId
+output logAnalyticsWorkspaceId string = logAnalytics.outputs.id
 output logAnalyticsWorkspaceName string = logAnalytics.outputs.name

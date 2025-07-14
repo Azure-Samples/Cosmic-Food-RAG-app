@@ -82,7 +82,9 @@ async def add_data(input_args: Namespace) -> None:
 
     # Read more about these variables in detail here. https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/vcore/vector-search
     num_lists = 100
-    dimensions = 1536
+    dimensions = int(
+        os.getenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS") or os.getenv("OPENAICOM_EMBED_DIMENSIONS") or "1536"
+    )
     similarity_algorithm = CosmosDBSimilarityType.COS
     kind = CosmosDBVectorSearchType.VECTOR_IVF
     m = 16

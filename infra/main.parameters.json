@@ -11,6 +11,9 @@
       "principalId": {
         "value": "${AZURE_PRINCIPAL_ID}"
       },
+      "runningOnGh": {
+        "value": "${GITHUB_ACTIONS}"
+      },
       "mongoAdminPassword": {
         "value": "$(secretOrRandomPassword ${AZURE_KEY_VAULT_NAME} mongoAdminPassword)"
       },
@@ -20,8 +23,65 @@
       "mongoServiceSku":{
         "value": "${AZURE_MONGO_SERVICE_SKU=M25}"
       },
-      "openAiLocation": {
+      "mongoServiceLocation": {
+        "value": "${AZURE_MONGO_SERVICE_REGION}"
+      },
+      "openAILocation": {
         "value": "${AZURE_OPENAI_LOCATION}"
+      },
+      "deployAzureOpenAI": {
+        "value": "${DEPLOY_AZURE_OPENAI=true}"
+      },
+      "azureOpenAIKey": {
+        "value": "${AZURE_OPENAI_KEY}"
+      },
+      "azureOpenAIEndpoint": {
+        "value": "${AZURE_OPENAI_ENDPOINT}"
+      },
+      "openAIChatHost": {
+        "value": "${OPENAI_CHAT_HOST=azure}"
+      },
+      "chatModelName": {
+        "value": "${AZURE_OPENAI_CHAT_MODEL=gpt-4o-mini}"
+      },
+      "chatDeploymentName": {
+        "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT=gpt-4o-mini}"
+      },
+      "chatDeploymentVersion":{
+        "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION=2024-07-18}"
+      },
+      "chatDeploymentSku": {
+        "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_SKU=GlobalStandard}"
+      },
+      "chatDeploymentCapacity":{
+        "value": "${AZURE_OPENAI_CHAT_DEPLOYMENT_CAPACITY=30}"
+      },
+      "openAIEmbedHost": {
+        "value": "${OPENAI_EMBED_HOST=azure}"
+      },
+      "embedModelName":{
+        "value": "${AZURE_OPENAI_EMBED_MODEL=text-embedding-3-small}"
+      },
+      "embedDeploymentName": {
+        "value": "${AZURE_OPENAI_EMBED_DEPLOYMENT=text-embedding-3-small}"
+      },
+      "embedDeploymentVersion":{
+        "value": "${AZURE_OPENAI_EMBED_DEPLOYMENT_VERSION=1}"
+      },
+      "embedDeploymentSku": {
+        "value": "${AZURE_OPENAI_EMBED_DEPLOYMENT_SKU=GlobalStandard}"
+      },
+      "embedDeploymentCapacity":{
+        "value": "${AZURE_OPENAI_EMBED_DEPLOYMENT_CAPACITY=30}"
+      },
+      "embedDimensions": {
+        "value": "${AZURE_OPENAI_EMBED_DIMENSIONS=1536}"
+      },
+      "openAIComKey": {
+        "value": "${OPENAICOM_KEY}"
+      },
+      "useAiProject": {
+        "value": "${USE_AI_PROJECT=false}"
       }
     }
   }

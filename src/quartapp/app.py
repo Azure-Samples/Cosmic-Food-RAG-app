@@ -87,7 +87,7 @@ def create_app(test_config: dict[str, Any] | None = None) -> Quart:
         retrieval_mode: str = override.get("retrieval_mode", "vector")
         temperature: float = override.get("temperature", 0.3)
         top: int = override.get("top", 3)
-        score_threshold: float = override.get("score_threshold", 0.5)
+        score_threshold: float = override.get("score_threshold", 0)
 
         if approach := available_approaches.get(retrieval_mode):
             response: RetrievalResponse = await approach(
@@ -126,7 +126,7 @@ def create_app(test_config: dict[str, Any] | None = None) -> Quart:
         retrieval_mode: str = override.get("retrieval_mode", "vector")
         temperature: float = override.get("temperature", 0.3)
         top: int = override.get("top", 3)
-        score_threshold: float = override.get("score_threshold", 0.5)
+        score_threshold: float = override.get("score_threshold", 0)
 
         if retrieval_mode == "rag":
             result: AsyncGenerator[RetrievalResponseDelta, None] = app_config.run_rag_stream(
