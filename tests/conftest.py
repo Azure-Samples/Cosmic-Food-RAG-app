@@ -57,7 +57,7 @@ def mock_session_env(monkeypatch_session):
         monkeypatch_session.setenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-4o-mini")
         monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-3-small")
         monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding-3-small")
-        monkeypatch_session.setenv("AZURE_OPENAI_EMBED_MODEL_DIMENSIONS", "1536")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS", "1536")
         monkeypatch_session.setenv("AZURE_OPENAI_KEY", "fakekey")
         # Allowed Origin
         monkeypatch_session.setenv("ALLOWED_ORIGIN", "https://frontend.com")
