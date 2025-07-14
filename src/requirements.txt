@@ -116,7 +116,7 @@ markupsafe==3.0.2
     #   jinja2
     #   quart
     #   werkzeug
-marshmallow==3.26.1
+marshmallow==4.0.0
     # via dataclasses-json
 multidict==6.6.3
     # via
@@ -130,7 +130,7 @@ openai==1.95.1
     # via langchain-openai
 orjson==3.10.18
     # via langsmith
-packaging==24.2
+packaging==25.0
     # via
     #   langchain-core
     #   langsmith
@@ -148,7 +148,7 @@ pydantic==2.11.7
     #   langsmith
     #   openai
     #   pydantic-settings
-pydantic-core==2.33.2
+pydantic-core==2.35.2
     # via pydantic
 pydantic-settings==2.10.1
     # via langchain-community
@@ -167,7 +167,7 @@ quart==0.20.0
     # via quartapp (src/pyproject.toml)
 regex==2024.11.6
     # via tiktoken
-requests==2.32.3
+requests==2.32.4
     # via
     #   langchain
     #   langchain-community
