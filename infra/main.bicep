@@ -137,6 +137,9 @@ param embedDimensions int // Set in main.parameters.json
 @description('Use AI project')
 param useAiProject bool = false
 
+@description('Whether to use Application insights or not')
+param useApplicationInsights bool // Set in main.parameters.json
+
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
 var prefix = '${toLower(name)}-${resourceToken}'
 var tags = { 'azd-env-name': name }
@@ -281,6 +284,7 @@ module ai 'core/ai/ai-foundry.bicep' = if (useAiProject) {
     principalId: principalId
   }
 }
+
 // USER ROLES
 module openAIRoleUser 'core/security/role.bicep' = {
   scope: openAIResourceGroup
@@ -292,7 +296,7 @@ module openAIRoleUser 'core/security/role.bicep' = {
   }
 }
 
-module appInsightsReaderRole 'core/security/role.bicep' = {
+module appInsightsReaderRole 'core/security/role.bicep' = if (useApplicationInsights) {
   scope: resourceGroup
   name: 'appinsights-reader-role'
   params: {
@@ -351,7 +355,7 @@ module mongoCluster 'core/database/cosmos/mongo/cosmos-mongo-cluster.bicep' = {
 }
 
 // Monitor application with Azure Monitor
-module monitoring 'core/monitor/monitoring.bicep' = {
+module monitoring 'core/monitor/monitoring.bicep' = if (useApplicationInsights) {
   name: 'monitoring'
   scope: resourceGroup
   params: {
@@ -362,13 +366,13 @@ module monitoring 'core/monitor/monitoring.bicep' = {
   }
 }
 
-module applicationInsightsDashboard 'app/dashboard.bicep' = {
+module applicationInsightsDashboard 'app/dashboard.bicep' = if (useApplicationInsights) {
   name: 'application-insights-dashboard'
   scope: resourceGroup
   params: {
     name: '${prefix}-appinsights-dashboard'
     location: location
-    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    applicationInsightsName: useApplicationInsights ? monitoring.outputs.applicationInsightsName : ''
   }
 }
 
@@ -401,7 +405,7 @@ var webAppEnv = {
   OPENAICOM_EMBED_DIMENSIONS: openAIEmbedHost == 'openaicom' ? '1536' : ''
   OPENAICOM_EMBED_MODEL: openAIEmbedHost == 'openaicom' ? 'text-embedding-3-small' : ''
   AZURE_OPENAI_EMBEDDINGS_DIMENSIONS: openAIEmbedHost == 'azure' ? string(embedDimensions) : ''
-  APPLICATIONINSIGHTS_CONNECTION_STRING: monitoring.outputs.applicationInsightsConnectionString
+  APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? monitoring.outputs.applicationInsightsConnectionString : ''
   AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
   AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey
   AZURE_COSMOS_USERNAME: mongoAdminUser
@@ -429,7 +433,7 @@ module web 'core/host/appservice.bicep' = {
     alwaysOn: appServiceSku != 'F1'
     appSettings: webAppEnv
     keyVaultName: keyVault.outputs.name
-    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    applicationInsightsName: useApplicationInsights ? monitoring.outputs.applicationInsightsName : ''
 
   }
 }
@@ -449,7 +453,7 @@ output AZURE_RESOURCE_GROUP string = resourceGroup.name
 output WEB_URI string = web.outputs.uri
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 
-output APPLICATIONINSIGHTS_NAME string = monitoring.outputs.applicationInsightsName
+output APPLICATIONINSIGHTS_NAME string = useApplicationInsights ? monitoring.outputs.applicationInsightsName : ''
 
 output OPENAI_CHAT_HOST string = openAIChatHost
 output OPENAI_EMBED_HOST string = openAIEmbedHost

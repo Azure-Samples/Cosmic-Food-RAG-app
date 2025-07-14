@@ -47,6 +47,7 @@ However, you can try the [Azure pricing calculator](https://azure.com/e/eb597434
 - Azure Cosmos DB for MongoDB vCore: `M25` tier, 2 (Burstable) vCores per Node, 8 GB Memory per Node. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/cosmos-db/mongodb/)
 
 To reduce costs, you can switch to free SKUs for various services, but those SKUs have limitations.
+See this guide on [deploying with minimal costs](./docs/deploy_lowcost.md) for more details.
 
 ⚠️ To avoid unnecessary costs, remember to take down your app if it's no longer in use,
 either by deleting the resource group in the Portal or running `azd down`.

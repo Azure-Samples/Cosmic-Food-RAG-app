@@ -82,6 +82,9 @@
       },
       "useAiProject": {
         "value": "${USE_AI_PROJECT=false}"
+      },
+      "useApplicationInsights": {
+        "value": "${AZURE_USE_APPLICATION_INSIGHTS=true}"
       }
     }
   }
