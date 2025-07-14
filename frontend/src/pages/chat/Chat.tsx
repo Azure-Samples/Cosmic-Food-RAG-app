@@ -25,7 +25,7 @@ const Chat = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [temperature, setTemperature] = useState<number>(0.3);
     const [retrieveCount, setRetrieveCount] = useState<number>(3);
-    const [scoreThreshold, setScoreThreshold] = useState<number>(0.5);
+    const [scoreThreshold, setScoreThreshold] = useState<number>(0);
     const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>(RetrievalMode.Hybrid);
 
     const lastQuestionRef = useRef<string>("");
