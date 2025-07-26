@@ -117,7 +117,7 @@ markupsafe==3.0.2
     #   jinja2
     #   quart
     #   werkzeug
-marshmallow==3.26.1
+marshmallow==4.0.0
     # via dataclasses-json
 multidict==6.6.3
     # via
@@ -149,7 +149,7 @@ pydantic==2.11.7
     #   langsmith
     #   openai
     #   pydantic-settings
-pydantic-core==2.33.2
+pydantic-core==2.37.2
     # via pydantic
 pydantic-settings==2.10.1
     # via langchain-community
