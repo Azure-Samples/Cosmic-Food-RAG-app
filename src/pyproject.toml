@@ -18,8 +18,12 @@ dev = [
     "pytest",
     "pytest-cov",
     "pytest-asyncio",
-    "pip-tools",
-    "pre-commit",
+    "pytest-playwright",
+    "mongomock",
+    "requests",
+    "types-requests",
+]
+lint = [
     "ruff",
     "mypy",
     "mongomock",
