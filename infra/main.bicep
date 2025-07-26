@@ -280,7 +280,7 @@ module ai 'core/ai/ai-foundry.bicep' = if (useAiProject) {
     tags: tags
     foundryName: 'aifoundry-${resourceToken}'
     projectName: 'aiproject-${resourceToken}'
-    storageAccountName: storage.outputs.name
+    storageAccountName: storage.?outputs.name ?? 'default-storage-account'
     principalId: principalId
   }
 }
@@ -316,14 +316,14 @@ module azureAiUserRole 'core/security/role.bicep' = if (useAiProject && resource
   }
 }
 
-module cognitiveServiceSecret './app/key-vault-secrets.bicep' = {
+module cognitiveServiceSecret './app/key-vault-secrets.bicep' = if (deployAzureOpenAI) {
   name: 'keyvaultsecret-cognitiveservice'
   scope: resourceGroup
   params: {
     rgName: resourceGroup.name
     keyVaultName: keyVault.outputs.name
     name: 'cognitiveServiceKey'
-    cognitiveServiceName: openAI.outputs.name
+    cognitiveServiceName: openAI.?outputs.name ?? ''
   }
 }
 
@@ -372,7 +372,7 @@ module applicationInsightsDashboard 'app/dashboard.bicep' = if (useApplicationIn
   params: {
     name: '${prefix}-appinsights-dashboard'
     location: location
-    applicationInsightsName: useApplicationInsights ? monitoring.outputs.applicationInsightsName : ''
+    applicationInsightsName: useApplicationInsights ? (monitoring.?outputs.applicationInsightsName ?? '') : ''
   }
 }
 
@@ -395,7 +395,7 @@ var webAppEnv = {
   OPENAI_EMBED_HOST: openAIEmbedHost
   AZURE_OPENAI_API_VERSION: openAIChatHost == 'azure' ? azureOpenAIAPIVersion : ''
   AZURE_OPENAI_API_KEY: deployAzureOpenAI ? '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)' : azureOpenAIKey
-  AZURE_OPENAI_ENDPOINT:  !empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.outputs.endpoint : '')
+  AZURE_OPENAI_ENDPOINT:  !empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')
   AZURE_OPENAI_DEPLOYMENT_NAME: deployAzureOpenAI ? openAIDeploymentName : ''
   AZURE_OPENAI_CHAT_MODEL_NAME: openAIChatHost == 'azure' ? chatModelName : ''
   AZURE_OPENAI_CHAT_DEPLOYMENT_NAME: openAIChatHost == 'azure' ? chatDeploymentName : ''
@@ -405,7 +405,7 @@ var webAppEnv = {
   OPENAICOM_EMBED_DIMENSIONS: openAIEmbedHost == 'openaicom' ? '1536' : ''
   OPENAICOM_EMBED_MODEL: openAIEmbedHost == 'openaicom' ? 'text-embedding-3-small' : ''
   AZURE_OPENAI_EMBEDDINGS_DIMENSIONS: openAIEmbedHost == 'azure' ? string(embedDimensions) : ''
-  APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? monitoring.outputs.applicationInsightsConnectionString : ''
+  APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? (monitoring.?outputs.applicationInsightsConnectionString ?? '') : ''
   AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
   AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey
   AZURE_COSMOS_USERNAME: mongoAdminUser
@@ -433,7 +433,7 @@ module web 'core/host/appservice.bicep' = {
     alwaysOn: appServiceSku != 'F1'
     appSettings: webAppEnv
     keyVaultName: keyVault.outputs.name
-    applicationInsightsName: useApplicationInsights ? monitoring.outputs.applicationInsightsName : ''
+    applicationInsightsName: useApplicationInsights ? (monitoring.?outputs.applicationInsightsName ?? '') : ''
 
   }
 }
@@ -453,15 +453,15 @@ output AZURE_RESOURCE_GROUP string = resourceGroup.name
 output WEB_URI string = web.outputs.uri
 output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 
-output APPLICATIONINSIGHTS_NAME string = useApplicationInsights ? monitoring.outputs.applicationInsightsName : ''
+output APPLICATIONINSIGHTS_NAME string = useApplicationInsights ? (monitoring.?outputs.applicationInsightsName ?? '') : ''
 
 output OPENAI_CHAT_HOST string = openAIChatHost
 output OPENAI_EMBED_HOST string = openAIEmbedHost
-output AZURE_OPENAI_SERVICE string = deployAzureOpenAI ? openAI.outputs.name : ''
+output AZURE_OPENAI_SERVICE string = deployAzureOpenAI ? (openAI.?outputs.name ?? '') : ''
 output AZURE_OPENAI_RESOURCE_GROUP string = deployAzureOpenAI ? openAIResourceGroup.name : ''
 output AZURE_OPENAI_ENDPOINT string = !empty(azureOpenAIEndpoint)
   ? azureOpenAIEndpoint
-  : (deployAzureOpenAI ? openAI.outputs.endpoint : '')
+  : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')
 output AZURE_OPENAI_VERSION string = azureOpenAIAPIVersion
 output AZURE_OPENAI_CHAT_DEPLOYMENT_NAME string = deployAzureOpenAI ? chatDeploymentName : ''
 output AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION string = deployAzureOpenAI ? chatDeploymentVersion : ''
@@ -475,7 +475,7 @@ output AZURE_OPENAI_EMBED_DEPLOYMENT_SKU string = deployAzureOpenAI ? embedDeplo
 output AZURE_OPENAI_EMBED_MODEL_NAME string = deployAzureOpenAI ? embedModelName : ''
 output AZURE_OPENAI_EMBED_DIMENSIONS string = deployAzureOpenAI ? string(embedDimensions) : ''
 
-output AZURE_AI_PROJECT string = useAiProject ? ai.outputs.projectName : ''
+output AZURE_AI_PROJECT string = useAiProject ? (ai.?outputs.projectName ?? '') : ''
 
 output mongoClusterConnectionString string = mongoCluster.outputs.connectionStringKey
 output mongoClusterAdminUser string = mongoAdminUser
