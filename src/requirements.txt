@@ -24,7 +24,7 @@ blinker==1.9.0
     # via
     #   flask
     #   quart
-certifi==2025.7.9
+certifi==2025.7.14
     # via
     #   httpcore
     #   httpx
@@ -90,23 +90,23 @@ jsonpatch==1.33
     # via langchain-core
 jsonpointer==3.0.0
     # via jsonpatch
-langchain==0.3.26
+langchain==0.3.27
     # via
     #   langchain-community
     #   quartapp (src/pyproject.toml)
 langchain-community==0.3.27
     # via quartapp (src/pyproject.toml)
-langchain-core==0.3.68
+langchain-core==0.3.72
     # via
     #   langchain
     #   langchain-community
     #   langchain-openai
     #   langchain-text-splitters
-langchain-openai==0.3.27
+langchain-openai==0.3.28
     # via quartapp (src/pyproject.toml)
-langchain-text-splitters==0.3.8
+langchain-text-splitters==0.3.9
     # via langchain
-langsmith==0.4.5
+langsmith==0.4.8
     # via
     #   langchain
     #   langchain-community
@@ -116,7 +116,7 @@ markupsafe==3.0.2
     #   jinja2
     #   quart
     #   werkzeug
-marshmallow==3.26.1
+marshmallow==4.0.0
     # via dataclasses-json
 multidict==6.6.3
     # via
@@ -126,11 +126,11 @@ mypy-extensions==1.1.0
     # via typing-inspect
 numpy==2.3.1
     # via langchain-community
-openai==1.95.1
+openai==1.97.1
     # via langchain-openai
-orjson==3.10.18
+orjson==3.11.1
     # via langsmith
-packaging==24.2
+packaging==25.0
     # via
     #   langchain-core
     #   langsmith
@@ -148,7 +148,7 @@ pydantic==2.11.7
     #   langsmith
     #   openai
     #   pydantic-settings
-pydantic-core==2.33.2
+pydantic-core==2.37.2
     # via pydantic
 pydantic-settings==2.10.1
     # via langchain-community
@@ -167,7 +167,7 @@ quart==0.20.0
     # via quartapp (src/pyproject.toml)
 regex==2024.11.6
     # via tiktoken
-requests==2.32.3
+requests==2.32.4
     # via
     #   langchain
     #   langchain-community
