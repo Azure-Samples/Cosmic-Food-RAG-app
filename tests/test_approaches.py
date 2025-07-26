@@ -324,10 +324,6 @@ async def test_add_to_cosmos_with_id_and_without_messages(app_config_mock):
     assert is_added is False
 
 
-# Schema tests
-
-
-
 # RAG additional tests
 @pytest.mark.asyncio
 async def test_rag_run_no_data_points(rag_mock):
