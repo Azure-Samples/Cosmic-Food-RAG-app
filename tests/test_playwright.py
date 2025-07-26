@@ -1,10 +1,12 @@
 import asyncio
 import socket
 import time
+import os
 from collections.abc import Generator
 from contextlib import closing
 from multiprocessing import Process
 import json
+from unittest import mock
 
 import pytest
 import requests
@@ -47,9 +49,35 @@ def free_port() -> int:
 
 def run_server(port: int):
     """Run the Quart application server using uvicorn."""
-    # Create app with test configuration to avoid DB connection issues
-    app = create_app(test_config={"TESTING": True})
-    uvicorn.run(app, port=port, log_level="error")
+    # Set up environment variables to avoid external dependencies
+    import os
+    from unittest import mock
+    
+    env_vars = {
+        "AZURE_COSMOS_CONNECTION_STRING": "test-connection-string",
+        "AZURE_COSMOS_USERNAME": "test-username", 
+        "AZURE_COSMOS_PASSWORD": "test-password",
+        "AZURE_COSMOS_DATABASE_NAME": "test-database",
+        "AZURE_COSMOS_COLLECTION_NAME": "test-collection",
+        "AZURE_COSMOS_INDEX_NAME": "test-index",
+        "AZURE_SUBSCRIPTION_ID": "test-storage-subid",
+        "OPENAI_CHAT_HOST": "azure",
+        "OPENAI_EMBED_HOST": "azure", 
+        "AZURE_OPENAI_ENDPOINT": "https://api.openai.com",
+        "OPENAI_API_VERSION": "2024-03-01-preview",
+        "AZURE_OPENAI_CHAT_DEPLOYMENT_NAME": "gpt-4o-mini",
+        "AZURE_OPENAI_CHAT_MODEL_NAME": "gpt-4o-mini",
+        "AZURE_OPENAI_EMBEDDINGS_MODEL_NAME": "text-embedding-3-small",
+        "AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME": "text-embedding-3-small",
+        "AZURE_OPENAI_EMBEDDINGS_DIMENSIONS": "1536",
+        "AZURE_OPENAI_KEY": "fakekey",
+        "ALLOWED_ORIGIN": "https://frontend.com"
+    }
+    
+    with mock.patch.dict(os.environ, env_vars):
+        app = create_app()
+        app.config.update({"TESTING": True})
+        uvicorn.run(app, port=port, log_level="error")
 
 
 @pytest.fixture()
