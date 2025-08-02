@@ -150,8 +150,9 @@ class AppConfig(AppConfigBase):
 
         yield RetrievalResponseDelta(context=context, sessionState=new_session_state)
 
+        message = Message(content="", role=AIChatRoles.ASSISTANT)
         async for message_chunk in answer:
-            message: Message = Message(content=str(message_chunk.content), role=AIChatRoles.ASSISTANT)
+            message.content = str(message_chunk.content)
             yield RetrievalResponseDelta(
                 delta=message,
             )
