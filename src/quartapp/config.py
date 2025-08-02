@@ -150,16 +150,19 @@ class AppConfig(AppConfigBase):
 
         yield RetrievalResponseDelta(context=context, sessionState=new_session_state)
 
-        message = Message(content="", role=AIChatRoles.ASSISTANT)
+        full_message_content = ""
         async for message_chunk in answer:
-            message.content = str(message_chunk.content)
-            yield RetrievalResponseDelta(
-                delta=message,
-            )
+            chunk_content = str(message_chunk.content)
+            full_message_content += chunk_content
+            message = Message(content=chunk_content, role=AIChatRoles.ASSISTANT)
+            yield RetrievalResponseDelta(delta=message)
 
-        await self.add_to_cosmos(
-            old_messages=messages,
-            new_message=message.to_dict(),
-            session_state=session_state,
-            new_session_state=new_session_state,
-        )
+        # Only save to Cosmos if we have content
+        if full_message_content:
+            full_message = Message(content=full_message_content, role=AIChatRoles.ASSISTANT)
+            await self.add_to_cosmos(
+                old_messages=messages,
+                new_message=full_message.to_dict(),
+                session_state=session_state,
+                new_session_state=new_session_state,
+            )
