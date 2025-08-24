@@ -1,0 +1,35 @@
+{
+  "context": {
+    "data_points": [
+      {
+        "name": "Quinoa Buddha Bowl",
+        "description": "Fresh quinoa with roasted vegetables, avocado, and tahini dressing",
+        "price": "$12.99",
+        "category": "Vegetarian",
+        "collection": "main-dishes"
+      },
+      {
+        "name": "Roasted Vegetable Pasta",
+        "description": "House-made pasta with seasonal roasted vegetables in olive oil",
+        "price": "$14.99",
+        "category": "Vegetarian",
+        "collection": "main-dishes"
+      }
+    ],
+    "thoughts": [
+      {
+        "title": "Search Query Generation",
+        "description": "Generated search query for vegetarian dishes in our menu database"
+      },
+      {
+        "title": "Document Retrieval",
+        "description": "Found 2 relevant vegetarian dishes matching the customer's request"
+      }
+    ]
+  },
+  "message": {
+    "content": "We have delicious vegetarian options including our signature Quinoa Buddha Bowl with fresh quinoa, roasted vegetables, avocado, and tahini dressing for $12.99, and our Roasted Vegetable Pasta with house-made pasta and seasonal roasted vegetables in olive oil for $14.99.",
+    "role": "assistant"
+  },
+  "sessionState": null
+}

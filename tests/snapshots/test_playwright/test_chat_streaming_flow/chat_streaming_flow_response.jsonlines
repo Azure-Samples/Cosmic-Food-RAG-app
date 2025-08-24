@@ -1,0 +1,41 @@
+{"context": null, "delta": {"content": "", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": "We", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " have", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " delicious", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " vegetarian", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " options", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " including", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " our", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " signature", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " Quinoa", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " Buddha", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " Bowl", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " with", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " fresh", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " quinoa,", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " roasted", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " vegetables,", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " avocado,", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " and", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " tahini", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " dressing", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " for", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " $12.99,", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " and", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " our", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " Roasted", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " Vegetable", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " Pasta", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " with", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " house-made", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " pasta", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " and", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " seasonal", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " roasted", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " vegetables", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " in", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " olive", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " oil", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " for", "role": "assistant"}, "sessionState": null}
+{"context": null, "delta": {"content": " $14.99.", "role": "assistant"}, "sessionState": null}
+{"context": {"data_points": [{"name": "Quinoa Buddha Bowl", "description": "Fresh quinoa with roasted vegetables, avocado, and tahini dressing", "price": "$12.99", "category": "Vegetarian", "collection": "main-dishes"}, {"name": "Roasted Vegetable Pasta", "description": "House-made pasta with seasonal roasted vegetables in olive oil", "price": "$14.99", "category": "Vegetarian", "collection": "main-dishes"}], "thoughts": [{"title": "Search Query Generation", "description": "Generated search query for vegetarian dishes in our menu database"}, {"title": "Document Retrieval", "description": "Found 2 relevant vegetarian dishes matching the customer's request"}]}, "delta": null, "sessionState": null}
