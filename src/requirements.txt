@@ -104,7 +104,7 @@ langchain-core==0.3.72
     #   langchain-text-splitters
 langchain-openai==0.3.28
     # via quartapp (src/pyproject.toml)
-langchain-text-splitters==0.3.9
+langchain-text-splitters==1.0.0a1
     # via langchain
 langsmith==0.4.8
     # via
