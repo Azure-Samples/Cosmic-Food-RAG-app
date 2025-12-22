@@ -117,7 +117,7 @@ markupsafe==3.0.2
     #   jinja2
     #   quart
     #   werkzeug
-marshmallow==3.26.1
+marshmallow==3.26.2
     # via dataclasses-json
 multidict==6.6.3
     # via
