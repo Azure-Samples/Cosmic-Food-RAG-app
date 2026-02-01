@@ -83,7 +83,7 @@ Lock and sync the dependencies:
 
 ```shell
 uv lock --directory src
-uv sync --directory src --active
+uv sync --directory src --active --group dev --group lint
 ```
 
 Install the pre-commit hooks:

@@ -53,6 +53,6 @@ jobs:
             npm run build
         - name: Install dependencies
           run: |
-            uv sync --directory src
+            uv sync --directory src --group dev
         - name: Run tests
           run: uv run --directory src pytest
