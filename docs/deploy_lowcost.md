@@ -29,7 +29,7 @@ However, if your goal is to minimize costs while prototyping your application, f
 
     Limitation: You are only allowed a certain number of free App Service instances per region. If you have exceeded your limit in a region, you will get an error during the provisioning stage. If that happens, you can run `azd down`, then `azd env new` to create a new environment with a new region.
 
-1. Use the free tier of Azure Cosmos DB for MongoDB vCore:
+1. Use the free tier of Azure DocumentDB (with MongoDB compatibility):
 
     * Set the Cosmos DB SKU to the free tier:
 

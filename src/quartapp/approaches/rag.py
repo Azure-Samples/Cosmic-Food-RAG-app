@@ -1,9 +1,9 @@
 import json
 from collections.abc import AsyncIterator
 
-from langchain.prompts import ChatPromptTemplate
 from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage
+from langchain_core.prompts import ChatPromptTemplate
 
 from quartapp.approaches.base import ApproachesBase
 from quartapp.approaches.schemas import DataPoint

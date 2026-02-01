@@ -21,9 +21,9 @@ updates:
         patterns:
           - "*"
 
-  # Maintain dependencies for pip
-  - package-ecosystem: "pip"
-    directory: "/"
+  # Maintain dependencies for uv
+  - package-ecosystem: "uv"
+    directory: "/src"
     schedule:
       interval: "weekly"
     groups:
