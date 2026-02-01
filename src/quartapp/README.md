@@ -8,7 +8,7 @@ To install the application requirements, run these commands from the **repositor
 uv venv .venv
 source .venv/bin/activate
 uv lock --directory src
-uv sync --directory src --active
+uv sync --directory src --active --all-groups
 ```
 
 > [!NOTE]

@@ -83,13 +83,14 @@ Lock and sync the dependencies:
 
 ```shell
 uv lock --directory src
-uv sync --directory src --active --group dev --group lint
+uv sync --directory src --active --all-groups
 ```
 
 Install the pre-commit hooks:
 
 ```shell
 uv tool install pre-commit
+pre-commit install
 ```
 
 Compile the JavaScript:
@@ -122,7 +123,7 @@ For Python, you can enforce the conventions using `ruff`.
 Sync the dependencies (if not already done):
 
 ```shell
-uv sync --directory src --active
+uv sync --directory src --active --group lint
 ```
 
 Run `ruff` to lint a file:
