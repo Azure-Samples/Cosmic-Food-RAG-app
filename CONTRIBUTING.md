@@ -103,13 +103,13 @@ Compile the JavaScript:
 Run the tests:
 
 ```shell
-uv run --active --directory src pytest
+uv run --active --project src pytest
 ```
 
 Check the coverage report to make sure your changes are covered.
 
 ```shell
-uv run --active --directory src pytest --cov
+uv run --active --project src pytest --cov
 ```
 
 ## Code Style
@@ -128,13 +128,13 @@ uv sync --directory src --active
 Run `ruff` to lint a file:
 
 ```shell
-uv run --active --directory src ruff check <path-to-file> --fix
+uv run --active --project src ruff check <path-to-file> --fix
 ```
 
 Run `ruff` to format a file:
 
 ```shell
-uv run --active --directory src ruff format <path-to-file>
+uv run --active --project src ruff format <path-to-file>
 ```
 
 If you followed the steps above to install the pre-commit hooks, then you can just wait for those hooks to run `ruff` for you.
