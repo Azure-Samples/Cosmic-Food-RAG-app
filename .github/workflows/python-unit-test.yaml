@@ -59,7 +59,7 @@ jobs:
         - name: Run E2E tests with Playwright
           id: e2e
           run: |
-            playwright install chromium --with-deps
+            uv run --active --project src playwright install chromium --with-deps
             uv run --project src pytest tests/e2e.py --tracing=retain-on-failure
         - name: Upload test artifacts
           if: ${{ failure() && steps.e2e.conclusion == 'failure' }}

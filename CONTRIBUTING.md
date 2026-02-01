@@ -119,7 +119,7 @@ uv run --active --project src pytest --cov
 Install Playwright and its dependencies:
 
 ```shell
-playwright install chromium --with-deps
+uv run --active --project src playwright install chromium --with-deps
 ```
 
 Run the E2E tests:
