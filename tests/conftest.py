@@ -20,6 +20,7 @@ from openai.types.create_embedding_response import Usage
 from pydantic import SecretStr
 
 import quartapp
+import quartapp.approaches.setup
 from quartapp.app import create_app
 from quartapp.approaches.base import ApproachesBase
 from quartapp.approaches.keyword import KeyWord
@@ -186,7 +187,7 @@ def app_config_mock(setup_mock):
 def setup_data_collection_mock(monkeypatch):
     """Mock quartapp.approaches.setup.setup_data_collection."""
     _mock = MagicMock()
-    monkeypatch.setattr(quartapp.approaches.setup, quartapp.approaches.setup.setup_data_collection.__name__, _mock)
+    monkeypatch.setattr(quartapp.approaches.setup, "setup_data_collection", _mock)
     return _mock
 
 
@@ -202,9 +203,7 @@ def mock_runnable_or(monkeypatch):
     or_return.ainvoke = AsyncMock(return_value=MockContent(content="content"))
     or_mock = MagicMock()
     or_mock.return_value = or_return
-    monkeypatch.setattr(
-        langchain_core.runnables.base.Runnable, langchain_core.runnables.base.Runnable.__or__.__name__, or_mock
-    )
+    monkeypatch.setattr(langchain_core.runnables.base.Runnable, "__or__", or_mock)
     return or_mock
 
 

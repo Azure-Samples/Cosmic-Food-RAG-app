@@ -67,7 +67,7 @@ def test_chat_endpoint(live_server_url: str):
     chat_data = {
         "messages": [{"content": "What vegetarian dishes do you have?", "role": "user"}],
         "sessionState": None,
-        "context": {"overrides": {"retrieval_mode": "vector"}}
+        "context": {"overrides": {"retrieval_mode": "vector"}},
     }
     response = requests.post(f"{live_server_url}chat", json=chat_data)
     assert response.status_code == 200
@@ -84,6 +84,7 @@ def test_home(page: Page, live_server_url: str):
 
 def test_chat(page: Page, live_server_url: str):
     """Test basic chat functionality with mocked streaming responses."""
+
     # Set up a mock route to the /chat/stream endpoint with streaming results
     def handle(route: Route):
         # Assert that session_state is specified in the request (None for now)
@@ -91,9 +92,7 @@ def test_chat(page: Page, live_server_url: str):
             session_state = route.request.post_data_json.get("sessionState")
             assert session_state is None
         # Read the JSONL from our snapshot results and return as the response
-        with open(
-            "tests/snapshots/e2e/test_chat_streaming_flow/chat_streaming_flow_response.jsonlines"
-        ) as f:
+        with open("tests/snapshots/e2e/test_chat_streaming_flow/chat_streaming_flow_response.jsonlines") as f:
             jsonl = f.read()
         route.fulfill(body=jsonl, status=200, headers={"Transfer-encoding": "Chunked"})
 
@@ -107,7 +106,9 @@ def test_chat(page: Page, live_server_url: str):
 
     # Ask a question and wait for the message to appear
     page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").click()
-    page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").fill("What vegetarian dishes do you have?")
+    page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").fill(
+        "What vegetarian dishes do you have?"
+    )
     # Find the submit button - it might be near the textarea
     page.keyboard.press("Enter")  # Try submitting with Enter key
 
@@ -124,6 +125,7 @@ def test_chat(page: Page, live_server_url: str):
 
 def test_chat_customization(page: Page, live_server_url: str):
     """Test chat customization via developer settings."""
+
     # Set up a mock route to the /chat endpoint
     def handle(route: Route):
         # Read the JSON from our snapshot results and return as the response
@@ -139,14 +141,16 @@ def test_chat_customization(page: Page, live_server_url: str):
 
     # Open developer settings
     page.get_by_role("button", name="Developer settings").click()
-    
+
     # Just verify we can open settings panel - actual settings might be different than expected
     # Close the settings
     page.keyboard.press("Escape")  # Try to close with escape key
 
     # Ask a question and wait for the message to appear
     page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").click()
-    page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").fill("What vegetarian dishes do you have?")
+    page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").fill(
+        "What vegetarian dishes do you have?"
+    )
     page.keyboard.press("Enter")
 
     expect(page.get_by_text("What vegetarian dishes do you have?")).to_be_visible()
@@ -155,6 +159,7 @@ def test_chat_customization(page: Page, live_server_url: str):
 
 def test_chat_nonstreaming(page: Page, live_server_url: str):
     """Test non-streaming chat responses."""
+
     # Set up a mock route to the /chat endpoint
     def handle(route: Route):
         # Read the JSON from our snapshot results and return as the response
@@ -171,7 +176,9 @@ def test_chat_nonstreaming(page: Page, live_server_url: str):
 
     # Ask a question and wait for the message to appear
     page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").click()
-    page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").fill("What vegetarian dishes do you have?")
+    page.get_by_placeholder("Type a new question (e.g. Are there any high protein dishes available?)").fill(
+        "What vegetarian dishes do you have?"
+    )
     page.keyboard.press("Enter")
 
     expect(page.get_by_text("What vegetarian dishes do you have?")).to_be_visible()
