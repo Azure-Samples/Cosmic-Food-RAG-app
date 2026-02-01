@@ -61,10 +61,22 @@ either by deleting the resource group in the Portal or running `azd down`.
     cd Cosmic-Food-RAG-app
     ```
 
+1. **Install uv (Python package manager):**
+
+    ```bash
+    brew install uv
+    ```
+
+    Or:
+
+    ```bash
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    ```
+
 1. **Initialize and activate a virtualenv using:**
 
     ```bash
-    python3 -m venv .venv
+    uv venv .venv
     source .venv/bin/activate
     ```
 
@@ -74,10 +86,11 @@ either by deleting the resource group in the Portal or running `azd down`.
     source .venv/Scripts/activate
     ```
 
-1. **Install the development dependencies as an editable package:**
+1. **Lock and sync dependencies:**
 
     ```bash
-    python3 -m pip install -e 'src[dev]'
+    uv lock --directory src
+    uv sync --directory src --active
     ```
 
 1. **Run the [notebook](./rag-azure-openai-cosmosdb-langchain-notebook.ipynb) to generate the .env file and test out everything**
@@ -171,6 +184,6 @@ When azd has finished deploying, you'll see an endpoint URI in the command outpu
 1. In the SSH terminal, execute the following commands:
 
     ```bash
-    pip install -e .
+    uv sync --active
     python ./scripts/add_data.py  --file="./data/food_items.json"
     ```

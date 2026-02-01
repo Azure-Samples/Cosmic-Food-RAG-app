@@ -12,15 +12,16 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-- [Code of Conduct](#code-of-conduct)
-- [Found an Issue?](#found-an-issue)
-- [Want a Feature?](#want-a-feature)
-- [Submission Guidelines](#submission-guidelines)
-  - [Submitting an Issue](#submitting-an-issue)
-  - [Submitting a Pull Request (PR)](#submitting-a-pull-request-pr)
-- [Setting up the development environment](#setting-up-the-development-environment)
-- [Running unit tests](#running-unit-tests)
-- [Code Style](#code-style)
+- [Contributing](#contributing)
+  - [Code of Conduct](#code-of-conduct)
+  - [Found an Issue?](#found-an-issue)
+  - [Want a Feature?](#want-a-feature)
+  - [Submission Guidelines](#submission-guidelines)
+    - [Submitting an Issue](#submitting-an-issue)
+    - [Submitting a Pull Request (PR)](#submitting-a-pull-request-pr)
+  - [Setting up the development environment](#setting-up-the-development-environment)
+  - [Running unit tests](#running-unit-tests)
+  - [Code Style](#code-style)
 
 ## Code of Conduct
 
@@ -78,16 +79,17 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 ## Setting up the development environment
 
-Install the development dependencies:
+Lock and sync the dependencies:
 
 ```shell
-python3 -m pip install -e 'src[dev]'
+uv lock --directory src
+uv sync --directory src --active
 ```
 
 Install the pre-commit hooks:
 
 ```shell
-pre-commit install
+uv tool install pre-commit
 ```
 
 Compile the JavaScript:
@@ -101,13 +103,13 @@ Compile the JavaScript:
 Run the tests:
 
 ```shell
-python3 -m pytest
+uv run --active --directory src pytest
 ```
 
 Check the coverage report to make sure your changes are covered.
 
 ```shell
-python3 -m pytest --cov
+uv run --active --directory src pytest --cov
 ```
 
 ## Code Style
@@ -117,22 +119,22 @@ Code should follow the standard conventions of each language.
 
 For Python, you can enforce the conventions using `ruff`.
 
-Install the development dependencies:
+Sync the dependencies (if not already done):
 
 ```shell
-python3 -m pip install -e 'src[dev]'
+uv sync --directory src --active
 ```
 
 Run `ruff` to lint a file:
 
 ```shell
-python3 -m ruff check <path-to-file> --fix
+uv run --active --directory src ruff check <path-to-file> --fix
 ```
 
 Run `ruff` to format a file:
 
 ```shell
-python3 -m ruff format <path-to-file>
+uv run --active --directory src ruff format <path-to-file>
 ```
 
 If you followed the steps above to install the pre-commit hooks, then you can just wait for those hooks to run `ruff` for you.

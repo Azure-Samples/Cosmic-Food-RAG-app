@@ -24,11 +24,12 @@ jobs:
         - uses: actions/setup-python@v6
           with:
                 python-version: 3.12
-                cache: 'pip'
+        - uses: astral-sh/setup-uv@v5
+          with:
+                enable-cache: true
         - name: Install dependencies
           run: |
-            python3 -m pip install --upgrade pip
-            python3 -m pip install -e 'src[dev]'
+            uv sync --directory src --group lint
         - name: Check mypy
           run: |
-            mypy .
+            uv run --directory src mypy .

@@ -5,12 +5,12 @@ import logging
 import os
 from argparse import ArgumentParser, Namespace
 
-from langchain.docstore.document import Document
 from langchain_community.vectorstores.azure_cosmos_db import (
     AzureCosmosDBVectorSearch,
     CosmosDBSimilarityType,
     CosmosDBVectorSearchType,
 )
+from langchain_core.documents import Document
 from langchain_openai import AzureOpenAIEmbeddings
 from pymongo import MongoClient
 from pymongo.collection import Collection

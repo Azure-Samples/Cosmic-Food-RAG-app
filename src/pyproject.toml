@@ -2,27 +2,29 @@
 name = "quartapp"
 version = "1.0.0"
 description = "Demo Chat Application to demonstrate retrieval augmented generation using Azure Open AI, Azure Cosmos DB for MongoDB vCore, and lang chain."
+requires-python = ">=3.10"
 dependencies = [
-    "Quart",
+    "Quart==0.20.0",
     "python-dotenv",
-    "Hypercorn",
-    "langchain",
-    "langchain-openai",
-    "langchain-community",
-    "pymongo"
-    ]
+    "Hypercorn==0.18.0",
+    "langchain==1.2.7",
+    "langchain-openai==1.1.7",
+    "langchain-community==0.4.1",
+    "pymongo==4.16.0"
+]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "ipykernel",
     "pytest",
     "pytest-cov",
     "pytest-asyncio",
-    "pip-tools",
-    "pre-commit",
+    "mongomock",
+]
+lint = [
     "ruff",
     "mypy",
-    "mongomock",
+    "pre-commit",
 ]
 
 [build-system]
