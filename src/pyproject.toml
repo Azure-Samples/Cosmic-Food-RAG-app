@@ -19,7 +19,10 @@ dev = [
     "pytest",
     "pytest-cov",
     "pytest-asyncio",
+    "pytest-playwright",
     "mongomock",
+    "requests",
+    "types-requests",
 ]
 lint = [
     "ruff",
