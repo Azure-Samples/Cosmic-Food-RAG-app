@@ -91,11 +91,10 @@ def test_chat(page: Page, live_server_url: str):
             session_state = route.request.post_data_json.get("sessionState")
             assert session_state is None
         # Read the JSONL from our snapshot results and return as the response
-        f = open(
+        with open(
             "tests/snapshots/e2e/test_chat_streaming_flow/chat_streaming_flow_response.jsonlines"
-        )
-        jsonl = f.read()
-        f.close()
+        ) as f:
+            jsonl = f.read()
         route.fulfill(body=jsonl, status=200, headers={"Transfer-encoding": "Chunked"})
 
     page.route("*/**/chat/stream", handle)
@@ -128,9 +127,8 @@ def test_chat_customization(page: Page, live_server_url: str):
     # Set up a mock route to the /chat endpoint
     def handle(route: Route):
         # Read the JSON from our snapshot results and return as the response
-        f = open("tests/snapshots/e2e/test_simple_chat_flow/simple_chat_flow_response.json")
-        json = f.read()
-        f.close()
+        with open("tests/snapshots/e2e/test_simple_chat_flow/simple_chat_flow_response.json") as f:
+            json = f.read()
         route.fulfill(body=json, status=200)
 
     page.route("*/**/chat", handle)
@@ -160,9 +158,8 @@ def test_chat_nonstreaming(page: Page, live_server_url: str):
     # Set up a mock route to the /chat endpoint
     def handle(route: Route):
         # Read the JSON from our snapshot results and return as the response
-        f = open("tests/snapshots/e2e/test_chat_flow/chat_flow_response.json")
-        json = f.read()
-        f.close()
+        with open("tests/snapshots/e2e/test_chat_flow/chat_flow_response.json") as f:
+            json = f.read()
         route.fulfill(body=json, status=200)
 
     page.route("*/**/chat", handle)
