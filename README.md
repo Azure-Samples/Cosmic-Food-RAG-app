@@ -91,7 +91,7 @@ either by deleting the resource group in the Portal or running `azd down`.
 
     ```bash
     uv lock --directory src
-    uv sync --directory src --active
+    uv sync --directory src --active --all-groups
     ```
 
 1. **Run the [notebook](./rag-azure-openai-cosmosdb-langchain-notebook.ipynb) to generate the .env file and test out everything**
