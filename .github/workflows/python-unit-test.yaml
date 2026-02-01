@@ -6,7 +6,7 @@ on:
     paths:
       - "**.py"
       - "frontend/**"
-      - "src/requirements.txt"
+      - "src/uv.lock"
       - "src/pyproject.toml"
 
   pull_request:
@@ -14,7 +14,7 @@ on:
     paths:
       - "**.py"
       - "frontend/**"
-      - "src/requirements.txt"
+      - "src/uv.lock"
       - "src/pyproject.toml"
 
   workflow_dispatch:
@@ -39,6 +39,9 @@ jobs:
           with:
             python-version: ${{ matrix.python_version }}
             architecture: x64
+        - uses: astral-sh/setup-uv@v7
+          with:
+            enable-cache: true
         - name: Setup node
           uses: actions/setup-node@v6
           with:
@@ -50,15 +53,14 @@ jobs:
             npm run build
         - name: Install dependencies
           run: |
-            python3 -m pip install --upgrade pip
-            python3 -m pip install -e 'src[dev]'
+            uv sync --directory src --group dev
         - name: Run tests
-          run: python3 -m pytest --ignore=tests/e2e.py
+          run: uv run --project src pytest --ignore=tests/e2e.py
         - name: Run E2E tests with Playwright
           id: e2e
           run: |
             playwright install chromium --with-deps
-            python3 -m pytest tests/e2e.py --tracing=retain-on-failure
+            uv run --project src pytest tests/e2e.py --tracing=retain-on-failure
         - name: Upload test artifacts
           if: ${{ failure() && steps.e2e.conclusion == 'failure' }}
           uses: actions/upload-artifact@v4

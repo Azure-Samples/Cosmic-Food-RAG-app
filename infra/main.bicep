@@ -85,7 +85,7 @@ param openAIEmbedHost string = 'azure'
 @secure()
 param openAIComKey string = ''
 
-param azureOpenAIAPIVersion string = '2024-03-01-preview'
+param azureOpenAIAPIVersion string = '2024-10-21'
 
 @secure()
 param azureOpenAIKey string = ''
@@ -393,7 +393,7 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
 var webAppEnv = {
   OPENAI_CHAT_HOST: openAIChatHost
   OPENAI_EMBED_HOST: openAIEmbedHost
-  AZURE_OPENAI_API_VERSION: openAIChatHost == 'azure' ? azureOpenAIAPIVersion : ''
+  OPENAI_API_VERSION: openAIChatHost == 'azure' ? azureOpenAIAPIVersion : ''
   AZURE_OPENAI_API_KEY: deployAzureOpenAI ? '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)' : azureOpenAIKey
   AZURE_OPENAI_ENDPOINT:  !empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')
   AZURE_OPENAI_DEPLOYMENT_NAME: deployAzureOpenAI ? openAIDeploymentName : ''

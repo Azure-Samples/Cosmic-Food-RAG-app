@@ -13,9 +13,9 @@ from langchain_core.documents import Document
 from openai.types import CreateEmbeddingResponse, Embedding
 from openai.types.chat import ChatCompletion, ChatCompletionChunk
 from openai.types.chat.chat_completion import (
-    ChatCompletionMessage,
     Choice,
 )
+from openai.types.chat.chat_completion_message import ChatCompletionMessage
 from openai.types.create_embedding_response import Usage
 from pydantic import SecretStr
 
@@ -56,7 +56,7 @@ def mock_session_env(monkeypatch_session):
         monkeypatch_session.setenv("OPENAI_CHAT_HOST", "azure")
         monkeypatch_session.setenv("OPENAI_EMBED_HOST", "azure")
         monkeypatch_session.setenv("AZURE_OPENAI_ENDPOINT", "https://api.openai.com")
-        monkeypatch_session.setenv("OPENAI_API_VERSION", "2024-03-01-preview")
+        monkeypatch_session.setenv("OPENAI_API_VERSION", "2024-10-21")
         monkeypatch_session.setenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-4o-mini")
         monkeypatch_session.setenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-4o-mini")
         monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-3-small")
