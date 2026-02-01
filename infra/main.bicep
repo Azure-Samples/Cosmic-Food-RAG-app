@@ -85,7 +85,7 @@ param openAIEmbedHost string = 'azure'
 @secure()
 param openAIComKey string = ''
 
-param azureOpenAIAPIVersion string = '2024-03-01-preview'
+param azureOpenAIAPIVersion string = '2024-10-21'
 
 @secure()
 param azureOpenAIKey string = ''

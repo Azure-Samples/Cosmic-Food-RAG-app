@@ -1,5 +1,5 @@
 ---
-name: Cosmic Food with Azure OpenAI and Azure Cosmos DB for MongoDB vCore
+name: Cosmic Food with Azure OpenAI and Azure DocumentDB (with MongoDB compatibility)
 description: A Demo application for a streamlined ordering system tailored for various food categories. It allows users to request customized meals, such as "high protein dishes," with recommendations provided from our database. Users can further customize their choices before sending their orders from the app to the restaurant, including delivery details.
 languages:
 - python
@@ -12,13 +12,14 @@ products:
 - azure-openai
 - cosmos-db
 - mongodb-vcore
+- documentdb
 page_type: sample
 urlFragment: cosmic-food-rag-app
 ---
 
-# Cosmic Food with Azure OpenAI and Azure Cosmos DB for MongoDB vCore
+# Cosmic Food with Azure OpenAI and Azure DocumentDB (with MongoDB compatibility)
 
- A Demo application for a streamlined ordering system tailored for various food categories. It allows users to request customized meals, such as "high protein dishes," with recommendations provided from our database. Users can further customize their choices before sending their orders from the app to the restaurant, including delivery details. A unique feature of our system is its ability to remember user preferences for future orders, using vCore to store that data. With the help of Langchain, this setup can be easily adapted by ISVs with minimal modifications needed for other food chains.
+ A Demo application for a streamlined ordering system tailored for various food categories. It allows users to request customized meals, such as "high protein dishes," with recommendations provided from our database. Users can further customize their choices before sending their orders from the app to the restaurant, including delivery details. A unique feature of our system is its ability to remember user preferences for future orders, using Azure DocumentDB (with MongoDB compatibility) to store that data. With the help of Langchain, this setup can be easily adapted by ISVs with minimal modifications needed for other food chains.
 
 ![App Screenshot](https://github.com/Azure-Samples/Cosmic-Food-RAG-app/assets/64026625/95ef09bf-7aeb-4027-8c40-39d9c2615ae3)
 
@@ -26,7 +27,7 @@ urlFragment: cosmic-food-rag-app
 
 1. Create the following resources on Microsoft Azure:
 
-    - Azure Cosmos DB for MongoDB vCore cluster. See the [Quick Start guide here](https://techcommunity.microsoft.com/t5/educator-developer-blog/build-rag-chat-app-using-azure-cosmos-db-for-mongodb-vcore-and/ba-p/4055852#:~:text=RAG%20Chat%20Application-,Step%201%3A%20Create%20an%20Azure%20Cosmos%20DB%20for%20MongoDB%20vCore%20Cluster,-In%20this%20step).
+    - Azure DocumentDB (with MongoDB compatibility) cluster. See the [Quick Start guide here](https://techcommunity.microsoft.com/t5/educator-developer-blog/build-rag-chat-app-using-azure-cosmos-db-for-mongodb-vcore-and/ba-p/4055852#:~:text=RAG%20Chat%20Application-,Step%201%3A%20Create%20an%20Azure%20Cosmos%20DB%20for%20MongoDB%20vCore%20Cluster,-In%20this%20step).
     - Azure OpenAI resource with:
         - Embedding model deployment. (ex. `text-embedding-3-small`) See the [guide here](https://techcommunity.microsoft.com/t5/educator-developer-blog/build-rag-chat-app-using-azure-cosmos-db-for-mongodb-vcore-and/ba-p/4055852#:~:text=to%20it%20later.-,Step%202%3A%C2%A0Create%20an%20Azure%20OpenAI%20resource%20and%20Deploy%20chat%20and%20embedding%20Models,-In%20this%20step).
         - Chat model deployment. (ex. `gpt-4o-mini`)
@@ -44,7 +45,7 @@ However, you can try the [Azure pricing calculator](https://azure.com/e/eb597434
 
 - Azure App Service: `B1` Basic Tier with 1 CPU core, 1.75 GB RAM. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/app-service/linux/)
 - Azure OpenAI: `S0` Standard tier, GPT and Ada models. Pricing per 1K tokens used, and at least 1K tokens are used per question. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
-- Azure Cosmos DB for MongoDB vCore: `M25` tier, 2 (Burstable) vCores per Node, 8 GB Memory per Node. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/cosmos-db/mongodb/)
+- Azure DocumentDB (with MongoDB compatibility): `M25` tier, 2 (Burstable) vCores per Node, 8 GB Memory per Node. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/cosmos-db/mongodb/)
 
 To reduce costs, you can switch to free SKUs for various services, but those SKUs have limitations.
 See this guide on [deploying with minimal costs](./docs/deploy_lowcost.md) for more details.
@@ -131,7 +132,7 @@ Navigate to project homepage [http://127.0.0.1:50505/](http://127.0.0.1:50505/) 
 
 ![architecture thumbnail rag-langchain-mongodb-vcore](https://github.com/user-attachments/assets/95a50a47-80fd-4a35-bfbd-4f0d497602ea)
 
-This repository is set up for deployment on Azure App Service (w/Azure Cosmos DB for MongoDB vCore) using the configuration files in the `infra` folder.
+This repository is set up for deployment on Azure App Service (w/Azure DocumentDB (with MongoDB compatibility)) using the configuration files in the `infra` folder.
 
 To deploy your own instance, follow these steps:
 
@@ -184,6 +185,6 @@ When azd has finished deploying, you'll see an endpoint URI in the command outpu
 1. In the SSH terminal, execute the following commands:
 
     ```bash
-    uv sync --active
-    python ./scripts/add_data.py  --file="./data/food_items.json"
+    uv sync
+    uv run ./scripts/add_data.py  --file="./data/food_items.json"
     ```

@@ -1,6 +1,6 @@
 {
     "name": "frontend",
-    "description": "Demo frontend for a Chat Application to demonstrate retrieval augmented generation using Azure Open AI, Azure Cosmos DB for MongoDB vCore, and lang chain.",
+    "description": "Demo frontend for a Chat Application to demonstrate retrieval augmented generation using Azure Open AI, Azure DocumentDB (with MongoDB compatibility), and lang chain.",
     "version": "0.0.0",
     "private": true,
     "type": "module",
