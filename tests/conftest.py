@@ -38,7 +38,10 @@ def monkeypatch_session():
 @pytest.fixture(scope="session")
 def mock_session_env(monkeypatch_session):
     """Mock the environment variables for testing."""
-    with mock.patch.dict(os.environ, clear=True):
+    # Note that this does *not* clear existing env variables by default-
+    # we used to specify clear=True but this caused issues with Playwright tests
+    # https://github.com/microsoft/playwright-python/issues/2506
+    with mock.patch.dict(os.environ):
         # Database
         monkeypatch_session.setenv("AZURE_COSMOS_CONNECTION_STRING", "test-connection-string")
         monkeypatch_session.setenv("AZURE_COSMOS_USERNAME", "test-username")

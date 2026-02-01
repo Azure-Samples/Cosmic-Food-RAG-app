@@ -1,27 +1,17 @@
-import asyncio
 import socket
 import time
-import os
 from collections.abc import Generator
 from contextlib import closing
 from multiprocessing import Process
-import json
-from unittest import mock
 
 import pytest
 import requests
 import uvicorn
-# Import playwright but mark tests as skipped if chromium not available
-try:
-    from playwright.sync_api import Page, Route, expect
-    PLAYWRIGHT_AVAILABLE = True
-except ImportError:
-    PLAYWRIGHT_AVAILABLE = False
+from playwright.sync_api import Page, Route, expect
 
 from quartapp.app import create_app
 
-if PLAYWRIGHT_AVAILABLE:
-    expect.set_options(timeout=10_000)
+expect.set_options(timeout=10_000)
 
 
 def wait_for_server_ready(url: str, timeout: float = 10.0, check_interval: float = 0.5) -> bool:
@@ -49,35 +39,9 @@ def free_port() -> int:
 
 def run_server(port: int):
     """Run the Quart application server using uvicorn."""
-    # Set up environment variables to avoid external dependencies
-    import os
-    from unittest import mock
-    
-    env_vars = {
-        "AZURE_COSMOS_CONNECTION_STRING": "test-connection-string",
-        "AZURE_COSMOS_USERNAME": "test-username", 
-        "AZURE_COSMOS_PASSWORD": "test-password",
-        "AZURE_COSMOS_DATABASE_NAME": "test-database",
-        "AZURE_COSMOS_COLLECTION_NAME": "test-collection",
-        "AZURE_COSMOS_INDEX_NAME": "test-index",
-        "AZURE_SUBSCRIPTION_ID": "test-storage-subid",
-        "OPENAI_CHAT_HOST": "azure",
-        "OPENAI_EMBED_HOST": "azure", 
-        "AZURE_OPENAI_ENDPOINT": "https://api.openai.com",
-        "OPENAI_API_VERSION": "2024-03-01-preview",
-        "AZURE_OPENAI_CHAT_DEPLOYMENT_NAME": "gpt-4o-mini",
-        "AZURE_OPENAI_CHAT_MODEL_NAME": "gpt-4o-mini",
-        "AZURE_OPENAI_EMBEDDINGS_MODEL_NAME": "text-embedding-3-small",
-        "AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME": "text-embedding-3-small",
-        "AZURE_OPENAI_EMBEDDINGS_DIMENSIONS": "1536",
-        "AZURE_OPENAI_KEY": "fakekey",
-        "ALLOWED_ORIGIN": "https://frontend.com"
-    }
-    
-    with mock.patch.dict(os.environ, env_vars):
-        app = create_app()
-        app.config.update({"TESTING": True})
-        uvicorn.run(app, port=port, log_level="error")
+    app = create_app()
+    app.config.update({"TESTING": True})
+    uvicorn.run(app, port=port, log_level="error")
 
 
 @pytest.fixture()
@@ -112,14 +76,12 @@ def test_chat_endpoint(live_server_url: str):
     assert "context" in data
 
 
-@pytest.mark.skipif(not PLAYWRIGHT_AVAILABLE, reason="Playwright not available")
 def test_home(page: Page, live_server_url: str):
     """Test that the home page loads with the correct title."""
     page.goto(live_server_url)
     expect(page).to_have_title("Cosmic Food RAG App | Sample")
 
 
-@pytest.mark.skipif(not PLAYWRIGHT_AVAILABLE, reason="Playwright not available")
 def test_chat(page: Page, live_server_url: str):
     """Test basic chat functionality with mocked streaming responses."""
     # Set up a mock route to the /chat/stream endpoint with streaming results
@@ -130,7 +92,7 @@ def test_chat(page: Page, live_server_url: str):
             assert session_state is None
         # Read the JSONL from our snapshot results and return as the response
         f = open(
-            "tests/snapshots/test_playwright/test_chat_streaming_flow/chat_streaming_flow_response.jsonlines"
+            "tests/snapshots/e2e/test_chat_streaming_flow/chat_streaming_flow_response.jsonlines"
         )
         jsonl = f.read()
         f.close()
@@ -161,13 +123,12 @@ def test_chat(page: Page, live_server_url: str):
     expect(page.get_by_role("button", name="Clear chat")).to_be_disabled()
 
 
-@pytest.mark.skipif(not PLAYWRIGHT_AVAILABLE, reason="Playwright not available")
 def test_chat_customization(page: Page, live_server_url: str):
     """Test chat customization via developer settings."""
     # Set up a mock route to the /chat endpoint
     def handle(route: Route):
         # Read the JSON from our snapshot results and return as the response
-        f = open("tests/snapshots/test_playwright/test_simple_chat_flow/simple_chat_flow_response.json")
+        f = open("tests/snapshots/e2e/test_simple_chat_flow/simple_chat_flow_response.json")
         json = f.read()
         f.close()
         route.fulfill(body=json, status=200)
@@ -194,13 +155,12 @@ def test_chat_customization(page: Page, live_server_url: str):
     expect(page.get_by_role("button", name="Clear chat")).to_be_enabled()
 
 
-@pytest.mark.skipif(not PLAYWRIGHT_AVAILABLE, reason="Playwright not available")
 def test_chat_nonstreaming(page: Page, live_server_url: str):
     """Test non-streaming chat responses."""
     # Set up a mock route to the /chat endpoint
     def handle(route: Route):
         # Read the JSON from our snapshot results and return as the response
-        f = open("tests/snapshots/test_playwright/test_chat_flow/chat_flow_response.json")
+        f = open("tests/snapshots/e2e/test_chat_flow/chat_flow_response.json")
         json = f.read()
         f.close()
         route.fulfill(body=json, status=200)
