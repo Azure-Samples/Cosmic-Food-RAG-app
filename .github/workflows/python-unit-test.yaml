@@ -55,7 +55,7 @@ jobs:
           run: |
             uv sync --directory src --group dev
         - name: Run tests
-          run: uv run --project src pytest --ignore=tests/e2e.py
+          run: uv run --project src pytest --cov
         - name: Run E2E tests with Playwright
           id: e2e
           run: |
