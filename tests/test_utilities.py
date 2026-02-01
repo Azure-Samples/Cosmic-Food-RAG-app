@@ -22,7 +22,7 @@ def test_embeddings_api():
         openai_embeddings_model="text-embedding-3-small",
         openai_embeddings_deployment="test-deployment",
         api_key=SecretStr("test-key"),
-        api_version="2024-03-01-preview",
+        api_version="2024-10-21",
         azure_endpoint="https://test.openai.azure.com/",
     )
 
@@ -37,7 +37,7 @@ def test_chat_api():
         openai_chat_model="gpt-4o-mini",
         openai_chat_deployment="test-deployment",
         api_key=SecretStr("test-key"),
-        api_version="2024-03-01-preview",
+        api_version="2024-10-21",
         azure_endpoint="https://test.openai.azure.com/",
     )
 

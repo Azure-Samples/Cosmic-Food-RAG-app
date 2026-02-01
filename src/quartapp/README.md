@@ -2,18 +2,17 @@
 
 This is a simple Quart API to handel requests coming from the frontend.
 
-To install the application requirements run this command inside the `src/` directory:
+To install the application requirements, run these commands from the **repository root**:
 
 ```bash
-pip install -e .
+uv venv .venv
+source .venv/bin/activate
+uv lock --directory src
+uv sync --directory src --active
 ```
 
 > [!NOTE]
-> To install the development dependencies you need to use the following command:
->
-> ```bash
-> pip install -e '.[dev]'
-> ```
+> This installs all dependencies including dev dependencies. The lockfile (`src/uv.lock`) ensures reproducible installs.
 >
 
 To start the application run inside the `src/` directory:

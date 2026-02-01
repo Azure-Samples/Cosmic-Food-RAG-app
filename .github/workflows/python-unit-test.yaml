@@ -6,7 +6,7 @@ on:
     paths:
       - "**.py"
       - "frontend/**"
-      - "src/requirements.txt"
+      - "src/uv.lock"
       - "src/pyproject.toml"
 
   pull_request:
@@ -14,7 +14,7 @@ on:
     paths:
       - "**.py"
       - "frontend/**"
-      - "src/requirements.txt"
+      - "src/uv.lock"
       - "src/pyproject.toml"
 
   workflow_dispatch:
@@ -39,6 +39,9 @@ jobs:
           with:
             python-version: ${{ matrix.python_version }}
             architecture: x64
+        - uses: astral-sh/setup-uv@v5
+          with:
+            enable-cache: true
         - name: Setup node
           uses: actions/setup-node@v6
           with:
@@ -50,7 +53,6 @@ jobs:
             npm run build
         - name: Install dependencies
           run: |
-            python3 -m pip install --upgrade pip
-            python3 -m pip install -e 'src[dev]'
+            uv sync --directory src
         - name: Run tests
-          run: python3 -m pytest
+          run: uv run --directory src pytest
