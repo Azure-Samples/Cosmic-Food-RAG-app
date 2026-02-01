@@ -21,6 +21,7 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
     - [Submitting a Pull Request (PR)](#submitting-a-pull-request-pr)
   - [Setting up the development environment](#setting-up-the-development-environment)
   - [Running unit tests](#running-unit-tests)
+  - [Running E2E tests with Playwright](#running-e2e-tests-with-playwright)
   - [Code Style](#code-style)
 
 ## Code of Conduct
@@ -111,6 +112,20 @@ Check the coverage report to make sure your changes are covered.
 
 ```shell
 uv run --active --project src pytest --cov
+```
+
+## Running E2E tests with Playwright
+
+Install Playwright and its dependencies:
+
+```shell
+uv run --active --project src playwright install chromium --with-deps
+```
+
+Run the E2E tests:
+
+```shell
+uv run --project src pytest tests/e2e.py --tracing=retain-on-failure
 ```
 
 ## Code Style
