@@ -32,4 +32,4 @@ jobs:
             uv sync --directory src --group lint
         - name: Check mypy
           run: |
-            uv run --directory src mypy .
+            uv run --project src mypy .

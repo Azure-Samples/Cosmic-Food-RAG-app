@@ -55,4 +55,4 @@ jobs:
           run: |
             uv sync --directory src --group dev
         - name: Run tests
-          run: uv run --directory src pytest
+          run: uv run --project src pytest
