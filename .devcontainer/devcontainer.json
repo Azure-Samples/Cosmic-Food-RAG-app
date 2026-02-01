@@ -5,7 +5,7 @@
     "image": "mcr.microsoft.com/vscode/devcontainers/python:3.12",
     "features": {
         "ghcr.io/devcontainers/features/node:1": {
-            "version": "18",
+            "version": "22",
             "nodeGypDependencies": false
         },
         "ghcr.io/azure/azure-dev/azd:latest": {}
