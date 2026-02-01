@@ -1,7 +1,7 @@
 [project]
 name = "quartapp"
 version = "1.0.0"
-description = "Demo Chat Application to demonstrate retrieval augmented generation using Azure Open AI, Azure Cosmos DB for MongoDB vCore, and lang chain."
+description = "Demo Chat Application to demonstrate retrieval augmented generation using Azure Open AI, Azure DocumentDB (with MongoDB compatibility), and lang chain."
 requires-python = ">=3.10"
 dependencies = [
     "Quart==0.20.0",

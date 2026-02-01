@@ -49,7 +49,7 @@ async def generate_embeddings_and_add_data(
     index_name: str,
     embeddings: AzureOpenAIEmbeddings,
 ) -> AzureCosmosDBVectorSearch:
-    # Create embeddings from the data, save to the database and return a connection to MongoDB vCore
+    # Create embeddings from the data, save to the database and return a connection to Azure DocumentDB
     return await AzureCosmosDBVectorSearch.afrom_documents(
         documents=documents,
         embedding=embeddings,
