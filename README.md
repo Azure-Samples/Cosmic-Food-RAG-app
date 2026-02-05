@@ -41,11 +41,11 @@ urlFragment: cosmic-food-rag-app
 ### Cost estimation
 
 Pricing varies per region and usage, so it isn't possible to predict exact costs for your usage.
-However, you can try the [Azure pricing calculator](https://azure.com/e/eb597434d2e74f6b947369079e7a6d27) for the resources below.
+However, you can try the [Azure pricing calculator](https://azure.com/e/965851c8bb99475fb07b9a648a8f0eaf) for the resources below.
 
 - Azure App Service: `B1` Basic Tier with 1 CPU core, 1.75 GB RAM. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/app-service/linux/)
 - Azure OpenAI: `S0` Standard tier, GPT and Ada models. Pricing per 1K tokens used, and at least 1K tokens are used per question. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
-- Azure DocumentDB (with MongoDB compatibility): `M25` tier, 2 (Burstable) vCores per Node, 8 GB Memory per Node. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/cosmos-db/mongodb/)
+- Azure DocumentDB (with MongoDB compatibility): `M25` tier, 2 (Burstable) vCores per Node, 8 GB Memory per Node. Pricing per hour. [Pricing](https://azure.microsoft.com/pricing/details/document-db/)
 
 To reduce costs, you can switch to free SKUs for various services, but those SKUs have limitations.
 See this guide on [deploying with minimal costs](./docs/deploy_lowcost.md) for more details.
