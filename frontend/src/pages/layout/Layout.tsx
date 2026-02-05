@@ -38,7 +38,7 @@ const Layout = () => {
                             </li>
                         </ul>
                     </nav>
-                    <h4 className={styles.headerRightText}>Azure OpenAI + Cosmos DB for MongoDB vCore + LangChain</h4>
+                    <h4 className={styles.headerRightText}>Azure OpenAI + DocumentDB (with MongoDB compatibility) + LangChain</h4>
                 </div>
             </header>
 
