@@ -80,7 +80,7 @@ async def add_data(input_args: Namespace) -> None:
 
     logging.info("✨ Successfully Created the Collection, Embeddings and Added the Data the Collection...")
 
-    # Read more about these variables in detail here. https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/vcore/vector-search
+    # Read more about these variables in detail here. https://learn.microsoft.com/azure/documentdb/vector-search
     num_lists = 100
     dimensions = int(
         os.getenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS") or os.getenv("OPENAICOM_EMBED_DIMENSIONS") or "1536"
