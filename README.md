@@ -21,7 +21,7 @@ urlFragment: cosmic-food-rag-app
 
  A Demo application for a streamlined ordering system tailored for various food categories. It allows users to request customized meals, such as "high protein dishes," with recommendations provided from our database. Users can further customize their choices before sending their orders from the app to the restaurant, including delivery details. A unique feature of our system is its ability to remember user preferences for future orders, using Azure DocumentDB (with MongoDB compatibility) to store that data. With the help of Langchain, this setup can be easily adapted by ISVs with minimal modifications needed for other food chains.
 
-![App Screenshot](https://github.com/Azure-Samples/Cosmic-Food-RAG-app/assets/64026625/95ef09bf-7aeb-4027-8c40-39d9c2615ae3)
+![App Screenshot](https://github.com/user-attachments/assets/0ca562cc-0057-47b7-97e8-567b9c9c413a)
 
 ## How to use?
 
