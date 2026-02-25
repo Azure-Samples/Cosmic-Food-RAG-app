@@ -186,6 +186,6 @@ When azd has finished deploying, you'll see an endpoint URI in the command outpu
 1. In the SSH terminal, execute the following commands:
 
     ```bash
-    uv sync
-    uv run ./scripts/add_data.py  --file="./data/food_items.json"
+    uv sync --active
+    uv run --active ./scripts/add_data.py  --file="./data/food_items.json"
     ```
