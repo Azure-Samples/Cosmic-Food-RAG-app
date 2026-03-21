@@ -2,7 +2,7 @@ from abc import ABC
 
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
 from langchain_core.embeddings import Embeddings
-from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_openai.chat_models.base import BaseChatOpenAI
 from pydantic import SecretStr
 from pymongo.collection import Collection
 
@@ -22,7 +22,7 @@ class OpenAISetup(ABC):
     def __init__(
         self,
         embeddings_api: Embeddings,
-        chat_api: BaseChatModel,
+        chat_api: BaseChatOpenAI,
     ):
         self._embeddings_api = embeddings_api
         self._chat_api = chat_api

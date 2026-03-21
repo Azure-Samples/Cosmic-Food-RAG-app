@@ -1,7 +1,7 @@
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
 from langchain_core.embeddings import Embeddings
-from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings, ChatOpenAI, OpenAIEmbeddings
+from langchain_openai.chat_models.base import BaseChatOpenAI
 from pydantic import SecretStr
 from pymongo import MongoClient
 from pymongo.collection import Collection
@@ -36,7 +36,7 @@ def embeddings_api(
         kwargs = {
             "model": openai_embeddings_model,
             "base_url": azure_endpoint if azure_endpoint != "" else OLLAMA_ENDPOINT,
-            "api_key": OLLAMA_DEFAULT_API_KEY,
+            "api_key": SecretStr(OLLAMA_DEFAULT_API_KEY),
             "check_embedding_ctx_length": False,
         }
         if embedding_dimensions is not None:
@@ -69,7 +69,7 @@ def chat_api(
     api_version: str,
     azure_endpoint: str,
     openai_chat_host: str = "azure",
-) -> BaseChatModel:
+) -> BaseChatOpenAI:
     if openai_chat_host == "azure":
         return AzureChatOpenAI(
             model=openai_chat_model,
@@ -82,7 +82,7 @@ def chat_api(
         return ChatOpenAI(
             model=openai_chat_model,
             base_url=azure_endpoint if azure_endpoint != "" else OLLAMA_ENDPOINT,
-            api_key=OLLAMA_DEFAULT_API_KEY,
+            api_key=SecretStr(OLLAMA_DEFAULT_API_KEY),
         )
     elif openai_chat_host == "github":
         return ChatOpenAI(
@@ -98,9 +98,7 @@ def chat_api(
         )
 
 
-def vector_store_api(
-    connection_string: str, namespace: str, embedding: Embeddings
-) -> AzureCosmosDBVectorSearch:
+def vector_store_api(connection_string: str, namespace: str, embedding: Embeddings) -> AzureCosmosDBVectorSearch:
     return AzureCosmosDBVectorSearch.from_connection_string(
         connection_string=connection_string,
         namespace=namespace,

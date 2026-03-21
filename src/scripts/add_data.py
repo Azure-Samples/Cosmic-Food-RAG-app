@@ -11,7 +11,7 @@ from langchain_community.vectorstores.azure_cosmos_db import (
     CosmosDBVectorSearchType,
 )
 from langchain_core.documents import Document
-from langchain_openai import AzureOpenAIEmbeddings
+from langchain_core.embeddings import Embeddings
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
@@ -47,7 +47,7 @@ async def generate_embeddings_and_add_data(
     documents: list[Document],
     collection: Collection,
     index_name: str,
-    embeddings: AzureOpenAIEmbeddings,
+    embeddings: Embeddings,
 ) -> AzureCosmosDBVectorSearch:
     # Create embeddings from the data, save to the database and return a connection to Azure DocumentDB
     return await AzureCosmosDBVectorSearch.afrom_documents(
