@@ -3,7 +3,7 @@
 from unittest.mock import MagicMock, patch
 
 import pytest
-from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings, ChatOpenAI, OpenAIEmbeddings
 from pydantic import SecretStr
 from pymongo.errors import ServerSelectionTimeoutError
 
@@ -17,32 +17,168 @@ from quartapp.approaches.utils import (
 
 
 def test_embeddings_api():
-    """Test embeddings_api function."""
+    """Test embeddings_api function with Azure host."""
     result = embeddings_api(
         openai_embeddings_model="text-embedding-3-small",
         openai_embeddings_deployment="test-deployment",
         api_key=SecretStr("test-key"),
         api_version="2024-10-21",
         azure_endpoint="https://test.openai.azure.com/",
+        openai_embed_host="azure",
     )
 
     assert isinstance(result, AzureOpenAIEmbeddings)
-    # Check that the embedding instance was created successfully
+    assert result is not None
+
+
+def test_embeddings_api_with_dimensions():
+    """Test embeddings_api function with Azure host and dimensions."""
+    result = embeddings_api(
+        openai_embeddings_model="text-embedding-3-small",
+        openai_embeddings_deployment="test-deployment",
+        api_key=SecretStr("test-key"),
+        api_version="2024-10-21",
+        azure_endpoint="https://test.openai.azure.com/",
+        openai_embed_host="azure",
+        embedding_dimensions=256,
+    )
+
+    assert isinstance(result, AzureOpenAIEmbeddings)
+    assert result is not None
+
+
+def test_embeddings_api_openai():
+    """Test embeddings_api function with OpenAI.com host."""
+    result = embeddings_api(
+        openai_embeddings_model="text-embedding-3-small",
+        openai_embeddings_deployment="",
+        api_key=SecretStr("test-key"),
+        api_version="",
+        azure_endpoint="",
+        openai_embed_host="openai",
+    )
+
+    assert isinstance(result, OpenAIEmbeddings)
+    assert result is not None
+
+
+def test_embeddings_api_github():
+    """Test embeddings_api function with GitHub Models host."""
+    result = embeddings_api(
+        openai_embeddings_model="text-embedding-3-small",
+        openai_embeddings_deployment="",
+        api_key=SecretStr("test-github-token"),
+        api_version="",
+        azure_endpoint="",
+        openai_embed_host="github",
+    )
+
+    assert isinstance(result, OpenAIEmbeddings)
+    assert result is not None
+
+
+def test_embeddings_api_ollama():
+    """Test embeddings_api function with Ollama host."""
+    result = embeddings_api(
+        openai_embeddings_model="nomic-embed-text",
+        openai_embeddings_deployment="",
+        api_key=SecretStr(""),
+        api_version="",
+        azure_endpoint="",
+        openai_embed_host="ollama",
+    )
+
+    assert isinstance(result, OpenAIEmbeddings)
+    assert result is not None
+
+
+def test_embeddings_api_ollama_custom_endpoint():
+    """Test embeddings_api function with Ollama host and custom endpoint."""
+    result = embeddings_api(
+        openai_embeddings_model="nomic-embed-text",
+        openai_embeddings_deployment="",
+        api_key=SecretStr(""),
+        api_version="",
+        azure_endpoint="http://my-ollama:11434/v1",
+        openai_embed_host="ollama",
+    )
+
+    assert isinstance(result, OpenAIEmbeddings)
     assert result is not None
 
 
 def test_chat_api():
-    """Test chat_api function."""
+    """Test chat_api function with Azure host."""
     result = chat_api(
         openai_chat_model="gpt-4o-mini",
         openai_chat_deployment="test-deployment",
         api_key=SecretStr("test-key"),
         api_version="2024-10-21",
         azure_endpoint="https://test.openai.azure.com/",
+        openai_chat_host="azure",
     )
 
     assert isinstance(result, AzureChatOpenAI)
-    # Check that the chat instance was created successfully
+    assert result is not None
+
+
+def test_chat_api_openai():
+    """Test chat_api function with OpenAI.com host."""
+    result = chat_api(
+        openai_chat_model="gpt-4o-mini",
+        openai_chat_deployment="",
+        api_key=SecretStr("test-key"),
+        api_version="",
+        azure_endpoint="",
+        openai_chat_host="openai",
+    )
+
+    assert isinstance(result, ChatOpenAI)
+    assert result is not None
+
+
+def test_chat_api_github():
+    """Test chat_api function with GitHub Models host."""
+    result = chat_api(
+        openai_chat_model="gpt-4o-mini",
+        openai_chat_deployment="",
+        api_key=SecretStr("test-github-token"),
+        api_version="",
+        azure_endpoint="",
+        openai_chat_host="github",
+    )
+
+    assert isinstance(result, ChatOpenAI)
+    assert result is not None
+
+
+def test_chat_api_ollama():
+    """Test chat_api function with Ollama host."""
+    result = chat_api(
+        openai_chat_model="llama3.2",
+        openai_chat_deployment="",
+        api_key=SecretStr(""),
+        api_version="",
+        azure_endpoint="",
+        openai_chat_host="ollama",
+    )
+
+    assert isinstance(result, ChatOpenAI)
+    assert result is not None
+
+
+def test_chat_api_ollama_custom_endpoint():
+    """Test chat_api function with Ollama host and custom endpoint."""
+    result = chat_api(
+        openai_chat_model="llama3.2",
+        openai_chat_deployment="",
+        api_key=SecretStr(""),
+        api_version="",
+        azure_endpoint="http://my-ollama:11434/v1",
+        openai_chat_host="ollama",
+    )
+
+    assert isinstance(result, ChatOpenAI)
     assert result is not None
 
 

@@ -1,9 +1,14 @@
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
-from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from langchain_core.embeddings import Embeddings
+from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings, ChatOpenAI, OpenAIEmbeddings
 from pydantic import SecretStr
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.errors import ServerSelectionTimeoutError
+
+OLLAMA_ENDPOINT = "http://localhost:11434/v1"
+GITHUB_MODELS_ENDPOINT = "https://models.github.ai/inference"
 
 
 def embeddings_api(
@@ -12,30 +17,88 @@ def embeddings_api(
     api_key: SecretStr,
     api_version: str,
     azure_endpoint: str,
-) -> AzureOpenAIEmbeddings:
-    return AzureOpenAIEmbeddings(
-        model=openai_embeddings_model,
-        azure_deployment=openai_embeddings_deployment,
-        api_key=api_key,
-        api_version=api_version,
-        azure_endpoint=azure_endpoint,
-    )
+    openai_embed_host: str = "azure",
+    embedding_dimensions: int | None = None,
+) -> Embeddings:
+    if openai_embed_host == "azure":
+        kwargs: dict = {
+            "model": openai_embeddings_model,
+            "azure_deployment": openai_embeddings_deployment,
+            "api_key": api_key,
+            "api_version": api_version,
+            "azure_endpoint": azure_endpoint,
+        }
+        if embedding_dimensions is not None:
+            kwargs["dimensions"] = embedding_dimensions
+        return AzureOpenAIEmbeddings(**kwargs)
+    elif openai_embed_host == "ollama":
+        kwargs = {
+            "model": openai_embeddings_model,
+            "base_url": azure_endpoint if azure_endpoint != "" else OLLAMA_ENDPOINT,
+            "api_key": "nokeyneeded",
+            "check_embedding_ctx_length": False,
+        }
+        if embedding_dimensions is not None:
+            kwargs["dimensions"] = embedding_dimensions
+        return OpenAIEmbeddings(**kwargs)
+    elif openai_embed_host == "github":
+        kwargs = {
+            "model": openai_embeddings_model,
+            "base_url": GITHUB_MODELS_ENDPOINT,
+            "api_key": api_key,
+        }
+        if embedding_dimensions is not None:
+            kwargs["dimensions"] = embedding_dimensions
+        return OpenAIEmbeddings(**kwargs)
+    else:
+        # openai.com
+        kwargs = {
+            "model": openai_embeddings_model,
+            "api_key": api_key,
+        }
+        if embedding_dimensions is not None:
+            kwargs["dimensions"] = embedding_dimensions
+        return OpenAIEmbeddings(**kwargs)
 
 
 def chat_api(
-    openai_chat_model: str, openai_chat_deployment: str, api_key: SecretStr, api_version: str, azure_endpoint: str
-) -> AzureChatOpenAI:
-    return AzureChatOpenAI(
-        model=openai_chat_model,
-        azure_deployment=openai_chat_deployment,
-        api_key=api_key,
-        api_version=api_version,
-        azure_endpoint=azure_endpoint,
-    )
+    openai_chat_model: str,
+    openai_chat_deployment: str,
+    api_key: SecretStr,
+    api_version: str,
+    azure_endpoint: str,
+    openai_chat_host: str = "azure",
+) -> BaseChatModel:
+    if openai_chat_host == "azure":
+        return AzureChatOpenAI(
+            model=openai_chat_model,
+            azure_deployment=openai_chat_deployment,
+            api_key=api_key,
+            api_version=api_version,
+            azure_endpoint=azure_endpoint,
+        )
+    elif openai_chat_host == "ollama":
+        return ChatOpenAI(
+            model=openai_chat_model,
+            base_url=azure_endpoint if azure_endpoint != "" else OLLAMA_ENDPOINT,
+            api_key="nokeyneeded",
+        )
+    elif openai_chat_host == "github":
+        return ChatOpenAI(
+            model=openai_chat_model,
+            base_url=GITHUB_MODELS_ENDPOINT,
+            api_key=api_key,
+        )
+    else:
+        # openai.com
+        return ChatOpenAI(
+            model=openai_chat_model,
+            api_key=api_key,
+        )
 
 
 def vector_store_api(
-    connection_string: str, namespace: str, embedding: AzureOpenAIEmbeddings
+    connection_string: str, namespace: str, embedding: Embeddings
 ) -> AzureCosmosDBVectorSearch:
     return AzureCosmosDBVectorSearch.from_connection_string(
         connection_string=connection_string,

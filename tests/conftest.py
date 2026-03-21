@@ -165,6 +165,8 @@ def setup_mock(rag_mock, vector_mock, database_mock, keyword_mock):
         api_key=SecretStr("api_key"),
         api_version="api_version",
         azure_endpoint="azure_endpoint",
+        openai_chat_host="azure",
+        openai_embed_host="azure",
     )
 
     setup._database_setup = database_mock

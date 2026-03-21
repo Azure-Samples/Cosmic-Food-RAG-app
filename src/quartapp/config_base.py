@@ -29,6 +29,8 @@ def read_and_parse_connection_string() -> str:
 
 class AppConfigBase(ABC):
     def __init__(self) -> None:
+        openai_chat_host = os.getenv("OPENAI_CHAT_HOST", "azure")
+        openai_embed_host = os.getenv("OPENAI_EMBED_HOST", "azure")
         openai_embeddings_model = os.getenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-3-small")
         openai_embeddings_deployment = os.getenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding-3-small")
         openai_chat_model = os.getenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-4o-mini")
@@ -40,6 +42,8 @@ class AppConfigBase(ABC):
         api_key = SecretStr(os.getenv("AZURE_OPENAI_API_KEY", "<YOUR-DEPLOYMENT-KEY>"))
         api_version = os.getenv("OPENAI_API_VERSION", "2024-10-21")
         azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "https://<YOUR-OPENAI-DEPLOYMENT-NAME>.openai.azure.com/")
+        embedding_dimensions_str = os.getenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS")
+        embedding_dimensions = int(embedding_dimensions_str) if embedding_dimensions_str else None
         self.setup = Setup(
             openai_embeddings_model=openai_embeddings_model,
             openai_embeddings_deployment=openai_embeddings_deployment,
@@ -52,6 +56,9 @@ class AppConfigBase(ABC):
             api_key=api_key,
             api_version=api_version,
             azure_endpoint=azure_endpoint,
+            openai_chat_host=openai_chat_host,
+            openai_embed_host=openai_embed_host,
+            embedding_dimensions=embedding_dimensions,
         )
 
     async def add_to_cosmos(

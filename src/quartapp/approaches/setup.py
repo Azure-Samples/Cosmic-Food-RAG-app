@@ -1,7 +1,8 @@
 from abc import ABC
 
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
-from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from langchain_core.embeddings import Embeddings
+from langchain_core.language_models.chat_models import BaseChatModel
 from pydantic import SecretStr
 from pymongo.collection import Collection
 
@@ -20,8 +21,8 @@ from quartapp.approaches.vector import Vector
 class OpenAISetup(ABC):
     def __init__(
         self,
-        embeddings_api: AzureOpenAIEmbeddings,
-        chat_api: AzureChatOpenAI,
+        embeddings_api: Embeddings,
+        chat_api: BaseChatModel,
     ):
         self._embeddings_api = embeddings_api
         self._chat_api = chat_api
@@ -61,6 +62,9 @@ class Setup(ABC):
         api_key: SecretStr,
         api_version: str,
         azure_endpoint: str,
+        openai_chat_host: str = "azure",
+        openai_embed_host: str = "azure",
+        embedding_dimensions: int | None = None,
     ):
         self._openai_setup = OpenAISetup(
             embeddings_api=embeddings_api(
@@ -69,6 +73,8 @@ class Setup(ABC):
                 api_key,
                 api_version,
                 azure_endpoint,
+                openai_embed_host=openai_embed_host,
+                embedding_dimensions=embedding_dimensions,
             ),
             chat_api=chat_api(
                 openai_chat_model,
@@ -76,6 +82,7 @@ class Setup(ABC):
                 api_key,
                 api_version,
                 azure_endpoint,
+                openai_chat_host=openai_chat_host,
             ),
         )
         self._database_setup = DatabaseSetup(
