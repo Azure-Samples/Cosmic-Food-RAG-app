@@ -9,6 +9,7 @@ from pymongo.errors import ServerSelectionTimeoutError
 
 OLLAMA_ENDPOINT = "http://localhost:11434/v1"
 GITHUB_MODELS_ENDPOINT = "https://models.github.ai/inference"
+OLLAMA_DEFAULT_API_KEY = "nokeyneeded"
 
 
 def embeddings_api(
@@ -35,7 +36,7 @@ def embeddings_api(
         kwargs = {
             "model": openai_embeddings_model,
             "base_url": azure_endpoint if azure_endpoint != "" else OLLAMA_ENDPOINT,
-            "api_key": "nokeyneeded",
+            "api_key": OLLAMA_DEFAULT_API_KEY,
             "check_embedding_ctx_length": False,
         }
         if embedding_dimensions is not None:
@@ -81,7 +82,7 @@ def chat_api(
         return ChatOpenAI(
             model=openai_chat_model,
             base_url=azure_endpoint if azure_endpoint != "" else OLLAMA_ENDPOINT,
-            api_key="nokeyneeded",
+            api_key=OLLAMA_DEFAULT_API_KEY,
         )
     elif openai_chat_host == "github":
         return ChatOpenAI(
