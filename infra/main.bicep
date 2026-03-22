@@ -74,13 +74,13 @@ param deployAzureOpenAI bool = true
   'azure'
   'openaicom'
 ])
-param openAIChatHost string = 'azure'
+param chatModelHost string = 'azure'
 
 @allowed([
   'azure'
   'openaicom'
 ])
-param openAIEmbedHost string = 'azure'
+param embedModelHost string = 'azure'
 
 @secure()
 param openAIComKey string = ''
@@ -391,20 +391,20 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
 }
 
 var webAppEnv = {
-  OPENAI_CHAT_HOST: openAIChatHost
-  OPENAI_EMBED_HOST: openAIEmbedHost
-  OPENAI_API_VERSION: openAIChatHost == 'azure' ? azureOpenAIAPIVersion : ''
+  CHAT_MODEL_HOST: chatModelHost
+  EMBED_MODEL_HOST: embedModelHost
+  OPENAI_API_VERSION: chatModelHost == 'azure' ? azureOpenAIAPIVersion : ''
   AZURE_OPENAI_API_KEY: deployAzureOpenAI ? '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)' : azureOpenAIKey
   AZURE_OPENAI_ENDPOINT:  !empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')
   AZURE_OPENAI_DEPLOYMENT_NAME: deployAzureOpenAI ? openAIDeploymentName : ''
-  AZURE_OPENAI_CHAT_MODEL_NAME: openAIChatHost == 'azure' ? chatModelName : ''
-  AZURE_OPENAI_CHAT_DEPLOYMENT_NAME: openAIChatHost == 'azure' ? chatDeploymentName : ''
-  OPENAICOM_CHAT_MODEL: openAIChatHost == 'openaicom' ? chatModelName : ''
-  AZURE_OPENAI_EMBEDDINGS_MODEL_NAME: openAIEmbedHost == 'azure' ? embedModelName : ''
-  AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME: openAIEmbedHost == 'azure' ? embedDeploymentName : ''
-  OPENAICOM_EMBED_DIMENSIONS: openAIEmbedHost == 'openaicom' ? '1536' : ''
-  OPENAICOM_EMBED_MODEL: openAIEmbedHost == 'openaicom' ? 'text-embedding-3-small' : ''
-  AZURE_OPENAI_EMBEDDINGS_DIMENSIONS: openAIEmbedHost == 'azure' ? string(embedDimensions) : ''
+  AZURE_OPENAI_CHAT_MODEL_NAME: chatModelHost == 'azure' ? chatModelName : ''
+  AZURE_OPENAI_CHAT_DEPLOYMENT_NAME: chatModelHost == 'azure' ? chatDeploymentName : ''
+  OPENAICOM_CHAT_MODEL: chatModelHost == 'openaicom' ? chatModelName : ''
+  AZURE_OPENAI_EMBEDDINGS_MODEL_NAME: embedModelHost == 'azure' ? embedModelName : ''
+  AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME: embedModelHost == 'azure' ? embedDeploymentName : ''
+  OPENAICOM_EMBED_DIMENSIONS: embedModelHost == 'openaicom' ? '1536' : ''
+  OPENAICOM_EMBED_MODEL: embedModelHost == 'openaicom' ? 'text-embedding-3-small' : ''
+  AZURE_OPENAI_EMBEDDINGS_DIMENSIONS: embedModelHost == 'azure' ? string(embedDimensions) : ''
   APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? (monitoring.?outputs.applicationInsightsConnectionString ?? '') : ''
   AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
   AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey
@@ -455,8 +455,8 @@ output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 
 output APPLICATIONINSIGHTS_NAME string = useApplicationInsights ? (monitoring.?outputs.applicationInsightsName ?? '') : ''
 
-output OPENAI_CHAT_HOST string = openAIChatHost
-output OPENAI_EMBED_HOST string = openAIEmbedHost
+output CHAT_MODEL_HOST string = chatModelHost
+output EMBED_MODEL_HOST string = embedModelHost
 output AZURE_OPENAI_SERVICE string = deployAzureOpenAI ? (openAI.?outputs.name ?? '') : ''
 output AZURE_OPENAI_RESOURCE_GROUP string = deployAzureOpenAI ? openAIResourceGroup.name : ''
 output AZURE_OPENAI_ENDPOINT string = !empty(azureOpenAIEndpoint)

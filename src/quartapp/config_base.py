@@ -29,8 +29,8 @@ def read_and_parse_connection_string() -> str:
 
 class AppConfigBase(ABC):
     def __init__(self) -> None:
-        openai_chat_host = os.getenv("OPENAI_CHAT_HOST", "azure")
-        openai_embed_host = os.getenv("OPENAI_EMBED_HOST", "azure")
+        openai_chat_host = os.getenv("CHAT_MODEL_HOST", "azure")
+        openai_embed_host = os.getenv("EMBED_MODEL_HOST", "azure")
         openai_embeddings_model = os.getenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-3-small")
         openai_embeddings_deployment = os.getenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding-3-small")
         openai_chat_model = os.getenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-4o-mini")

@@ -1,3 +1,5 @@
+import os
+
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
 from langchain_core.embeddings import Embeddings
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings, ChatOpenAI, OpenAIEmbeddings
@@ -6,10 +8,6 @@ from pydantic import SecretStr
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.errors import ServerSelectionTimeoutError
-
-OLLAMA_ENDPOINT = "http://localhost:11434/v1"
-GITHUB_MODELS_ENDPOINT = "https://models.github.ai/inference"
-OLLAMA_DEFAULT_API_KEY = "nokeyneeded"
 
 
 def embeddings_api(
@@ -35,8 +33,10 @@ def embeddings_api(
     elif openai_embed_host == "ollama":
         kwargs = {
             "model": openai_embeddings_model,
-            "base_url": azure_endpoint if azure_endpoint != "" else OLLAMA_ENDPOINT,
-            "api_key": SecretStr(OLLAMA_DEFAULT_API_KEY),
+            "base_url": azure_endpoint
+            if azure_endpoint != ""
+            else os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
+            "api_key": SecretStr(os.getenv("OLLAMA_API_KEY", "nokeyneeded")),
             "check_embedding_ctx_length": False,
         }
         if embedding_dimensions is not None:
@@ -45,7 +45,7 @@ def embeddings_api(
     elif openai_embed_host == "github":
         kwargs = {
             "model": openai_embeddings_model,
-            "base_url": GITHUB_MODELS_ENDPOINT,
+            "base_url": os.getenv("GITHUB_MODELS_ENDPOINT", "https://models.github.ai/inference"),
             "api_key": api_key,
         }
         if embedding_dimensions is not None:
@@ -81,13 +81,15 @@ def chat_api(
     elif openai_chat_host == "ollama":
         return ChatOpenAI(
             model=openai_chat_model,
-            base_url=azure_endpoint if azure_endpoint != "" else OLLAMA_ENDPOINT,
-            api_key=SecretStr(OLLAMA_DEFAULT_API_KEY),
+            base_url=azure_endpoint
+            if azure_endpoint != ""
+            else os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
+            api_key=SecretStr(os.getenv("OLLAMA_API_KEY", "nokeyneeded")),
         )
     elif openai_chat_host == "github":
         return ChatOpenAI(
             model=openai_chat_model,
-            base_url=GITHUB_MODELS_ENDPOINT,
+            base_url=os.getenv("GITHUB_MODELS_ENDPOINT", "https://models.github.ai/inference"),
             api_key=api_key,
         )
     else:

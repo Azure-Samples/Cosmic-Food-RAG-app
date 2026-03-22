@@ -52,8 +52,8 @@ def mock_session_env(monkeypatch_session):
         # Azure Subscription
         monkeypatch_session.setenv("AZURE_SUBSCRIPTION_ID", "test-storage-subid")
         # Azure OpenAI
-        monkeypatch_session.setenv("OPENAI_CHAT_HOST", "azure")
-        monkeypatch_session.setenv("OPENAI_EMBED_HOST", "azure")
+        monkeypatch_session.setenv("CHAT_MODEL_HOST", "azure")
+        monkeypatch_session.setenv("EMBED_MODEL_HOST", "azure")
         monkeypatch_session.setenv("AZURE_OPENAI_ENDPOINT", "https://api.openai.com")
         monkeypatch_session.setenv("OPENAI_API_VERSION", "2024-10-21")
         monkeypatch_session.setenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-4o-mini")
