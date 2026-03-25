@@ -89,6 +89,43 @@ param embedModelHost string = 'azure'
 @secure()
 param openAIComKey string = ''
 
+@description('Chat model name for OpenAI.com host')
+param openAIComChatModel string = 'gpt-4o-mini'
+
+@description('Embedding model name for OpenAI.com host')
+param openAIComEmbedModel string = 'text-embedding-3-small'
+
+@description('Embedding dimensions for OpenAI.com host')
+param openAIComEmbedDimensions int = 1536
+
+@secure()
+@description('GitHub personal access token for GitHub Models host')
+param githubToken string = ''
+
+@description('GitHub Models endpoint URL')
+param githubEndpoint string = 'https://models.github.ai/inference'
+
+@description('Chat model name for GitHub Models host')
+param githubModel string = 'gpt-4o-mini'
+
+@description('Embedding model name for GitHub Models host')
+param githubEmbedModel string = 'text-embedding-3-small'
+
+@description('Embedding dimensions for GitHub Models host')
+param githubEmbedDimensions int = 1536
+
+@description('Ollama endpoint URL')
+param ollamaEndpoint string = 'http://localhost:11434/v1'
+
+@description('Chat model name for Ollama host')
+param ollamaChatModel string = 'llama3.2'
+
+@description('Embedding model name for Ollama host')
+param ollamaEmbedModel string = 'nomic-embed-text'
+
+@description('Embedding dimensions for Ollama host')
+param ollamaEmbedDimensions int = 1536
+
 param azureOpenAIAPIVersion string = '2024-10-21'
 
 @secure()
@@ -406,6 +443,18 @@ var webAppEnv = {
   AZURE_OPENAI_EMBED_DEPLOYMENT: embedDeploymentName
   AZURE_OPENAI_EMBED_DIMENSIONS: string(embedDimensions)
   OPENAICOM_KEY: !empty(openAIComKey) ? openAIComKey : ''
+  OPENAICOM_CHAT_MODEL: openAIComChatModel
+  OPENAICOM_EMBED_MODEL: openAIComEmbedModel
+  OPENAICOM_EMBED_DIMENSIONS: string(openAIComEmbedDimensions)
+  GITHUB_TOKEN: !empty(githubToken) ? githubToken : ''
+  GITHUB_ENDPOINT: githubEndpoint
+  GITHUB_MODEL: githubModel
+  GITHUB_EMBED_MODEL: githubEmbedModel
+  GITHUB_EMBED_DIMENSIONS: string(githubEmbedDimensions)
+  OLLAMA_ENDPOINT: ollamaEndpoint
+  OLLAMA_CHAT_MODEL: ollamaChatModel
+  OLLAMA_EMBED_MODEL: ollamaEmbedModel
+  OLLAMA_EMBED_DIMENSIONS: string(ollamaEmbedDimensions)
   APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? (monitoring.?outputs.applicationInsightsConnectionString ?? '') : ''
   AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
   AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey

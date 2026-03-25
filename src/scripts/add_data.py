@@ -83,7 +83,7 @@ async def add_data(input_args: Namespace) -> None:
 
     # Read more about these variables in detail here. https://learn.microsoft.com/azure/documentdb/vector-search
     num_lists = 100
-    dimensions = _app_config.embedding_dimensions or 1536
+    dimensions = _app_config.embedding_dimensions if _app_config.embedding_dimensions is not None else 1536
     similarity_algorithm = CosmosDBSimilarityType.COS
     kind = CosmosDBVectorSearchType.VECTOR_IVF
     m = 16
