@@ -51,8 +51,7 @@ def embeddings_api(
         if embedding_dimensions is not None:
             kwargs["dimensions"] = embedding_dimensions
         return OpenAIEmbeddings(**kwargs)
-    else:
-        # openai.com
+    elif openai_embed_host == "openai":
         kwargs = {
             "model": openai_embeddings_model,
             "api_key": api_key,
@@ -60,6 +59,11 @@ def embeddings_api(
         if embedding_dimensions is not None:
             kwargs["dimensions"] = embedding_dimensions
         return OpenAIEmbeddings(**kwargs)
+    else:
+        raise ValueError(
+            f"Unsupported EMBED_MODEL_HOST '{openai_embed_host}'. "
+            "Supported values are: 'azure', 'openai', 'ollama', 'github'."
+        )
 
 
 def chat_api(
@@ -92,11 +96,15 @@ def chat_api(
             base_url=os.getenv("GITHUB_MODELS_ENDPOINT", "https://models.github.ai/inference"),
             api_key=api_key,
         )
-    else:
-        # openai.com
+    elif openai_chat_host == "openai":
         return ChatOpenAI(
             model=openai_chat_model,
             api_key=api_key,
+        )
+    else:
+        raise ValueError(
+            f"Unsupported CHAT_MODEL_HOST '{openai_chat_host}'. "
+            "Supported values are: 'azure', 'openai', 'ollama', 'github'."
         )
 
 

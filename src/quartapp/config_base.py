@@ -42,8 +42,18 @@ class AppConfigBase(ABC):
         api_key = SecretStr(os.getenv("AZURE_OPENAI_API_KEY", "<YOUR-DEPLOYMENT-KEY>"))
         api_version = os.getenv("OPENAI_API_VERSION", "2024-10-21")
         azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "https://<YOUR-OPENAI-DEPLOYMENT-NAME>.openai.azure.com/")
+        embedding_dimensions: int | None = None
         embedding_dimensions_str = os.getenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS")
-        embedding_dimensions = int(embedding_dimensions_str) if embedding_dimensions_str else None
+        if embedding_dimensions_str is not None:
+            embedding_dimensions_str = embedding_dimensions_str.strip()
+            if embedding_dimensions_str:
+                try:
+                    embedding_dimensions = int(embedding_dimensions_str)
+                except ValueError:
+                    raise ValueError(
+                        f"Invalid AZURE_OPENAI_EMBEDDINGS_DIMENSIONS value: {embedding_dimensions_str!r}. "
+                        "It must be an integer or unset."
+                    )
         self.setup = Setup(
             openai_embeddings_model=openai_embeddings_model,
             openai_embeddings_deployment=openai_embeddings_deployment,

@@ -246,3 +246,29 @@ def test_setup_data_collection_timeout_error():
             )
 
         mock_mongo_client.assert_called_once_with("test-connection", serverSelectionTimeoutMS=1000)
+
+
+def test_embeddings_api_unsupported_host():
+    """Test embeddings_api function raises ValueError for unsupported host."""
+    with pytest.raises(ValueError, match="Unsupported EMBED_MODEL_HOST 'invalid_host'"):
+        embeddings_api(
+            openai_embeddings_model="text-embedding-3-small",
+            openai_embeddings_deployment="",
+            api_key=SecretStr("test-key"),
+            api_version="",
+            azure_endpoint="",
+            openai_embed_host="invalid_host",
+        )
+
+
+def test_chat_api_unsupported_host():
+    """Test chat_api function raises ValueError for unsupported host."""
+    with pytest.raises(ValueError, match="Unsupported CHAT_MODEL_HOST 'invalid_host'"):
+        chat_api(
+            openai_chat_model="gpt-4o-mini",
+            openai_chat_deployment="",
+            api_key=SecretStr("test-key"),
+            api_version="",
+            azure_endpoint="",
+            openai_chat_host="invalid_host",
+        )
