@@ -80,7 +80,7 @@ For more information:
     ```env
     CHAT_MODEL_HOST="ollama"
     EMBED_MODEL_HOST="ollama"
-    AZURE_OPENAI_ENDPOINT="http://localhost:11434/v1"
+    OLLAMA_ENDPOINT="http://localhost:11434/v1"
     AZURE_OPENAI_CHAT_MODEL_NAME="llama3.2"
     AZURE_OPENAI_EMBEDDINGS_MODEL_NAME="nomic-embed-text"
     AZURE_OPENAI_EMBEDDINGS_DIMENSIONS="768"
