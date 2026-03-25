@@ -114,7 +114,7 @@
         "value": "${OLLAMA_EMBED_MODEL=nomic-embed-text}"
       },
       "ollamaEmbedDimensions": {
-        "value": "${OLLAMA_EMBED_DIMENSIONS=1536}"
+        "value": "${OLLAMA_EMBED_DIMENSIONS=768}"
       },
       "useAiProject": {
         "value": "${USE_AI_PROJECT=false}"
