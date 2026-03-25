@@ -1,5 +1,6 @@
 """Tests for quartapp.approaches.utils module."""
 
+import os
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -93,15 +94,16 @@ def test_embeddings_api_ollama():
 
 
 def test_embeddings_api_ollama_custom_endpoint():
-    """Test embeddings_api function with Ollama host and custom endpoint."""
-    result = embeddings_api(
-        openai_embeddings_model="nomic-embed-text",
-        openai_embeddings_deployment="",
-        api_key=SecretStr(""),
-        api_version="",
-        azure_endpoint="http://my-ollama:11434/v1",
-        openai_embed_host="ollama",
-    )
+    """Test embeddings_api function with Ollama host and custom endpoint via env var."""
+    with patch.dict(os.environ, {"OLLAMA_ENDPOINT": "http://my-ollama:11434/v1"}):
+        result = embeddings_api(
+            openai_embeddings_model="nomic-embed-text",
+            openai_embeddings_deployment="",
+            api_key=SecretStr(""),
+            api_version="",
+            azure_endpoint="",
+            openai_embed_host="ollama",
+        )
 
     assert isinstance(result, OpenAIEmbeddings)
     assert result is not None
@@ -168,15 +170,16 @@ def test_chat_api_ollama():
 
 
 def test_chat_api_ollama_custom_endpoint():
-    """Test chat_api function with Ollama host and custom endpoint."""
-    result = chat_api(
-        openai_chat_model="llama3.2",
-        openai_chat_deployment="",
-        api_key=SecretStr(""),
-        api_version="",
-        azure_endpoint="http://my-ollama:11434/v1",
-        openai_chat_host="ollama",
-    )
+    """Test chat_api function with Ollama host and custom endpoint via env var."""
+    with patch.dict(os.environ, {"OLLAMA_ENDPOINT": "http://my-ollama:11434/v1"}):
+        result = chat_api(
+            openai_chat_model="llama3.2",
+            openai_chat_deployment="",
+            api_key=SecretStr(""),
+            api_version="",
+            azure_endpoint="",
+            openai_chat_host="ollama",
+        )
 
     assert isinstance(result, ChatOpenAI)
     assert result is not None

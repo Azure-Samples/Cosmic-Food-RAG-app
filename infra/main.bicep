@@ -397,9 +397,9 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
 var webAppEnv = {
   CHAT_MODEL_HOST: chatModelHost
   EMBED_MODEL_HOST: embedModelHost
-  OPENAI_API_VERSION: chatModelHost == 'azure' ? azureOpenAIAPIVersion : ''
+  OPENAI_API_VERSION: (chatModelHost == 'azure' || embedModelHost == 'azure') ? azureOpenAIAPIVersion : ''
   AZURE_OPENAI_API_KEY: deployAzureOpenAI ? '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)' : azureOpenAIKey
-  AZURE_OPENAI_ENDPOINT:  !empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')
+  AZURE_OPENAI_ENDPOINT: (chatModelHost == 'azure' || embedModelHost == 'azure') ? (!empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')) : ''
   AZURE_OPENAI_DEPLOYMENT_NAME: deployAzureOpenAI ? openAIDeploymentName : ''
   AZURE_OPENAI_CHAT_MODEL_NAME: chatModelName
   AZURE_OPENAI_CHAT_DEPLOYMENT_NAME: chatDeploymentName

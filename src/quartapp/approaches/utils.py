@@ -33,9 +33,7 @@ def embeddings_api(
     elif openai_embed_host == "ollama":
         kwargs = {
             "model": openai_embeddings_model,
-            "base_url": azure_endpoint
-            if azure_endpoint != ""
-            else os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
+            "base_url": os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
             "api_key": SecretStr(os.getenv("OLLAMA_API_KEY", "nokeyneeded")),
             "check_embedding_ctx_length": False,
         }
@@ -85,9 +83,7 @@ def chat_api(
     elif openai_chat_host == "ollama":
         return ChatOpenAI(
             model=openai_chat_model,
-            base_url=azure_endpoint
-            if azure_endpoint != ""
-            else os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
+            base_url=os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
             api_key=SecretStr(os.getenv("OLLAMA_API_KEY", "nokeyneeded")),
         )
     elif openai_chat_host == "github":
