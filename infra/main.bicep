@@ -124,7 +124,7 @@ param ollamaChatModel string = 'llama3.2'
 param ollamaEmbedModel string = 'nomic-embed-text'
 
 @description('Embedding dimensions for Ollama host')
-param ollamaEmbedDimensions int = 1536
+param ollamaEmbedDimensions int = 768
 
 param azureOpenAIAPIVersion string = '2024-10-21'
 
