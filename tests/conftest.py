@@ -55,12 +55,12 @@ def mock_session_env(monkeypatch_session):
         monkeypatch_session.setenv("CHAT_MODEL_HOST", "azure")
         monkeypatch_session.setenv("EMBED_MODEL_HOST", "azure")
         monkeypatch_session.setenv("AZURE_OPENAI_ENDPOINT", "https://api.openai.com")
-        monkeypatch_session.setenv("OPENAI_API_VERSION", "2024-10-21")
-        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-4o-mini")
-        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-4o-mini")
-        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-3-small")
-        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding-3-small")
-        monkeypatch_session.setenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS", "1536")
+        monkeypatch_session.setenv("AZURE_OPENAI_VERSION", "2024-10-21")
+        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_DEPLOYMENT", "gpt-4o-mini")
+        monkeypatch_session.setenv("AZURE_OPENAI_CHAT_MODEL", "gpt-4o-mini")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBED_MODEL", "text-embedding-3-small")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBED_DEPLOYMENT", "text-embedding-3-small")
+        monkeypatch_session.setenv("AZURE_OPENAI_EMBED_DIMENSIONS", "1536")
         monkeypatch_session.setenv("AZURE_OPENAI_KEY", "fakekey")
         # Allowed Origin
         monkeypatch_session.setenv("ALLOWED_ORIGIN", "https://frontend.com")
@@ -162,9 +162,12 @@ def setup_mock(rag_mock, vector_mock, database_mock, keyword_mock):
         database_name="database_name",
         collection_name="collection_name",
         index_name="index_name",
-        api_key=SecretStr("api_key"),
-        api_version="api_version",
-        azure_endpoint="azure_endpoint",
+        chat_api_key=SecretStr("api_key"),
+        chat_api_version="api_version",
+        chat_endpoint="https://test.openai.azure.com",
+        embed_api_key=SecretStr("api_key"),
+        embed_api_version="api_version",
+        embed_endpoint="https://test.openai.azure.com",
         openai_chat_host="azure",
         openai_embed_host="azure",
     )
@@ -177,7 +180,7 @@ def setup_mock(rag_mock, vector_mock, database_mock, keyword_mock):
 
 
 @pytest.fixture
-def app_config_mock(setup_mock):
+def app_config_mock(mock_session_env, setup_mock):
     """Mock quartapp.config.AppConfig."""
     app_config = AppConfig()
     app_config.setup = setup_mock

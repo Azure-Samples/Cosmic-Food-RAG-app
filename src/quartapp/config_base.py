@@ -28,44 +28,118 @@ def read_and_parse_connection_string() -> str:
 
 
 class AppConfigBase(ABC):
+    @staticmethod
+    def _parse_embedding_dimensions(dimensions_str: str | None, env_var_name: str) -> int | None:
+        if dimensions_str is not None:
+            dimensions_str = dimensions_str.strip()
+            if dimensions_str:
+                try:
+                    return int(dimensions_str)
+                except ValueError:
+                    raise ValueError(
+                        f"Invalid {env_var_name} value: {dimensions_str!r}. It must be an integer or unset."
+                    )
+        return None
+
     def __init__(self) -> None:
         openai_chat_host = os.getenv("CHAT_MODEL_HOST", "azure")
         openai_embed_host = os.getenv("EMBED_MODEL_HOST", "azure")
-        openai_embeddings_model = os.getenv("AZURE_OPENAI_EMBEDDINGS_MODEL_NAME", "text-embedding-3-small")
-        openai_embeddings_deployment = os.getenv("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME", "text-embedding-3-small")
-        openai_chat_model = os.getenv("AZURE_OPENAI_CHAT_MODEL_NAME", "gpt-4o-mini")
-        openai_chat_deployment = os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-4o-mini")
+
+        # Read chat model config based on host
+        if openai_chat_host == "azure":
+            chat_model = os.getenv("AZURE_OPENAI_CHAT_MODEL", "gpt-4o-mini")
+            chat_deployment = os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT", "gpt-4o-mini")
+            chat_api_key = SecretStr(os.getenv("AZURE_OPENAI_KEY", ""))
+            chat_api_version = os.getenv("AZURE_OPENAI_VERSION", "2024-10-21")
+            chat_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "")
+        elif openai_chat_host == "openai":
+            chat_model = os.getenv("OPENAICOM_CHAT_MODEL", "gpt-4o-mini")
+            chat_deployment = ""
+            chat_api_key = SecretStr(os.getenv("OPENAICOM_KEY", ""))
+            chat_api_version = ""
+            chat_endpoint = ""
+        elif openai_chat_host == "github":
+            chat_model = os.getenv("GITHUB_MODEL", "gpt-4o-mini")
+            chat_deployment = ""
+            chat_api_key = SecretStr(os.getenv("GITHUB_TOKEN", ""))
+            chat_api_version = ""
+            chat_endpoint = os.getenv("GITHUB_ENDPOINT", "https://models.github.ai/inference")
+        elif openai_chat_host == "ollama":
+            chat_model = os.getenv("OLLAMA_CHAT_MODEL", "llama3.2")
+            chat_deployment = ""
+            chat_api_key = SecretStr(os.getenv("OLLAMA_API_KEY", "nokeyneeded"))
+            chat_api_version = ""
+            chat_endpoint = os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1")
+        else:
+            raise ValueError(
+                f"Unsupported CHAT_MODEL_HOST '{openai_chat_host}'. "
+                "Supported values are: 'azure', 'openai', 'ollama', 'github'."
+            )
+
+        # Read embed model config based on host
+        if openai_embed_host == "azure":
+            embed_model = os.getenv("AZURE_OPENAI_EMBED_MODEL", "text-embedding-3-small")
+            embed_deployment = os.getenv("AZURE_OPENAI_EMBED_DEPLOYMENT", "text-embedding-3-small")
+            embed_api_key = SecretStr(os.getenv("AZURE_OPENAI_KEY", ""))
+            embed_api_version = os.getenv("AZURE_OPENAI_VERSION", "2024-10-21")
+            embed_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "")
+            embedding_dimensions = self._parse_embedding_dimensions(
+                os.getenv("AZURE_OPENAI_EMBED_DIMENSIONS"), "AZURE_OPENAI_EMBED_DIMENSIONS"
+            )
+        elif openai_embed_host == "openai":
+            embed_model = os.getenv("OPENAICOM_EMBED_MODEL", "text-embedding-3-small")
+            embed_deployment = ""
+            embed_api_key = SecretStr(os.getenv("OPENAICOM_KEY", ""))
+            embed_api_version = ""
+            embed_endpoint = ""
+            embedding_dimensions = self._parse_embedding_dimensions(
+                os.getenv("OPENAICOM_EMBED_DIMENSIONS"), "OPENAICOM_EMBED_DIMENSIONS"
+            )
+        elif openai_embed_host == "github":
+            embed_model = os.getenv("GITHUB_EMBED_MODEL", "text-embedding-3-small")
+            embed_deployment = ""
+            embed_api_key = SecretStr(os.getenv("GITHUB_TOKEN", ""))
+            embed_api_version = ""
+            embed_endpoint = os.getenv("GITHUB_ENDPOINT", "https://models.github.ai/inference")
+            embedding_dimensions = self._parse_embedding_dimensions(
+                os.getenv("GITHUB_EMBED_DIMENSIONS"), "GITHUB_EMBED_DIMENSIONS"
+            )
+        elif openai_embed_host == "ollama":
+            embed_model = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
+            embed_deployment = ""
+            embed_api_key = SecretStr(os.getenv("OLLAMA_API_KEY", "nokeyneeded"))
+            embed_api_version = ""
+            embed_endpoint = os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1")
+            embedding_dimensions = self._parse_embedding_dimensions(
+                os.getenv("OLLAMA_EMBED_DIMENSIONS"), "OLLAMA_EMBED_DIMENSIONS"
+            )
+        else:
+            raise ValueError(
+                f"Unsupported EMBED_MODEL_HOST '{openai_embed_host}'. "
+                "Supported values are: 'azure', 'openai', 'ollama', 'github'."
+            )
+
         connection_string = read_and_parse_connection_string()
         database_name = os.getenv("AZURE_COSMOS_DATABASE_NAME", "<COSMOS-DB-NEW-UNIQUE-DATABASE-NAME>")
         collection_name = os.getenv("AZURE_COSMOS_COLLECTION_NAME", "<COSMOS-DB-NEW-UNIQUE-DATABASE-NAME>")
         index_name = os.getenv("AZURE_COSMOS_INDEX_NAME", "<COSMOS-DB-NEW-UNIQUE-INDEX-NAME>")
-        api_key = SecretStr(os.getenv("AZURE_OPENAI_API_KEY", "<YOUR-DEPLOYMENT-KEY>"))
-        api_version = os.getenv("OPENAI_API_VERSION", "2024-10-21")
-        azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "https://<YOUR-OPENAI-DEPLOYMENT-NAME>.openai.azure.com/")
-        embedding_dimensions: int | None = None
-        embedding_dimensions_str = os.getenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS")
-        if embedding_dimensions_str is not None:
-            embedding_dimensions_str = embedding_dimensions_str.strip()
-            if embedding_dimensions_str:
-                try:
-                    embedding_dimensions = int(embedding_dimensions_str)
-                except ValueError:
-                    raise ValueError(
-                        f"Invalid AZURE_OPENAI_EMBEDDINGS_DIMENSIONS value: {embedding_dimensions_str!r}. "
-                        "It must be an integer or unset."
-                    )
+
+        self.embedding_dimensions = embedding_dimensions
         self.setup = Setup(
-            openai_embeddings_model=openai_embeddings_model,
-            openai_embeddings_deployment=openai_embeddings_deployment,
-            openai_chat_model=openai_chat_model,
-            openai_chat_deployment=openai_chat_deployment,
+            openai_embeddings_model=embed_model,
+            openai_embeddings_deployment=embed_deployment,
+            openai_chat_model=chat_model,
+            openai_chat_deployment=chat_deployment,
             connection_string=connection_string,
             database_name=database_name,
             collection_name=collection_name,
             index_name=index_name,
-            api_key=api_key,
-            api_version=api_version,
-            azure_endpoint=azure_endpoint,
+            chat_api_key=chat_api_key,
+            chat_api_version=chat_api_version,
+            chat_endpoint=chat_endpoint,
+            embed_api_key=embed_api_key,
+            embed_api_version=embed_api_version,
+            embed_endpoint=embed_endpoint,
             openai_chat_host=openai_chat_host,
             openai_embed_host=openai_embed_host,
             embedding_dimensions=embedding_dimensions,

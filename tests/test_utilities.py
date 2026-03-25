@@ -1,6 +1,5 @@
 """Tests for quartapp.approaches.utils module."""
 
-import os
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -24,7 +23,7 @@ def test_embeddings_api():
         openai_embeddings_deployment="test-deployment",
         api_key=SecretStr("test-key"),
         api_version="2024-10-21",
-        azure_endpoint="https://test.openai.azure.com/",
+        endpoint="https://test.openai.azure.com/",
         openai_embed_host="azure",
     )
 
@@ -39,7 +38,7 @@ def test_embeddings_api_with_dimensions():
         openai_embeddings_deployment="test-deployment",
         api_key=SecretStr("test-key"),
         api_version="2024-10-21",
-        azure_endpoint="https://test.openai.azure.com/",
+        endpoint="https://test.openai.azure.com/",
         openai_embed_host="azure",
         embedding_dimensions=256,
     )
@@ -55,7 +54,7 @@ def test_embeddings_api_openai():
         openai_embeddings_deployment="",
         api_key=SecretStr("test-key"),
         api_version="",
-        azure_endpoint="",
+        endpoint="",
         openai_embed_host="openai",
     )
 
@@ -70,7 +69,7 @@ def test_embeddings_api_github():
         openai_embeddings_deployment="",
         api_key=SecretStr("test-github-token"),
         api_version="",
-        azure_endpoint="",
+        endpoint="https://models.github.ai/inference",
         openai_embed_host="github",
     )
 
@@ -85,7 +84,7 @@ def test_embeddings_api_ollama():
         openai_embeddings_deployment="",
         api_key=SecretStr(""),
         api_version="",
-        azure_endpoint="",
+        endpoint="http://localhost:11434/v1",
         openai_embed_host="ollama",
     )
 
@@ -94,16 +93,15 @@ def test_embeddings_api_ollama():
 
 
 def test_embeddings_api_ollama_custom_endpoint():
-    """Test embeddings_api function with Ollama host and custom endpoint via env var."""
-    with patch.dict(os.environ, {"OLLAMA_ENDPOINT": "http://my-ollama:11434/v1"}):
-        result = embeddings_api(
-            openai_embeddings_model="nomic-embed-text",
-            openai_embeddings_deployment="",
-            api_key=SecretStr(""),
-            api_version="",
-            azure_endpoint="",
-            openai_embed_host="ollama",
-        )
+    """Test embeddings_api function with Ollama host and custom endpoint."""
+    result = embeddings_api(
+        openai_embeddings_model="nomic-embed-text",
+        openai_embeddings_deployment="",
+        api_key=SecretStr(""),
+        api_version="",
+        endpoint="http://my-ollama:11434/v1",
+        openai_embed_host="ollama",
+    )
 
     assert isinstance(result, OpenAIEmbeddings)
     assert result is not None
@@ -116,7 +114,7 @@ def test_chat_api():
         openai_chat_deployment="test-deployment",
         api_key=SecretStr("test-key"),
         api_version="2024-10-21",
-        azure_endpoint="https://test.openai.azure.com/",
+        endpoint="https://test.openai.azure.com/",
         openai_chat_host="azure",
     )
 
@@ -131,7 +129,7 @@ def test_chat_api_openai():
         openai_chat_deployment="",
         api_key=SecretStr("test-key"),
         api_version="",
-        azure_endpoint="",
+        endpoint="",
         openai_chat_host="openai",
     )
 
@@ -146,7 +144,7 @@ def test_chat_api_github():
         openai_chat_deployment="",
         api_key=SecretStr("test-github-token"),
         api_version="",
-        azure_endpoint="",
+        endpoint="https://models.github.ai/inference",
         openai_chat_host="github",
     )
 
@@ -161,7 +159,7 @@ def test_chat_api_ollama():
         openai_chat_deployment="",
         api_key=SecretStr(""),
         api_version="",
-        azure_endpoint="",
+        endpoint="http://localhost:11434/v1",
         openai_chat_host="ollama",
     )
 
@@ -170,16 +168,15 @@ def test_chat_api_ollama():
 
 
 def test_chat_api_ollama_custom_endpoint():
-    """Test chat_api function with Ollama host and custom endpoint via env var."""
-    with patch.dict(os.environ, {"OLLAMA_ENDPOINT": "http://my-ollama:11434/v1"}):
-        result = chat_api(
-            openai_chat_model="llama3.2",
-            openai_chat_deployment="",
-            api_key=SecretStr(""),
-            api_version="",
-            azure_endpoint="",
-            openai_chat_host="ollama",
-        )
+    """Test chat_api function with Ollama host and custom endpoint."""
+    result = chat_api(
+        openai_chat_model="llama3.2",
+        openai_chat_deployment="",
+        api_key=SecretStr(""),
+        api_version="",
+        endpoint="http://my-ollama:11434/v1",
+        openai_chat_host="ollama",
+    )
 
     assert isinstance(result, ChatOpenAI)
     assert result is not None
@@ -259,7 +256,7 @@ def test_embeddings_api_unsupported_host():
             openai_embeddings_deployment="",
             api_key=SecretStr("test-key"),
             api_version="",
-            azure_endpoint="",
+            endpoint="",
             openai_embed_host="invalid_host",
         )
 
@@ -272,6 +269,6 @@ def test_chat_api_unsupported_host():
             openai_chat_deployment="",
             api_key=SecretStr("test-key"),
             api_version="",
-            azure_endpoint="",
+            endpoint="",
             openai_chat_host="invalid_host",
         )

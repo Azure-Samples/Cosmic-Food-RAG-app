@@ -18,7 +18,8 @@ from pymongo.collection import Collection
 from quartapp.approaches.setup import Setup
 from quartapp.config import AppConfig
 
-setup: Setup = AppConfig().setup
+_app_config = AppConfig()
+setup: Setup = _app_config.setup
 
 
 logging.basicConfig(
@@ -82,9 +83,7 @@ async def add_data(input_args: Namespace) -> None:
 
     # Read more about these variables in detail here. https://learn.microsoft.com/azure/documentdb/vector-search
     num_lists = 100
-    dimensions = int(
-        os.getenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS") or os.getenv("OPENAICOM_EMBED_DIMENSIONS") or "1536"
-    )
+    dimensions = _app_config.embedding_dimensions or 1536
     similarity_algorithm = CosmosDBSimilarityType.COS
     kind = CosmosDBVectorSearchType.VECTOR_IVF
     m = 16

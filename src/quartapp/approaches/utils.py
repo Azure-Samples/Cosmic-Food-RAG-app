@@ -1,5 +1,3 @@
-import os
-
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
 from langchain_core.embeddings import Embeddings
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings, ChatOpenAI, OpenAIEmbeddings
@@ -15,7 +13,7 @@ def embeddings_api(
     openai_embeddings_deployment: str,
     api_key: SecretStr,
     api_version: str,
-    azure_endpoint: str,
+    endpoint: str,
     openai_embed_host: str = "azure",
     embedding_dimensions: int | None = None,
 ) -> Embeddings:
@@ -25,7 +23,7 @@ def embeddings_api(
             "azure_deployment": openai_embeddings_deployment,
             "api_key": api_key,
             "api_version": api_version,
-            "azure_endpoint": azure_endpoint,
+            "azure_endpoint": endpoint,
         }
         if embedding_dimensions is not None:
             kwargs["dimensions"] = embedding_dimensions
@@ -33,8 +31,8 @@ def embeddings_api(
     elif openai_embed_host == "ollama":
         kwargs = {
             "model": openai_embeddings_model,
-            "base_url": os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
-            "api_key": SecretStr(os.getenv("OLLAMA_API_KEY", "nokeyneeded")),
+            "base_url": endpoint,
+            "api_key": api_key,
             "check_embedding_ctx_length": False,
         }
         if embedding_dimensions is not None:
@@ -43,7 +41,7 @@ def embeddings_api(
     elif openai_embed_host == "github":
         kwargs = {
             "model": openai_embeddings_model,
-            "base_url": os.getenv("GITHUB_MODELS_ENDPOINT", "https://models.github.ai/inference"),
+            "base_url": endpoint,
             "api_key": api_key,
         }
         if embedding_dimensions is not None:
@@ -69,7 +67,7 @@ def chat_api(
     openai_chat_deployment: str,
     api_key: SecretStr,
     api_version: str,
-    azure_endpoint: str,
+    endpoint: str,
     openai_chat_host: str = "azure",
 ) -> BaseChatOpenAI:
     if openai_chat_host == "azure":
@@ -78,18 +76,18 @@ def chat_api(
             azure_deployment=openai_chat_deployment,
             api_key=api_key,
             api_version=api_version,
-            azure_endpoint=azure_endpoint,
+            azure_endpoint=endpoint,
         )
     elif openai_chat_host == "ollama":
         return ChatOpenAI(
             model=openai_chat_model,
-            base_url=os.getenv("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
-            api_key=SecretStr(os.getenv("OLLAMA_API_KEY", "nokeyneeded")),
+            base_url=endpoint,
+            api_key=api_key,
         )
     elif openai_chat_host == "github":
         return ChatOpenAI(
             model=openai_chat_model,
-            base_url=os.getenv("GITHUB_MODELS_ENDPOINT", "https://models.github.ai/inference"),
+            base_url=endpoint,
             api_key=api_key,
         )
     elif openai_chat_host == "openai":

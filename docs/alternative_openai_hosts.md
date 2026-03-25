@@ -4,7 +4,7 @@ In addition to Azure OpenAI, this project supports using other OpenAI-compatible
 
 Supported values: `azure` (default), `openai`, `github`, `ollama`
 
-You can mix hosts — for example, use Azure for embeddings and Ollama for chat.
+Each provider uses its own set of environment variables with a distinct prefix. All providers can be configured simultaneously in a single `.env` file — the `CHAT_MODEL_HOST` and `EMBED_MODEL_HOST` selectors determine which provider block is read at runtime. You can mix hosts — for example, use Azure for embeddings and Ollama for chat.
 
 ## Azure OpenAI (default)
 
@@ -15,6 +15,20 @@ For more information:
 - [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/ai-services/openai/)
 - [Azure OpenAI quickstart](https://learn.microsoft.com/azure/ai-services/openai/chatgpt-quickstart)
 - [Azure OpenAI models](https://learn.microsoft.com/azure/ai-services/openai/concepts/models)
+
+```env
+CHAT_MODEL_HOST="azure"
+EMBED_MODEL_HOST="azure"
+AZURE_OPENAI_ENDPOINT="https://<YOUR-AZURE-OPENAI-SERVICE-NAME>.openai.azure.com"
+AZURE_OPENAI_VERSION="2024-10-21"
+AZURE_OPENAI_CHAT_DEPLOYMENT="gpt-4o-mini"
+AZURE_OPENAI_CHAT_MODEL="gpt-4o-mini"
+AZURE_OPENAI_EMBED_DEPLOYMENT="text-embedding-3-small"
+AZURE_OPENAI_EMBED_MODEL="text-embedding-3-small"
+AZURE_OPENAI_EMBED_DIMENSIONS="1536"
+# Only needed when using key-based Azure authentication:
+AZURE_OPENAI_KEY=""
+```
 
 ## OpenAI.com
 
@@ -29,10 +43,10 @@ For more information:
 ```env
 CHAT_MODEL_HOST="openai"
 EMBED_MODEL_HOST="openai"
-AZURE_OPENAI_API_KEY="<YOUR-OPENAI-COM-API-KEY>"
-AZURE_OPENAI_CHAT_MODEL_NAME="gpt-4o-mini"
-AZURE_OPENAI_EMBEDDINGS_MODEL_NAME="text-embedding-3-small"
-AZURE_OPENAI_EMBEDDINGS_DIMENSIONS="1536"
+OPENAICOM_KEY="<YOUR-OPENAI-COM-API-KEY>"
+OPENAICOM_CHAT_MODEL="gpt-4o-mini"
+OPENAICOM_EMBED_MODEL="text-embedding-3-small"
+OPENAICOM_EMBED_DIMENSIONS="1536"
 ```
 
 ## GitHub Models
@@ -48,10 +62,11 @@ For more information:
 ```env
 CHAT_MODEL_HOST="github"
 EMBED_MODEL_HOST="github"
-AZURE_OPENAI_API_KEY="<YOUR-GITHUB-TOKEN>"
-AZURE_OPENAI_CHAT_MODEL_NAME="gpt-4o-mini"
-AZURE_OPENAI_EMBEDDINGS_MODEL_NAME="text-embedding-3-small"
-AZURE_OPENAI_EMBEDDINGS_DIMENSIONS="1536"
+GITHUB_TOKEN="<YOUR-GITHUB-TOKEN>"
+GITHUB_ENDPOINT="https://models.github.ai/inference"
+GITHUB_MODEL="gpt-4o-mini"
+GITHUB_EMBED_MODEL="text-embedding-3-small"
+GITHUB_EMBED_DIMENSIONS="1536"
 ```
 
 ## Ollama (local models)
@@ -81,11 +96,11 @@ For more information:
     CHAT_MODEL_HOST="ollama"
     EMBED_MODEL_HOST="ollama"
     OLLAMA_ENDPOINT="http://localhost:11434/v1"
-    AZURE_OPENAI_CHAT_MODEL_NAME="llama3.2"
-    AZURE_OPENAI_EMBEDDINGS_MODEL_NAME="nomic-embed-text"
-    AZURE_OPENAI_EMBEDDINGS_DIMENSIONS="768"
+    OLLAMA_CHAT_MODEL="llama3.2"
+    OLLAMA_EMBED_MODEL="nomic-embed-text"
+    OLLAMA_EMBED_DIMENSIONS="768"
     ```
 
 ### Embedding dimensions
 
-Different embedding models produce different dimension sizes (e.g., `nomic-embed-text` uses 768 dimensions vs. `text-embedding-3-small` at 1536). Set `AZURE_OPENAI_EMBEDDINGS_DIMENSIONS` to match your model's output dimensions. You may need to recreate your vector search index if switching between models with different dimension sizes.
+Different embedding models produce different dimension sizes (e.g., `nomic-embed-text` uses 768 dimensions vs. `text-embedding-3-small` at 1536). Set the dimensions environment variable for your provider (e.g., `AZURE_OPENAI_EMBED_DIMENSIONS`, `OPENAICOM_EMBED_DIMENSIONS`, `OLLAMA_EMBED_DIMENSIONS`, or `GITHUB_EMBED_DIMENSIONS`) to match your model's output dimensions. You may need to recreate your vector search index if switching between models with different dimension sizes.

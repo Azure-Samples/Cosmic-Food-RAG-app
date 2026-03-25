@@ -397,15 +397,15 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
 var webAppEnv = {
   CHAT_MODEL_HOST: chatModelHost
   EMBED_MODEL_HOST: embedModelHost
-  OPENAI_API_VERSION: (chatModelHost == 'azure' || embedModelHost == 'azure') ? azureOpenAIAPIVersion : ''
-  AZURE_OPENAI_API_KEY: deployAzureOpenAI ? '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)' : azureOpenAIKey
+  AZURE_OPENAI_VERSION: (chatModelHost == 'azure' || embedModelHost == 'azure') ? azureOpenAIAPIVersion : ''
+  AZURE_OPENAI_KEY: deployAzureOpenAI ? '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)' : azureOpenAIKey
   AZURE_OPENAI_ENDPOINT: (chatModelHost == 'azure' || embedModelHost == 'azure') ? (!empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')) : ''
-  AZURE_OPENAI_DEPLOYMENT_NAME: deployAzureOpenAI ? openAIDeploymentName : ''
-  AZURE_OPENAI_CHAT_MODEL_NAME: chatModelName
-  AZURE_OPENAI_CHAT_DEPLOYMENT_NAME: chatDeploymentName
-  AZURE_OPENAI_EMBEDDINGS_MODEL_NAME: embedModelName
-  AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME: embedDeploymentName
-  AZURE_OPENAI_EMBEDDINGS_DIMENSIONS: string(embedDimensions)
+  AZURE_OPENAI_CHAT_MODEL: chatModelName
+  AZURE_OPENAI_CHAT_DEPLOYMENT: chatDeploymentName
+  AZURE_OPENAI_EMBED_MODEL: embedModelName
+  AZURE_OPENAI_EMBED_DEPLOYMENT: embedDeploymentName
+  AZURE_OPENAI_EMBED_DIMENSIONS: string(embedDimensions)
+  OPENAICOM_KEY: !empty(openAIComKey) ? openAIComKey : ''
   APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? (monitoring.?outputs.applicationInsightsConnectionString ?? '') : ''
   AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
   AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey
@@ -413,7 +413,6 @@ var webAppEnv = {
   AZURE_COSMOS_DATABASE_NAME: 'CosmicDB'
   AZURE_COSMOS_COLLECTION_NAME: 'CosmicFoodCollection'
   AZURE_COSMOS_INDEX_NAME: 'CosmicIndex'
-  OPENAICOM_KEY: !empty(openAIComKey) ? openAIComKey : ''
 }
 
 module web 'core/host/appservice.bicep' = {
@@ -464,16 +463,16 @@ output AZURE_OPENAI_ENDPOINT string = !empty(azureOpenAIEndpoint)
   ? azureOpenAIEndpoint
   : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')
 output AZURE_OPENAI_VERSION string = azureOpenAIAPIVersion
-output AZURE_OPENAI_CHAT_DEPLOYMENT_NAME string = deployAzureOpenAI ? chatDeploymentName : ''
+output AZURE_OPENAI_CHAT_DEPLOYMENT string = deployAzureOpenAI ? chatDeploymentName : ''
 output AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION string = deployAzureOpenAI ? chatDeploymentVersion : ''
 output AZURE_OPENAI_CHAT_DEPLOYMENT_CAPACITY int = deployAzureOpenAI ? chatDeploymentCapacity : 0
 output AZURE_OPENAI_CHAT_DEPLOYMENT_SKU string = deployAzureOpenAI ? chatDeploymentSku : ''
-output AZURE_OPENAI_CHAT_MODEL_NAME string = deployAzureOpenAI ? chatModelName : ''
-output AZURE_OPENAI_EMBED_DEPLOYMENT_NAME string = deployAzureOpenAI ? embedDeploymentName : ''
+output AZURE_OPENAI_CHAT_MODEL string = deployAzureOpenAI ? chatModelName : ''
+output AZURE_OPENAI_EMBED_DEPLOYMENT string = deployAzureOpenAI ? embedDeploymentName : ''
 output AZURE_OPENAI_EMBED_DEPLOYMENT_VERSION string = deployAzureOpenAI ? embedDeploymentVersion : ''
 output AZURE_OPENAI_EMBED_DEPLOYMENT_CAPACITY int = deployAzureOpenAI ? embedDeploymentCapacity : 0
 output AZURE_OPENAI_EMBED_DEPLOYMENT_SKU string = deployAzureOpenAI ? embedDeploymentSku : ''
-output AZURE_OPENAI_EMBED_MODEL_NAME string = deployAzureOpenAI ? embedModelName : ''
+output AZURE_OPENAI_EMBED_MODEL string = deployAzureOpenAI ? embedModelName : ''
 output AZURE_OPENAI_EMBED_DIMENSIONS string = deployAzureOpenAI ? string(embedDimensions) : ''
 
 output AZURE_AI_PROJECT string = useAiProject ? (ai.?outputs.projectName ?? '') : ''
