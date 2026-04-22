@@ -130,7 +130,7 @@ Navigate to project homepage [http://127.0.0.1:50505/](http://127.0.0.1:50505/) 
 
 ## `azd` Deployment
 
-![architecture thumbnail rag-langchain-mongodb-vcore](https://github.com/user-attachments/assets/bae8e072-2e2e-4711-aa35-a47382e361d3)
+![architecture thumbnail rag-langchain-documentdb-mongodb](https://github.com/user-attachments/assets/7ed58b2d-4f5e-4219-8596-9377574f297f)
 
 
 This repository is set up for deployment on Azure App Service (w/Azure DocumentDB (with MongoDB compatibility)) using the configuration files in the `infra` folder.
