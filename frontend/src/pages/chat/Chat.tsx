@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { Checkbox, Panel, DefaultButton, TextField, ITextFieldProps, ICheckboxProps } from "@fluentui/react";
-import cosmos from "../../assets/FeaturedDefault.png";
+import documentDB from "../../assets/FeaturedDefault.png";
 import { useId } from "@fluentui/react-hooks";
 
 import styles from "./Chat.module.css";
@@ -212,7 +212,14 @@ const Chat = () => {
                 <div className={styles.chatContainer}>
                     {!lastQuestionRef.current ? (
                         <div className={styles.chatEmptyState}>
-                            <img src={cosmos} alt="Cosmos logo" aria-label="Cosmos logo" width="100px" height="100px" className={styles.githubLogo} />
+                            <img
+                                src={documentDB}
+                                alt="Azure DocumentDB logo"
+                                aria-label="Azure DocumentDB logo"
+                                width="100px"
+                                height="132px"
+                                className={styles.githubLogo}
+                            />
                             <h1 className={styles.chatEmptyStateTitle}>FlavorGenius: Chat, Input, Discover</h1>
                             <h2 className={styles.chatEmptyStateSubtitle}>Ask anything or try an example</h2>
                             <ExampleList onExampleClicked={onExampleClicked} />
