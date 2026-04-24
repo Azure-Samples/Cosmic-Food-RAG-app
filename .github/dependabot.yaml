@@ -5,28 +5,40 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    cooldown:
+      default-days: 14
     groups:
       github-actions:
         patterns:
           - "*"
+    assignees:
+      - "john0isaac"
 
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
     directory: "frontend/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    cooldown:
+      default-days: 14
     groups:
       node-requirements:
         patterns:
           - "*"
+    assignees:
+      - "john0isaac"
 
   # Maintain dependencies for uv
   - package-ecosystem: "uv"
     directory: "/src"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    cooldown:
+      default-days: 14
     groups:
       python-requirements:
         patterns:
           - "*"
+    assignees:
+      - "john0isaac"
