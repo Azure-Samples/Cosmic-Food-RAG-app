@@ -1,14 +1,22 @@
+import enum
 from dataclasses import dataclass
-from enum import Enum
+
+try:
+    # Python 3.11+
+    from enum import StrEnum  # type: ignore[import]
+except AttributeError:
+
+    class StrEnum(str, enum.Enum):  # type: ignore[no-redef] # noqa: UP042
+        pass
 
 
-class AIChatRoles(str, Enum):
+class AIChatRoles(StrEnum):
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
 
 
-class RetrievalMode(str, Enum):
+class RetrievalMode(StrEnum):
     HYBRID = "rag"
     VECTOR = "vector"
     KEYWORD = "keyword"
