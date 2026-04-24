@@ -29,6 +29,8 @@ lint = [
     "mypy",
     "pre-commit",
 ]
+[tool.uv]
+exclude-newer = "14 days"
 
 [build-system]
 requires = ["flit_core<4"]
