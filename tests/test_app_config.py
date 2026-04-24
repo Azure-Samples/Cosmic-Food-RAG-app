@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from pymongo.errors import OperationFailure
 
 from quartapp.app import create_app
 from quartapp.approaches.schemas import AIChatRoles
@@ -27,10 +28,36 @@ async def test_run_keyword_no_results(app_config_mock):
 
 
 @pytest.mark.asyncio
+async def test_run_keyword_operation_failure_returns_no_results(app_config_mock):
+    """Test run_keyword returns no-results when retrieval raises an operation failure."""
+    app_config_mock.setup.keyword.run = AsyncMock(side_effect=OperationFailure("Text index missing", code=2))
+
+    result = await app_config_mock.run_keyword("test-session", [{"content": "test"}], 0.3, 1, 0.0)
+
+    assert result.message.content == "No results found"
+    assert result.message.role == AIChatRoles.ASSISTANT
+    assert len(result.context.data_points) == 1
+    assert result.context.data_points[0].name is None
+
+
+@pytest.mark.asyncio
 async def test_run_vector_no_results(app_config_mock):
     """Test run_vector with no results returned."""
     # Mock the vector approach to return empty results
     app_config_mock.setup.vector_search.run = AsyncMock(return_value=([], ""))
+
+    result = await app_config_mock.run_vector("test-session", [{"content": "test"}], 0.3, 1, 0.0)
+
+    assert result.message.content == "No results found"
+    assert result.message.role == AIChatRoles.ASSISTANT
+    assert len(result.context.data_points) == 1
+    assert result.context.data_points[0].name is None
+
+
+@pytest.mark.asyncio
+async def test_run_vector_operation_failure_returns_no_results(app_config_mock):
+    """Test run_vector returns no-results when retrieval raises an operation failure."""
+    app_config_mock.setup.vector_search.run = AsyncMock(side_effect=OperationFailure("Vector search failed", code=2))
 
     result = await app_config_mock.run_vector("test-session", [{"content": "test"}], 0.3, 1, 0.0)
 
@@ -94,6 +121,48 @@ async def test_run_rag_no_results_truly_empty_answer(app_config_mock):
             # Should return "No results found" when answer is falsy
             assert result.message.content == "No results found"
             assert result.message.role == AIChatRoles.ASSISTANT
+
+
+@pytest.mark.asyncio
+async def test_run_rag_missing_similarity_index_returns_no_results(app_config_mock):
+    """Test run_rag translates a missing vector index error to a no-results message."""
+    app_config_mock.setup.rag.run = AsyncMock(
+        side_effect=OperationFailure(
+            "Similarity index was not found for a vector similarity search query.",
+            code=2,
+            details={"errmsg": "Similarity index was not found for a vector similarity search query."},
+        )
+    )
+
+    result = await app_config_mock.run_rag("test-session", [{"content": "test"}], 0.3, 1, 0.0)
+
+    assert result.message.content == "No results found"
+    assert result.message.role == AIChatRoles.ASSISTANT
+    assert len(result.context.data_points) == 1
+    assert result.context.data_points[0].name is None
+
+
+@pytest.mark.asyncio
+async def test_run_rag_stream_missing_similarity_index_returns_no_results(app_config_mock):
+    """Test run_rag_stream translates a missing vector index error to a no-results stream."""
+    app_config_mock.setup.rag.run_stream = AsyncMock(
+        side_effect=OperationFailure(
+            "Similarity index was not found for a vector similarity search query.",
+            code=2,
+            details={"errmsg": "Similarity index was not found for a vector similarity search query."},
+        )
+    )
+
+    result_deltas = []
+    async for delta in app_config_mock.run_rag_stream("test-session", [{"content": "test"}], 0.3, 1, 0.0):
+        result_deltas.append(delta)
+
+    assert len(result_deltas) == 2
+    assert result_deltas[0].context is not None
+    assert result_deltas[0].sessionState == "test-session"
+    assert result_deltas[1].delta is not None
+    assert result_deltas[1].delta.content == "No results found"
+    assert result_deltas[1].delta.role == AIChatRoles.ASSISTANT
 
 
 @pytest.mark.asyncio

@@ -2,6 +2,8 @@ import json
 from collections.abc import AsyncGenerator
 from uuid import uuid4
 
+from pymongo.errors import OperationFailure
+
 from quartapp.approaches.schemas import (
     AIChatRoles,
     Context,
@@ -13,21 +15,36 @@ from quartapp.approaches.schemas import (
 )
 from quartapp.config_base import AppConfigBase
 
+MISSING_SIMILARITY_INDEX_ERROR = "Similarity index was not found for a vector similarity search query."
+
+
+def is_missing_similarity_index_error(error: OperationFailure) -> bool:
+    return error.code == 2 and MISSING_SIMILARITY_INDEX_ERROR in str(error)
+
 
 class AppConfig(AppConfigBase):
+    def _no_results_context(self) -> Context:
+        return Context([DataPoint()], [Thought()])
+
+    def _no_results_response(self, session_state: str) -> RetrievalResponse:
+        return RetrievalResponse(
+            sessionState=session_state,
+            context=self._no_results_context(),
+            message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
+        )
+
     async def run_keyword(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
     ) -> RetrievalResponse:
-        keyword_response, answer = await self.setup.keyword.run(messages, temperature, limit, score_threshold)
-
         new_session_state: str = session_state if session_state else str(uuid4())
 
+        try:
+            keyword_response, answer = await self.setup.keyword.run(messages, temperature, limit, score_threshold)
+        except OperationFailure:
+            return self._no_results_response(new_session_state)
+
         if keyword_response is None or len(keyword_response) == 0:
-            return RetrievalResponse(
-                sessionState=new_session_state,
-                context=Context([DataPoint()], [Thought()]),
-                message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
-            )
+            return self._no_results_response(new_session_state)
         top_result = json.loads(answer)
 
         message_content = f"""
@@ -56,16 +73,15 @@ class AppConfig(AppConfigBase):
     async def run_vector(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
     ) -> RetrievalResponse:
-        vector_response, answer = await self.setup.vector_search.run(messages, temperature, limit, score_threshold)
-
         new_session_state: str = session_state if session_state else str(uuid4())
 
+        try:
+            vector_response, answer = await self.setup.vector_search.run(messages, temperature, limit, score_threshold)
+        except OperationFailure:
+            return self._no_results_response(new_session_state)
+
         if vector_response is None or len(vector_response) == 0:
-            return RetrievalResponse(
-                sessionState=new_session_state,
-                context=Context([DataPoint()], [Thought()]),
-                message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
-            )
+            return self._no_results_response(new_session_state)
         top_result = json.loads(answer)
 
         message_content = f"""
@@ -94,24 +110,26 @@ class AppConfig(AppConfigBase):
     async def run_rag(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
     ) -> RetrievalResponse:
-        rag_response, answer = await self.setup.rag.run(messages, temperature, limit, score_threshold)
-        json_answer = json.loads(answer)
-
         new_session_state: str = session_state if session_state else str(uuid4())
+
+        try:
+            rag_response, answer = await self.setup.rag.run(messages, temperature, limit, score_threshold)
+        except OperationFailure as error:
+            if not is_missing_similarity_index_error(error):
+                raise
+            return self._no_results_response(new_session_state)
+
+        json_answer = json.loads(answer)
 
         if rag_response is None or len(rag_response) == 0:
             if answer:
                 return RetrievalResponse(
                     sessionState=new_session_state,
-                    context=Context([DataPoint()], [Thought()]),
+                    context=self._no_results_context(),
                     message=Message(content=json_answer.get("response"), role=AIChatRoles.ASSISTANT),
                 )
             else:
-                return RetrievalResponse(
-                    sessionState=new_session_state,
-                    context=Context([DataPoint()], [Thought()]),
-                    message=Message(content="No results found", role=AIChatRoles.ASSISTANT),
-                )
+                return self._no_results_response(new_session_state)
 
         context: Context = await self.get_context(rag_response)
         context.thoughts.insert(
@@ -138,9 +156,17 @@ class AppConfig(AppConfigBase):
     async def run_rag_stream(
         self, session_state: str | None, messages: list, temperature: float, limit: int, score_threshold: float
     ) -> AsyncGenerator[RetrievalResponseDelta, None]:
-        rag_response, answer = await self.setup.rag.run_stream(messages, temperature, limit, score_threshold)
-
         new_session_state: str = session_state if session_state else str(uuid4())
+
+        try:
+            rag_response, answer = await self.setup.rag.run_stream(messages, temperature, limit, score_threshold)
+        except OperationFailure as error:
+            if not is_missing_similarity_index_error(error):
+                raise
+
+            yield RetrievalResponseDelta(context=self._no_results_context(), sessionState=new_session_state)
+            yield RetrievalResponseDelta(delta=Message(content="No results found", role=AIChatRoles.ASSISTANT))
+            return
 
         context: Context = await self.get_context(rag_response)
         context.thoughts.insert(
