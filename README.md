@@ -27,9 +27,9 @@ urlFragment: cosmic-food-rag-app
 
 1. Create the following resources on Microsoft Azure:
 
-    - Azure DocumentDB (with MongoDB compatibility) cluster. See the [Quick Start guide here](https://techcommunity.microsoft.com/t5/educator-developer-blog/build-rag-chat-app-using-azure-cosmos-db-for-mongodb-vcore-and/ba-p/4055852#:~:text=RAG%20Chat%20Application-,Step%201%3A%20Create%20an%20Azure%20Cosmos%20DB%20for%20MongoDB%20vCore%20Cluster,-In%20this%20step).
+    - Azure DocumentDB (with MongoDB compatibility) cluster. See the [Quick Start guide here](https://techcommunity.microsoft.com/blog/educatordeveloperblog/build-ai-rag-apps-with-langchain-azure-documentdb-and-microsoft-foundry-step-by-/4513775?wt.mc_id=studentamb_71460#:~:text=Create%20a%20new%20Azure%20DocumentDB%20(with%20MongoDB%20compatibility)%20resource).
     - Azure OpenAI resource with:
-        - Embedding model deployment. (ex. `text-embedding-3-small`) See the [guide here](https://techcommunity.microsoft.com/t5/educator-developer-blog/build-rag-chat-app-using-azure-cosmos-db-for-mongodb-vcore-and/ba-p/4055852#:~:text=to%20it%20later.-,Step%202%3A%C2%A0Create%20an%20Azure%20OpenAI%20resource%20and%20Deploy%20chat%20and%20embedding%20Models,-In%20this%20step).
+        - Embedding model deployment. (ex. `text-embedding-3-small`) See the [guide here](https://techcommunity.microsoft.com/blog/educatordeveloperblog/build-ai-rag-apps-with-langchain-azure-documentdb-and-microsoft-foundry-step-by-/4513775?wt.mc_id=studentamb_71460#:~:text=later.-,Step%202:%20Create%20a%20Microsoft%20Foundry%20%2D%20Azure%20OpenAI%20resource%20and%20Deploy%20chat%20and%20embedding%20Models,-In).
         - Chat model deployment. (ex. `gpt-4o-mini`)
 
 1. Open the repository in GitHub Codespaces:
