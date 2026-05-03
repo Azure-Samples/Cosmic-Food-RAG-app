@@ -5,11 +5,13 @@ on:
     branches: [ main ]
     paths:
       - '**.py'
+      - '.github/workflows/python-static-analysis.yaml'
 
   pull_request:
     branches: [ main ]
     paths:
       - '**.py'
+      - '.github/workflows/python-static-analysis.yaml'
 
   workflow_dispatch:
 

@@ -4,10 +4,12 @@ on:
     branches: [ main ]
     paths:
       - "infra/**"
+      - ".github/workflows/azure-dev-templates-ci.yaml"
   pull_request:
     branches: [ main ]
     paths:
       - "infra/**"
+      - ".github/workflows/azure-dev-templates-ci.yaml"
   workflow_dispatch:
 
 jobs:
