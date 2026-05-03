@@ -5,11 +5,13 @@ on:
     branches: [ main ]
     paths:
       - '**.py'
+      - '.github/workflows/python-lint-format.yaml'
 
   pull_request:
     branches: [ main ]
     paths:
       - '**.py'
+      - '.github/workflows/python-lint-format.yaml'
 
   workflow_dispatch:
 

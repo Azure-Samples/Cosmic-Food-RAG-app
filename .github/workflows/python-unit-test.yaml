@@ -8,6 +8,7 @@ on:
       - "frontend/**"
       - "src/uv.lock"
       - "src/pyproject.toml"
+      - ".github/workflows/python-unit-test.yaml"
 
   pull_request:
     branches: [ main ]
@@ -16,6 +17,7 @@ on:
       - "frontend/**"
       - "src/uv.lock"
       - "src/pyproject.toml"
+      - ".github/workflows/python-unit-test.yaml"
 
   workflow_dispatch:
 
