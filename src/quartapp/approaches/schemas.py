@@ -5,6 +5,7 @@ try:
     # Python 3.11+
     from enum import StrEnum  # type: ignore[import]
 except (AttributeError, ImportError):
+
     class StrEnum(str, enum.Enum):  # type: ignore[no-redef] # noqa: UP042
         pass
 
