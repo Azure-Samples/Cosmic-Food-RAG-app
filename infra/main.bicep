@@ -72,18 +72,59 @@ param deployAzureOpenAI bool = true
 
 @allowed([
   'azure'
-  'openaicom'
+  'openai'
+  'github'
+  'ollama'
 ])
-param openAIChatHost string = 'azure'
+param chatModelHost string = 'azure'
 
 @allowed([
   'azure'
-  'openaicom'
+  'openai'
+  'github'
+  'ollama'
 ])
-param openAIEmbedHost string = 'azure'
+param embedModelHost string = 'azure'
 
 @secure()
 param openAIComKey string = ''
+
+@description('Chat model name for OpenAI.com host')
+param openAIComChatModel string = 'gpt-4o-mini'
+
+@description('Embedding model name for OpenAI.com host')
+param openAIComEmbedModel string = 'text-embedding-3-small'
+
+@description('Embedding dimensions for OpenAI.com host')
+param openAIComEmbedDimensions int = 1536
+
+@secure()
+@description('GitHub personal access token for GitHub Models host')
+param githubToken string = ''
+
+@description('GitHub Models endpoint URL')
+param githubEndpoint string = 'https://models.github.ai/inference'
+
+@description('Chat model name for GitHub Models host')
+param githubModel string = 'gpt-4o-mini'
+
+@description('Embedding model name for GitHub Models host')
+param githubEmbedModel string = 'text-embedding-3-small'
+
+@description('Embedding dimensions for GitHub Models host')
+param githubEmbedDimensions int = 1536
+
+@description('Ollama endpoint URL')
+param ollamaEndpoint string = 'http://localhost:11434/v1'
+
+@description('Chat model name for Ollama host')
+param ollamaChatModel string = 'llama3.2'
+
+@description('Embedding model name for Ollama host')
+param ollamaEmbedModel string = 'nomic-embed-text'
+
+@description('Embedding dimensions for Ollama host')
+param ollamaEmbedDimensions int = 768
 
 param azureOpenAIAPIVersion string = '2024-10-21'
 
@@ -391,20 +432,29 @@ module appServicePlan 'core/host/appserviceplan.bicep' = {
 }
 
 var webAppEnv = {
-  OPENAI_CHAT_HOST: openAIChatHost
-  OPENAI_EMBED_HOST: openAIEmbedHost
-  OPENAI_API_VERSION: openAIChatHost == 'azure' ? azureOpenAIAPIVersion : ''
-  AZURE_OPENAI_API_KEY: deployAzureOpenAI ? '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)' : azureOpenAIKey
-  AZURE_OPENAI_ENDPOINT:  !empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')
-  AZURE_OPENAI_DEPLOYMENT_NAME: deployAzureOpenAI ? openAIDeploymentName : ''
-  AZURE_OPENAI_CHAT_MODEL_NAME: openAIChatHost == 'azure' ? chatModelName : ''
-  AZURE_OPENAI_CHAT_DEPLOYMENT_NAME: openAIChatHost == 'azure' ? chatDeploymentName : ''
-  OPENAICOM_CHAT_MODEL: openAIChatHost == 'openaicom' ? chatModelName : ''
-  AZURE_OPENAI_EMBEDDINGS_MODEL_NAME: openAIEmbedHost == 'azure' ? embedModelName : ''
-  AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME: openAIEmbedHost == 'azure' ? embedDeploymentName : ''
-  OPENAICOM_EMBED_DIMENSIONS: openAIEmbedHost == 'openaicom' ? '1536' : ''
-  OPENAICOM_EMBED_MODEL: openAIEmbedHost == 'openaicom' ? 'text-embedding-3-small' : ''
-  AZURE_OPENAI_EMBEDDINGS_DIMENSIONS: openAIEmbedHost == 'azure' ? string(embedDimensions) : ''
+  CHAT_MODEL_HOST: chatModelHost
+  EMBED_MODEL_HOST: embedModelHost
+  AZURE_OPENAI_VERSION: (chatModelHost == 'azure' || embedModelHost == 'azure') ? azureOpenAIAPIVersion : ''
+  AZURE_OPENAI_KEY: deployAzureOpenAI ? '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=cognitiveServiceKey)' : azureOpenAIKey
+  AZURE_OPENAI_ENDPOINT: (chatModelHost == 'azure' || embedModelHost == 'azure') ? (!empty(azureOpenAIEndpoint) ? azureOpenAIEndpoint : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')) : ''
+  AZURE_OPENAI_CHAT_MODEL: chatModelName
+  AZURE_OPENAI_CHAT_DEPLOYMENT: chatDeploymentName
+  AZURE_OPENAI_EMBED_MODEL: embedModelName
+  AZURE_OPENAI_EMBED_DEPLOYMENT: embedDeploymentName
+  AZURE_OPENAI_EMBED_DIMENSIONS: string(embedDimensions)
+  OPENAICOM_KEY: !empty(openAIComKey) ? openAIComKey : ''
+  OPENAICOM_CHAT_MODEL: openAIComChatModel
+  OPENAICOM_EMBED_MODEL: openAIComEmbedModel
+  OPENAICOM_EMBED_DIMENSIONS: string(openAIComEmbedDimensions)
+  GITHUB_TOKEN: !empty(githubToken) ? githubToken : ''
+  GITHUB_ENDPOINT: githubEndpoint
+  GITHUB_MODEL: githubModel
+  GITHUB_EMBED_MODEL: githubEmbedModel
+  GITHUB_EMBED_DIMENSIONS: string(githubEmbedDimensions)
+  OLLAMA_ENDPOINT: ollamaEndpoint
+  OLLAMA_CHAT_MODEL: ollamaChatModel
+  OLLAMA_EMBED_MODEL: ollamaEmbedModel
+  OLLAMA_EMBED_DIMENSIONS: string(ollamaEmbedDimensions)
   APPLICATIONINSIGHTS_CONNECTION_STRING: useApplicationInsights ? (monitoring.?outputs.applicationInsightsConnectionString ?? '') : ''
   AZURE_COSMOS_PASSWORD: '@Microsoft.KeyVault(VaultName=${keyVault.outputs.name};SecretName=mongoAdminPassword)'
   AZURE_COSMOS_CONNECTION_STRING: mongoCluster.outputs.connectionStringKey
@@ -412,7 +462,6 @@ var webAppEnv = {
   AZURE_COSMOS_DATABASE_NAME: 'CosmicDB'
   AZURE_COSMOS_COLLECTION_NAME: 'CosmicFoodCollection'
   AZURE_COSMOS_INDEX_NAME: 'CosmicIndex'
-  OPENAICOM_KEY: !empty(openAIComKey) ? openAIComKey : ''
 }
 
 module web 'core/host/appservice.bicep' = {
@@ -455,24 +504,24 @@ output AZURE_KEY_VAULT_NAME string = keyVault.outputs.name
 
 output APPLICATIONINSIGHTS_NAME string = useApplicationInsights ? (monitoring.?outputs.applicationInsightsName ?? '') : ''
 
-output OPENAI_CHAT_HOST string = openAIChatHost
-output OPENAI_EMBED_HOST string = openAIEmbedHost
+output CHAT_MODEL_HOST string = chatModelHost
+output EMBED_MODEL_HOST string = embedModelHost
 output AZURE_OPENAI_SERVICE string = deployAzureOpenAI ? (openAI.?outputs.name ?? '') : ''
 output AZURE_OPENAI_RESOURCE_GROUP string = deployAzureOpenAI ? openAIResourceGroup.name : ''
 output AZURE_OPENAI_ENDPOINT string = !empty(azureOpenAIEndpoint)
   ? azureOpenAIEndpoint
   : (deployAzureOpenAI ? openAI.?outputs.endpoint ?? '' : '')
 output AZURE_OPENAI_VERSION string = azureOpenAIAPIVersion
-output AZURE_OPENAI_CHAT_DEPLOYMENT_NAME string = deployAzureOpenAI ? chatDeploymentName : ''
+output AZURE_OPENAI_CHAT_DEPLOYMENT string = deployAzureOpenAI ? chatDeploymentName : ''
 output AZURE_OPENAI_CHAT_DEPLOYMENT_VERSION string = deployAzureOpenAI ? chatDeploymentVersion : ''
 output AZURE_OPENAI_CHAT_DEPLOYMENT_CAPACITY int = deployAzureOpenAI ? chatDeploymentCapacity : 0
 output AZURE_OPENAI_CHAT_DEPLOYMENT_SKU string = deployAzureOpenAI ? chatDeploymentSku : ''
-output AZURE_OPENAI_CHAT_MODEL_NAME string = deployAzureOpenAI ? chatModelName : ''
-output AZURE_OPENAI_EMBED_DEPLOYMENT_NAME string = deployAzureOpenAI ? embedDeploymentName : ''
+output AZURE_OPENAI_CHAT_MODEL string = deployAzureOpenAI ? chatModelName : ''
+output AZURE_OPENAI_EMBED_DEPLOYMENT string = deployAzureOpenAI ? embedDeploymentName : ''
 output AZURE_OPENAI_EMBED_DEPLOYMENT_VERSION string = deployAzureOpenAI ? embedDeploymentVersion : ''
 output AZURE_OPENAI_EMBED_DEPLOYMENT_CAPACITY int = deployAzureOpenAI ? embedDeploymentCapacity : 0
 output AZURE_OPENAI_EMBED_DEPLOYMENT_SKU string = deployAzureOpenAI ? embedDeploymentSku : ''
-output AZURE_OPENAI_EMBED_MODEL_NAME string = deployAzureOpenAI ? embedModelName : ''
+output AZURE_OPENAI_EMBED_MODEL string = deployAzureOpenAI ? embedModelName : ''
 output AZURE_OPENAI_EMBED_DIMENSIONS string = deployAzureOpenAI ? string(embedDimensions) : ''
 
 output AZURE_AI_PROJECT string = useAiProject ? (ai.?outputs.projectName ?? '') : ''

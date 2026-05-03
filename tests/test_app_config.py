@@ -7,7 +7,7 @@ from quartapp.app import create_app
 from quartapp.approaches.schemas import AIChatRoles
 
 
-def test_config() -> None:
+def test_config(mock_session_env) -> None:
     """test the AppConfig class"""
     assert not create_app().testing
     assert create_app(test_config={"TESTING": True}).testing

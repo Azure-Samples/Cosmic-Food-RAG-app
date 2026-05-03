@@ -11,14 +11,15 @@ from langchain_community.vectorstores.azure_cosmos_db import (
     CosmosDBVectorSearchType,
 )
 from langchain_core.documents import Document
-from langchain_openai import AzureOpenAIEmbeddings
+from langchain_core.embeddings import Embeddings
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
 from quartapp.approaches.setup import Setup
 from quartapp.config import AppConfig
 
-setup: Setup = AppConfig().setup
+_app_config = AppConfig()
+setup: Setup = _app_config.setup
 
 
 logging.basicConfig(
@@ -47,7 +48,7 @@ async def generate_embeddings_and_add_data(
     documents: list[Document],
     collection: Collection,
     index_name: str,
-    embeddings: AzureOpenAIEmbeddings,
+    embeddings: Embeddings,
 ) -> AzureCosmosDBVectorSearch:
     # Create embeddings from the data, save to the database and return a connection to Azure DocumentDB
     return await AzureCosmosDBVectorSearch.afrom_documents(
@@ -82,9 +83,7 @@ async def add_data(input_args: Namespace) -> None:
 
     # Read more about these variables in detail here. https://learn.microsoft.com/azure/documentdb/vector-search
     num_lists = 100
-    dimensions = int(
-        os.getenv("AZURE_OPENAI_EMBEDDINGS_DIMENSIONS") or os.getenv("OPENAICOM_EMBED_DIMENSIONS") or "1536"
-    )
+    dimensions = _app_config.embedding_dimensions if _app_config.embedding_dimensions is not None else 1536
     similarity_algorithm = CosmosDBSimilarityType.COS
     kind = CosmosDBVectorSearchType.VECTOR_IVF
     m = 16

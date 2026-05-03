@@ -1,7 +1,8 @@
 from abc import ABC
 
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
-from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from langchain_core.embeddings import Embeddings
+from langchain_openai.chat_models.base import BaseChatOpenAI
 from pydantic import SecretStr
 from pymongo.collection import Collection
 
@@ -20,8 +21,8 @@ from quartapp.approaches.vector import Vector
 class OpenAISetup(ABC):
     def __init__(
         self,
-        embeddings_api: AzureOpenAIEmbeddings,
-        chat_api: AzureChatOpenAI,
+        embeddings_api: Embeddings,
+        chat_api: BaseChatOpenAI,
     ):
         self._embeddings_api = embeddings_api
         self._chat_api = chat_api
@@ -58,24 +59,33 @@ class Setup(ABC):
         database_name: str,
         collection_name: str,
         index_name: str,
-        api_key: SecretStr,
-        api_version: str,
-        azure_endpoint: str,
+        chat_api_key: SecretStr,
+        chat_api_version: str,
+        chat_endpoint: str,
+        embed_api_key: SecretStr,
+        embed_api_version: str,
+        embed_endpoint: str,
+        openai_chat_host: str = "azure",
+        openai_embed_host: str = "azure",
+        embedding_dimensions: int | None = None,
     ):
         self._openai_setup = OpenAISetup(
             embeddings_api=embeddings_api(
                 openai_embeddings_model,
                 openai_embeddings_deployment,
-                api_key,
-                api_version,
-                azure_endpoint,
+                embed_api_key,
+                embed_api_version,
+                embed_endpoint,
+                openai_embed_host=openai_embed_host,
+                embedding_dimensions=embedding_dimensions,
             ),
             chat_api=chat_api(
                 openai_chat_model,
                 openai_chat_deployment,
-                api_key,
-                api_version,
-                azure_endpoint,
+                chat_api_key,
+                chat_api_version,
+                chat_endpoint,
+                openai_chat_host=openai_chat_host,
             ),
         )
         self._database_setup = DatabaseSetup(
