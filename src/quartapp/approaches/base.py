@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 
 from langchain_community.vectorstores import AzureCosmosDBVectorSearch
 from langchain_core.documents import Document
-from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from langchain_core.embeddings import Embeddings
+from langchain_openai.chat_models.base import BaseChatOpenAI
 from pymongo.collection import Collection
 
 
@@ -10,8 +11,8 @@ class ApproachesBase(ABC):
     def __init__(
         self,
         vector_store: AzureCosmosDBVectorSearch,
-        embedding: AzureOpenAIEmbeddings,
-        chat: AzureChatOpenAI,
+        embedding: Embeddings,
+        chat: BaseChatOpenAI,
         data_collection: Collection,
     ):
         self._vector_store = vector_store
