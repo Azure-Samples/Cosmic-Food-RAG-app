@@ -31,9 +31,9 @@ param mongoServiceSku string
 param mongoServiceLocation string = location
 
 // https://learn.microsoft.com/azure/ai-services/openai/concepts/models?tabs=python-secure%2Cstandard%2Cstandard-chat-completions#standard-deployment-model-availability
-@minLength(1)
-@description('Location for the OpenAI resource')
+@description('Location for the OpenAI resource. Only required when deployAzureOpenAI is true.')
 @allowed([
+  ''
   'australiaeast'
   'brazilsouth'
   'canadaeast'
@@ -62,7 +62,7 @@ param mongoServiceLocation string = location
     type: 'location'
   }
 })
-param openAILocation string
+param openAILocation string = ''
 
 @description('Name of the OpenAI resource group. If not specified, the resource group name will be generated.')
 param openAIResourceGroupName string = ''
@@ -327,7 +327,7 @@ module ai 'core/ai/ai-foundry.bicep' = if (useAiProject) {
 }
 
 // USER ROLES
-module openAIRoleUser 'core/security/role.bicep' = {
+module openAIRoleUser 'core/security/role.bicep' = if (deployAzureOpenAI) {
   scope: openAIResourceGroup
   name: 'openai-role-user'
   params: {

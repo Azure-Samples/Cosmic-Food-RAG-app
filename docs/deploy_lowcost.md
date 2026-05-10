@@ -1,4 +1,4 @@
-# RAG chat: Deploying with minimal costs
+# Deploying with minimal costs
 
 This AI RAG chat application is designed to be easily deployed using the Azure Developer CLI, which provisions the infrastructure according to the Bicep files in the `infra` folder. Those files describe each of the Azure resources needed, and configures their SKU (pricing tier) and other parameters. Many Azure services offer a free tier, but the infrastructure files in this project do *not* default to the free tier as there are often limitations in that tier.
 
@@ -45,7 +45,7 @@ However, if your goal is to minimize costs while prototyping your application, f
 
     Replace `<your-region>` with a region that supports the free tier of Cosmos DB. You can find a list of supported regions in the [Azure DocumentDB documentation](https://learn.microsoft.com/azure/documentdb/free-tier).
 
-2. Turn off Azure Monitor (Application Insights):
+1. Turn off Azure Monitor (Application Insights):
 
     ```shell
     azd env set AZURE_USE_APPLICATION_INSIGHTS false
@@ -54,4 +54,4 @@ However, if your goal is to minimize costs while prototyping your application, f
     Application Insights is quite inexpensive already, so turning this off may not be worth the costs saved,
     but it is an option for those who want to minimize costs.
 
-3. Once you've made the desired customizations, you can run `azd up` to build, package, and deploy your customizations to Azure. We recommend using "eastus" as the region, for availability reasons.
+1. Once you've made the desired customizations, you can run `azd up` to build, package, and deploy your customizations to Azure. We recommend using "eastus" as the region, for availability reasons.
