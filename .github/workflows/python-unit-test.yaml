@@ -35,7 +35,7 @@ jobs:
         os: ["ubuntu-latest"]
         python_version: ["3.10", "3.11", "3.12"]
     steps:
-        - uses: actions/checkout@v6
+        - uses: actions/checkout@v6.0.2
         - name: Setup python
           uses: actions/setup-python@v6
           with:
@@ -45,7 +45,7 @@ jobs:
           with:
             enable-cache: true
         - name: Setup node
-          uses: actions/setup-node@v6.3.0
+          uses: actions/setup-node@v6.4.0
           with:
             node-version: 22
         - name: Build frontend
