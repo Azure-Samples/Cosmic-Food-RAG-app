@@ -22,11 +22,11 @@ jobs:
     check-format-lint:
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v6.0.2
-        - uses: actions/setup-python@v6
+        - uses: actions/checkout@v7.0.1
+        - uses: actions/setup-python@v6.3.0
           with:
                 python-version: 3.12
-        - uses: astral-sh/setup-uv@v8.1.0
+        - uses: astral-sh/setup-uv@v8.3.2
           with:
                 enable-cache: true
         - name: Install dependencies

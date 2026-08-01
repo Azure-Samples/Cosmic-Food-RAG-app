@@ -20,9 +20,9 @@ jobs:
   frontend-ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v7.0.1
       - name: Use Node.js 22.x
-        uses: actions/setup-node@v6.4.0
+        uses: actions/setup-node@v7.0.0
         with:
           node-version: 22.x
       - name: Install dependencies
