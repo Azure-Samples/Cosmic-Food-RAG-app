@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Stack, TextField } from "@fluentui/react";
-import { Button, Tooltip } from "@fluentui/react-components";
+import { Button, Textarea, TextareaOnChangeData, Tooltip } from "@fluentui/react-components";
 import { Send28Filled } from "@fluentui/react-icons";
 
 import styles from "./QuestionInput.module.css";
@@ -18,7 +17,9 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, init
     const [question, setQuestion] = useState<string>("");
 
     useEffect(() => {
-        initQuestion && setQuestion(initQuestion);
+        if (initQuestion) {
+            setQuestion(initQuestion);
+        }
     }, [initQuestion]);
 
     const sendQuestion = () => {
@@ -40,24 +41,22 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, init
         }
     };
 
-    const onQuestionChange = (_ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-        if (!newValue) {
+    const onQuestionChange = (_ev: React.ChangeEvent<HTMLTextAreaElement>, data: TextareaOnChangeData) => {
+        if (!data.value) {
             setQuestion("");
-        } else if (newValue.length <= 1000) {
-            setQuestion(newValue);
+        } else if (data.value.length <= 1000) {
+            setQuestion(data.value);
         }
     };
 
     const sendQuestionDisabled = disabled || !question.trim();
 
     return (
-        <Stack horizontal className={styles.questionInputContainer}>
-            <TextField
+        <div className={styles.questionInputContainer}>
+            <Textarea
                 className={styles.questionInputTextArea}
                 placeholder={placeholder}
-                multiline
-                resizable={false}
-                borderless
+                resize="none"
                 value={question}
                 onChange={onQuestionChange}
                 onKeyDown={onEnterPress}
@@ -68,6 +67,6 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, init
                 </Tooltip>
             </div>
             <SpeechInput updateQuestion={setQuestion} />
-        </Stack>
+        </div>
     );
 };

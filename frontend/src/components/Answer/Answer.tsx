@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { Stack, IconButton } from "@fluentui/react";
+import { Button } from "@fluentui/react-components";
+import { Lightbulb24Regular, ClipboardTaskListLtr24Regular } from "@fluentui/react-icons";
 import DOMPurify from "dompurify";
 
 import styles from "./Answer.module.css";
@@ -24,35 +25,40 @@ export const Answer = ({ answer, isSelected, isStreaming, onThoughtProcessClicke
     const sanitizedAnswerHtml = DOMPurify.sanitize(parsedAnswer.answerHtml);
 
     return (
-        <Stack className={`${styles.answerContainer} ${isSelected && styles.selected}`} verticalAlign="space-between">
-            <Stack.Item>
-                <Stack horizontal horizontalAlign="space-between">
+        <div
+            className={`${styles.answerContainer} ${isSelected && styles.selected}`}
+            style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}
+        >
+            <div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <AnswerIcon />
                     <div>
-                        <IconButton
+                        <Button
+                            appearance="transparent"
                             style={{ color: "black" }}
-                            iconProps={{ iconName: "Lightbulb" }}
+                            icon={<Lightbulb24Regular />}
                             title="Show thought process"
-                            ariaLabel="Show thought process"
+                            aria-label="Show thought process"
                             onClick={() => onThoughtProcessClicked()}
                             disabled={!answer.context.thoughts?.length}
                         />
-                        <IconButton
+                        <Button
+                            appearance="transparent"
                             style={{ color: "black" }}
-                            iconProps={{ iconName: "ClipboardList" }}
+                            icon={<ClipboardTaskListLtr24Regular />}
                             title="Show supporting content"
-                            ariaLabel="Show supporting content"
+                            aria-label="Show supporting content"
                             onClick={() => onSupportingContentClicked()}
                             disabled={!answer.context.data_points?.length}
                         />
                         <SpeechOutput answer={sanitizedAnswerHtml} />
                     </div>
-                </Stack>
-            </Stack.Item>
+                </div>
+            </div>
 
-            <Stack.Item grow>
+            <div style={{ flexGrow: 1 }}>
                 <div className={styles.answerText} dangerouslySetInnerHTML={{ __html: sanitizedAnswerHtml }}></div>
-            </Stack.Item>
-        </Stack>
+            </div>
+        </div>
     );
 };

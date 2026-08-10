@@ -1,4 +1,7 @@
 .questionInputContainer {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
     border-radius: 8px;
     box-shadow:
         0px 8px 16px rgba(0, 0, 0, 0.14),

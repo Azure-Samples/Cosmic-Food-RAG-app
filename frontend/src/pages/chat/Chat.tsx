@@ -1,7 +1,18 @@
-import { useRef, useState, useEffect } from "react";
-import { Checkbox, Panel, DefaultButton, TextField, ITextFieldProps, ICheckboxProps } from "@fluentui/react";
+import { useRef, useState, useEffect, useId } from "react";
+import {
+    Checkbox,
+    CheckboxOnChangeData,
+    OverlayDrawer,
+    DrawerHeader,
+    DrawerHeaderTitle,
+    DrawerBody,
+    DrawerFooter,
+    Button,
+    Input,
+    InputOnChangeData
+} from "@fluentui/react-components";
+import { Dismiss24Regular } from "@fluentui/react-icons";
 import documentDB from "../../assets/FeaturedDefault.png";
-import { useId } from "@fluentui/react-hooks";
 
 import styles from "./Chat.module.css";
 
@@ -97,7 +108,9 @@ const Chat = () => {
     const makeApiRequest = async (question: string) => {
         lastQuestionRef.current = question;
 
-        error && setError(undefined);
+        if (error) {
+            setError(undefined);
+        }
         setIsLoading(true);
         setActiveAnalysisPanelTab(undefined);
         try {
@@ -150,7 +163,9 @@ const Chat = () => {
 
     const clearChat = () => {
         lastQuestionRef.current = "";
-        error && setError(undefined);
+        if (error) {
+            setError(undefined);
+        }
         setActiveAnalysisPanelTab(undefined);
         setAnswers([]);
         setStreamedAnswers([]);
@@ -158,23 +173,27 @@ const Chat = () => {
         setIsStreaming(false);
     };
 
-    useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
-    useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "auto" }), [streamedAnswers]);
+    useEffect(() => {
+        chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" });
+    }, [isLoading]);
+    useEffect(() => {
+        chatMessageStreamEnd.current?.scrollIntoView({ behavior: "auto" });
+    }, [streamedAnswers]);
 
-    const onTemperatureChange = (_ev?: React.SyntheticEvent<HTMLElement, Event>, newValue?: string) => {
-        setTemperature(parseFloat(newValue || "0"));
+    const onTemperatureChange = (_ev: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
+        setTemperature(parseFloat(data.value || "0"));
     };
 
-    const onScoreThresholdChange = (_ev?: React.SyntheticEvent<HTMLElement, Event>, newValue?: string) => {
-        setScoreThreshold(parseFloat(newValue || "0"));
+    const onScoreThresholdChange = (_ev: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
+        setScoreThreshold(parseFloat(data.value || "0"));
     };
 
-    const onRetrieveCountChange = (_ev?: React.SyntheticEvent<HTMLElement, Event>, newValue?: string) => {
-        setRetrieveCount(parseInt(newValue || "3"));
+    const onRetrieveCountChange = (_ev: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
+        setRetrieveCount(parseInt(data.value || "3"));
     };
 
-    const onShouldStreamChange = (_ev?: React.FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean) => {
-        setShouldStream(!!checked);
+    const onShouldStreamChange = (_ev: React.ChangeEvent<HTMLInputElement>, data: CheckboxOnChangeData) => {
+        setShouldStream(!!data.checked);
     };
 
     const onExampleClicked = (example: string) => {
@@ -192,14 +211,14 @@ const Chat = () => {
     };
 
     // IDs for form labels and their associated callouts
-    const temperatureId = useId("temperature");
-    const temperatureFieldId = useId("temperatureField");
-    const searchScoreId = useId("searchScore");
-    const searchScoreFieldId = useId("searchScoreField");
-    const retrieveCountId = useId("retrieveCount");
-    const retrieveCountFieldId = useId("retrieveCountField");
-    const shouldStreamId = useId("shouldStream");
-    const shouldStreamFieldId = useId("shouldStreamField");
+    const temperatureId = useId();
+    const temperatureFieldId = useId();
+    const searchScoreId = useId();
+    const searchScoreFieldId = useId();
+    const retrieveCountId = useId();
+    const retrieveCountFieldId = useId();
+    const shouldStreamId = useId();
+    const shouldStreamFieldId = useId();
 
     return (
         <div className={styles.container}>
@@ -218,7 +237,7 @@ const Chat = () => {
                                 aria-label="Azure DocumentDB logo"
                                 width="100px"
                                 height="132px"
-                                className={styles.githubLogo}
+                                className={styles.emptyStateLogo}
                             />
                             <h1 className={styles.chatEmptyStateTitle}>FlavorGenius: Chat, Input, Discover</h1>
                             <h2 className={styles.chatEmptyStateSubtitle}>Ask anything or try an example</h2>
@@ -310,94 +329,101 @@ const Chat = () => {
                     />
                 )}
 
-                <Panel
-                    headerText="Cart Items"
-                    isOpen={isCartOpen}
-                    isBlocking={false}
-                    onDismiss={() => setIsCartOpen(false)}
-                    closeButtonAriaLabel="Close"
-                    onRenderFooterContent={() => <DefaultButton onClick={() => setIsCartOpen(false)}>Close</DefaultButton>}
-                    isFooterAtBottom={true}
-                >
-                    <div>
-                        {cartItems.map((item, index) => (
-                            <h4 key={index}>- {item}</h4>
-                        ))}
-                    </div>
-                </Panel>
-                <Panel
-                    headerText="Configure answer generation"
-                    isOpen={isConfigPanelOpen}
-                    isBlocking={false}
-                    onDismiss={() => setIsConfigPanelOpen(false)}
-                    closeButtonAriaLabel="Close"
-                    onRenderFooterContent={() => <DefaultButton onClick={() => setIsConfigPanelOpen(false)}>Close</DefaultButton>}
-                    isFooterAtBottom={true}
-                >
-                    <TextField
-                        id={temperatureFieldId}
-                        className={styles.chatSettingsSeparator}
-                        label="Temperature"
-                        type="number"
-                        min={0}
-                        max={1}
-                        step={0.1}
-                        defaultValue={temperature.toString()}
-                        onChange={onTemperatureChange}
-                        aria-labelledby={temperatureId}
-                        onRenderLabel={(props: ITextFieldProps | undefined) => (
-                            <HelpCallout labelId={temperatureId} fieldId={temperatureFieldId} helpText={toolTipText.temperature} label={props?.label} />
-                        )}
-                    />
+                <OverlayDrawer position="end" open={isCartOpen} onOpenChange={(_ev, data) => setIsCartOpen(data.open)}>
+                    <DrawerHeader>
+                        <DrawerHeaderTitle
+                            action={<Button appearance="subtle" aria-label="Close" icon={<Dismiss24Regular />} onClick={() => setIsCartOpen(false)} />}
+                        >
+                            Cart Items
+                        </DrawerHeaderTitle>
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <div>
+                            {cartItems.map((item, index) => (
+                                <h4 key={index}>- {item}</h4>
+                            ))}
+                        </div>
+                    </DrawerBody>
+                    <DrawerFooter>
+                        <Button onClick={() => setIsCartOpen(false)}>Close</Button>
+                    </DrawerFooter>
+                </OverlayDrawer>
+                <OverlayDrawer position="end" open={isConfigPanelOpen} onOpenChange={(_ev, data) => setIsConfigPanelOpen(data.open)}>
+                    <DrawerHeader>
+                        <DrawerHeaderTitle
+                            action={<Button appearance="subtle" aria-label="Close" icon={<Dismiss24Regular />} onClick={() => setIsConfigPanelOpen(false)} />}
+                        >
+                            Configure answer generation
+                        </DrawerHeaderTitle>
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <div className={styles.chatSettingsSeparator}>
+                            <HelpCallout labelId={temperatureId} fieldId={temperatureFieldId} helpText={toolTipText.temperature} label="Temperature" />
+                            <Input
+                                id={temperatureFieldId}
+                                type="number"
+                                min={0}
+                                max={1}
+                                step={0.1}
+                                defaultValue={temperature.toString()}
+                                onChange={onTemperatureChange}
+                                aria-labelledby={temperatureId}
+                            />
+                        </div>
 
-                    <TextField
-                        id={searchScoreFieldId}
-                        className={styles.chatSettingsSeparator}
-                        label="Similarity Score Threshold"
-                        type="number"
-                        min={0}
-                        max={1}
-                        step={0.1}
-                        defaultValue={scoreThreshold.toString()}
-                        onChange={onScoreThresholdChange}
-                        aria-labelledby={searchScoreId}
-                        onRenderLabel={(props: ITextFieldProps | undefined) => (
-                            <HelpCallout labelId={searchScoreId} fieldId={searchScoreFieldId} helpText={toolTipText.searchScore} label={props?.label} />
-                        )}
-                    />
+                        <div className={styles.chatSettingsSeparator}>
+                            <HelpCallout
+                                labelId={searchScoreId}
+                                fieldId={searchScoreFieldId}
+                                helpText={toolTipText.searchScore}
+                                label="Similarity Score Threshold"
+                            />
+                            <Input
+                                id={searchScoreFieldId}
+                                type="number"
+                                min={0}
+                                max={1}
+                                step={0.1}
+                                defaultValue={scoreThreshold.toString()}
+                                onChange={onScoreThresholdChange}
+                                aria-labelledby={searchScoreId}
+                            />
+                        </div>
 
-                    <TextField
-                        id={retrieveCountFieldId}
-                        className={styles.chatSettingsSeparator}
-                        label="Retrieve this many search results:"
-                        type="number"
-                        min={1}
-                        max={20}
-                        defaultValue={retrieveCount.toString()}
-                        onChange={onRetrieveCountChange}
-                        aria-labelledby={retrieveCountId}
-                        onRenderLabel={(props: ITextFieldProps | undefined) => (
-                            <HelpCallout labelId={retrieveCountId} fieldId={retrieveCountFieldId} helpText={toolTipText.retrieveNumber} label={props?.label} />
-                        )}
-                    />
+                        <div className={styles.chatSettingsSeparator}>
+                            <HelpCallout
+                                labelId={retrieveCountId}
+                                fieldId={retrieveCountFieldId}
+                                helpText={toolTipText.retrieveNumber}
+                                label="Retrieve this many search results:"
+                            />
+                            <Input
+                                id={retrieveCountFieldId}
+                                type="number"
+                                min={1}
+                                max={20}
+                                defaultValue={retrieveCount.toString()}
+                                onChange={onRetrieveCountChange}
+                                aria-labelledby={retrieveCountId}
+                            />
+                        </div>
 
-                    <VectorSettings
-                        defaultRetrievalMode={retrievalMode}
-                        updateRetrievalMode={(retrievalMode: RetrievalMode) => setRetrievalMode(retrievalMode)}
-                    />
+                        <VectorSettings
+                            defaultRetrievalMode={retrievalMode}
+                            updateRetrievalMode={(retrievalMode: RetrievalMode) => setRetrievalMode(retrievalMode)}
+                        />
 
-                    <Checkbox
-                        id={shouldStreamFieldId}
-                        className={styles.chatSettingsSeparator}
-                        checked={shouldStream}
-                        label="Stream chat completion responses"
-                        onChange={onShouldStreamChange}
-                        aria-labelledby={shouldStreamId}
-                        onRenderLabel={(props: ICheckboxProps | undefined) => (
-                            <HelpCallout labelId={shouldStreamId} fieldId={shouldStreamFieldId} helpText={toolTipText.streamChat} label={props?.label} />
-                        )}
-                    />
-                </Panel>
+                        <div className={styles.chatSettingsSeparator}>
+                            <HelpCallout
+                                labelId={shouldStreamId}
+                                fieldId={shouldStreamFieldId}
+                                helpText={toolTipText.streamChat}
+                                label="Stream chat completion responses"
+                            />
+                            <Checkbox id={shouldStreamFieldId} checked={shouldStream} onChange={onShouldStreamChange} aria-labelledby={shouldStreamId} />
+                        </div>
+                    </DrawerBody>
+                </OverlayDrawer>
             </div>
         </div>
     );

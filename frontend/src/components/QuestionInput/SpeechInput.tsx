@@ -25,7 +25,7 @@ try {
         speechRecognition.lang = "en-US";
         speechRecognition.interimResults = true;
     }
-} catch (err) {
+} catch {
     console.error("SpeechRecognition not supported");
     speechRecognition = null;
 }

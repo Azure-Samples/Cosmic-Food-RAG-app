@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { IconButton } from "@fluentui/react";
+import { Button } from "@fluentui/react-components";
+import { Speaker224Regular } from "@fluentui/react-icons";
 
 interface Props {
     answer: string;
@@ -11,7 +12,7 @@ let synth: SpeechSynthesis | null = null;
 
 try {
     synth = SpeechSynthesis;
-} catch (err) {
+} catch {
     console.error("SpeechSynthesis is not supported");
 }
 
@@ -63,11 +64,12 @@ export const SpeechOutput = ({ answer }: Props) => {
     const color = isPlaying ? "red" : "black";
 
     return (
-        <IconButton
+        <Button
+            appearance="transparent"
             style={{ color: color }}
-            iconProps={{ iconName: "Volume3" }}
+            icon={<Speaker224Regular />}
             title="Speak answer"
-            ariaLabel="Speak answer"
+            aria-label="Speak answer"
             onClick={() => startOrStopSpeech(answer)}
             disabled={!synth}
         />

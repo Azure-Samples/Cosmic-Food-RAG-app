@@ -1,0 +1,19 @@
+services:
+  documentdb:
+    image: ghcr.io/documentdb/documentdb/documentdb-local:latest
+    container_name: cosmic-documentdb-local
+    ports:
+      - "10260:10260"
+    environment:
+      USERNAME: ${AZURE_COSMOS_USERNAME:-admin}
+      PASSWORD: ${AZURE_COSMOS_PASSWORD:-Password123}
+    volumes:
+      - cosmic-documentdb-pgdata:/data
+    healthcheck:
+      test: ["CMD", "mongosh", "--tls", "--tlsAllowInvalidCertificates", "-u", "${AZURE_COSMOS_USERNAME:-admin}", "-p", "${AZURE_COSMOS_PASSWORD:-Password123}", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  cosmic-documentdb-pgdata:

@@ -1,14 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import { initializeIcons } from "@fluentui/react";
+import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 
 import "./index.css";
 
 import Layout from "./pages/layout/Layout";
 import Chat from "./pages/chat/Chat";
-
-initializeIcons();
 
 const router = createHashRouter([
     {
@@ -29,6 +27,8 @@ const router = createHashRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <FluentProvider theme={webLightTheme} style={{ height: "100%", backgroundColor: "transparent" }}>
+            <RouterProvider router={router} />
+        </FluentProvider>
     </React.StrictMode>
 );

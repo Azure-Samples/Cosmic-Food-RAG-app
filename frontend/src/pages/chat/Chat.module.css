@@ -28,6 +28,11 @@
     padding-top: 60px;
 }
 
+.emptyStateLogo {
+    display: block;
+    margin-bottom: 24px;
+}
+
 .chatEmptyStateTitle {
     font-size: 4rem;
     font-weight: 600;

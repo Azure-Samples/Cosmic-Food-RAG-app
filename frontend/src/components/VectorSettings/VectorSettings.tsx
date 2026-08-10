@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { Stack, IDropdownOption, Dropdown, IDropdownProps } from "@fluentui/react";
-import { useId } from "@fluentui/react-hooks";
+import { useId, useState } from "react";
+import { Dropdown, Option, OptionOnSelectData, SelectionEvents } from "@fluentui/react-components";
 
 import styles from "./VectorSettings.module.css";
 import { RetrievalMode } from "../../api";
@@ -13,33 +12,36 @@ interface Props {
 }
 
 export const VectorSettings = ({ updateRetrievalMode, defaultRetrievalMode }: Props) => {
-    const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>(RetrievalMode.Hybrid);
-    const retrievalModeId = useId("retrievalMode");
-    const retrievalModeFieldId = useId("retrievalModeField");
+    const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>(defaultRetrievalMode);
+    const retrievalModeId = useId();
+    const retrievalModeFieldId = useId();
 
-    const onRetrievalModeChange = (_ev: React.FormEvent<HTMLDivElement>, option?: IDropdownOption<RetrievalMode> | undefined) => {
-        setRetrievalMode(option?.data || RetrievalMode.Hybrid);
-        updateRetrievalMode(option?.data || RetrievalMode.Hybrid);
+    const onRetrievalModeChange = (_ev: SelectionEvents, data: OptionOnSelectData) => {
+        const mode = (data.optionValue as RetrievalMode) || RetrievalMode.Hybrid;
+        setRetrievalMode(mode);
+        updateRetrievalMode(mode);
     };
 
     return (
-        <Stack className={styles.container} tokens={{ childrenGap: 10 }}>
+        <div className={styles.container} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <HelpCallout labelId={retrievalModeId} fieldId={retrievalModeFieldId} helpText={toolTipText.retrievalMode} label="Retrieval mode" />
             <Dropdown
                 id={retrievalModeFieldId}
-                label="Retrieval mode"
-                selectedKey={defaultRetrievalMode.toString()}
-                options={[
-                    { key: "rag", text: "RAG with Vector Search", selected: retrievalMode == RetrievalMode.Hybrid, data: RetrievalMode.Hybrid },
-                    { key: "vector", text: "Vector Search", selected: retrievalMode == RetrievalMode.Vectors, data: RetrievalMode.Vectors },
-                    { key: "keyword", text: "Keyword Search", selected: retrievalMode == RetrievalMode.Text, data: RetrievalMode.Text }
-                ]}
-                required
-                onChange={onRetrievalModeChange}
                 aria-labelledby={retrievalModeId}
-                onRenderLabel={(props: IDropdownProps | undefined) => (
-                    <HelpCallout labelId={retrievalModeId} fieldId={retrievalModeFieldId} helpText={toolTipText.retrievalMode} label={props?.label} />
-                )}
-            />
-        </Stack>
+                selectedOptions={[retrievalMode.toString()]}
+                value={
+                    retrievalMode === RetrievalMode.Hybrid
+                        ? "RAG with Vector Search"
+                        : retrievalMode === RetrievalMode.Vectors
+                          ? "Vector Search"
+                          : "Keyword Search"
+                }
+                onOptionSelect={onRetrievalModeChange}
+            >
+                <Option value={RetrievalMode.Hybrid}>RAG with Vector Search</Option>
+                <Option value={RetrievalMode.Vectors}>Vector Search</Option>
+                <Option value={RetrievalMode.Text}>Keyword Search</Option>
+            </Dropdown>
+        </div>
     );
 };

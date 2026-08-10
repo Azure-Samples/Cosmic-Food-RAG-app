@@ -1,4 +1,4 @@
-import { Pivot, PivotItem } from "@fluentui/react";
+import { Tab, TabList, SelectTabEvent, SelectTabData } from "@fluentui/react-components";
 
 import { SupportingContent } from "../SupportingContent";
 import { ChatCompletionResponse } from "../../api";
@@ -12,32 +12,24 @@ interface Props {
     answer: ChatCompletionResponse;
 }
 
-const pivotItemDisabledStyle = { disabled: true, style: { color: "grey" } };
-
 export const AnalysisPanel = ({ answer, activeTab, className, onActiveTabChanged }: Props) => {
     const isDisabledThoughtProcessTab: boolean = !answer.context.thoughts;
     const isDisabledSupportingContentTab: boolean = !answer.context.data_points;
 
+    const onTabSelect = (_ev: SelectTabEvent, data: SelectTabData) => onActiveTabChanged(data.value as AnalysisPanelTabs);
+
     return (
-        <Pivot
-            className={className}
-            selectedKey={activeTab}
-            onLinkClick={pivotItem => pivotItem && onActiveTabChanged(pivotItem.props.itemKey! as AnalysisPanelTabs)}
-        >
-            <PivotItem
-                itemKey={AnalysisPanelTabs.ThoughtProcessTab}
-                headerText="Thought process"
-                headerButtonProps={isDisabledThoughtProcessTab ? pivotItemDisabledStyle : undefined}
-            >
-                <ThoughtProcess thoughts={answer.context.thoughts || []} />
-            </PivotItem>
-            <PivotItem
-                itemKey={AnalysisPanelTabs.SupportingContentTab}
-                headerText="Supporting content"
-                headerButtonProps={isDisabledSupportingContentTab ? pivotItemDisabledStyle : undefined}
-            >
-                <SupportingContent supportingContent={answer.context.data_points} />
-            </PivotItem>
-        </Pivot>
+        <div className={className}>
+            <TabList selectedValue={activeTab} onTabSelect={onTabSelect}>
+                <Tab value={AnalysisPanelTabs.ThoughtProcessTab} disabled={isDisabledThoughtProcessTab}>
+                    Thought process
+                </Tab>
+                <Tab value={AnalysisPanelTabs.SupportingContentTab} disabled={isDisabledSupportingContentTab}>
+                    Supporting content
+                </Tab>
+            </TabList>
+            {activeTab === AnalysisPanelTabs.ThoughtProcessTab && <ThoughtProcess thoughts={answer.context.thoughts || []} />}
+            {activeTab === AnalysisPanelTabs.SupportingContentTab && <SupportingContent supportingContent={answer.context.data_points} />}
+        </div>
     );
 };

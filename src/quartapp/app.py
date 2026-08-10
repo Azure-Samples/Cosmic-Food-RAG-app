@@ -90,13 +90,17 @@ def create_app(test_config: dict[str, Any] | None = None) -> Quart:
         score_threshold: float = override.get("score_threshold", 0)
 
         if approach := available_approaches.get(retrieval_mode):
-            response: RetrievalResponse = await approach(
-                session_state=session_state,
-                messages=messages,
-                temperature=temperature,
-                limit=top,
-                score_threshold=score_threshold,
-            )
+            try:
+                response: RetrievalResponse = await approach(
+                    session_state=session_state,
+                    messages=messages,
+                    temperature=temperature,
+                    limit=top,
+                    score_threshold=score_threshold,
+                )
+            except Exception as error:
+                logging.exception("Exception while generating response: %s", error)
+                return jsonify({"error": str(error)}), 500
             return jsonify(response)
         return jsonify({"error": "Not Implemented!"}), 501
 
