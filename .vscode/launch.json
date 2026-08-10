@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "quart",
             "cwd": "${workspaceFolder}/src",
-            "python": "${workspaceFolder}/.venv/bin/python",
+            "python": "${workspaceFolder}/src/.venv/bin/python",
             "env": {
                 "QUART_APP": "quartapp.app",
                 "QUART_ENV": "development",

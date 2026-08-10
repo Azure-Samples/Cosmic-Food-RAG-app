@@ -1,6 +1,21 @@
 import { useState } from "react";
 
-import { Modal, IconButton, DefaultButton, TextField, Dropdown, IDropdownOption } from "@fluentui/react";
+import {
+    Dialog,
+    DialogSurface,
+    DialogBody,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    Textarea,
+    TextareaOnChangeData,
+    Dropdown,
+    Option,
+    OptionOnSelectData,
+    SelectionEvents
+} from "@fluentui/react-components";
+import { Dismiss24Regular } from "@fluentui/react-icons";
 
 import styles from "./BuyModal.module.css";
 import { DataPoint } from "../../api";
@@ -19,18 +34,15 @@ export const BuyModal = ({ setIsBuy, setAddress, isBuy, address, latestItems, ca
     const [buyItem, setBuyItem] = useState<string>("");
     const [lastItem, setLastItem] = useState<string>("");
 
-    const onAddressChange = (_ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-        if (!newValue) {
-            setAddress("");
-        } else {
-            setAddress(newValue);
-        }
+    const onAddressChange = (_ev: React.ChangeEvent<HTMLTextAreaElement>, data: TextareaOnChangeData) => {
+        setAddress(data.value || "");
     };
 
-    const onItemChange = (_ev: React.FormEvent<HTMLDivElement>, option?: IDropdownOption<string> | undefined) => {
-        setBuyItem(option?.data || "");
-        if (option?.data && option.data && option.data.length > 0) {
-            setLastItem(option.data);
+    const onItemChange = (_ev: SelectionEvents, data: OptionOnSelectData) => {
+        const value = data.optionValue || "";
+        setBuyItem(value);
+        if (value.length > 0) {
+            setLastItem(value);
         }
     };
 
@@ -43,43 +55,53 @@ export const BuyModal = ({ setIsBuy, setAddress, isBuy, address, latestItems, ca
     const labelWithCollection: string = `Selected Item to Buy from ${latestItems[0].collection}`;
 
     return (
-        <Modal className={styles.buyContainer} isOpen={isBuy} onDismiss={() => setIsBuy(false)} isBlocking={true}>
-            <div>
-                <IconButton iconProps={{ iconName: "Cancel" }} ariaLabel="Close popup modal" onClick={() => setIsBuy(false)} />
-
-                <div className={styles.buyContainer}>
-                    <div className={styles.modalTitle}>
-                        <h1>Confirm Selection</h1>
-                    </div>
-                </div>
-                <div className={styles.buyContainer}>
-                    <Dropdown
-                        className={styles.buyInput}
-                        label={labelWithCollection}
-                        ariaLabel="Selected Item to Buy"
-                        placeholder="Select an item to buy"
-                        options={latestItems.flatMap((c, ind) => {
-                            const option: IDropdownOption[] = [];
-                            const parsed: string = `${c.price} - ${c.name}`;
-                            option.push({ key: ind, text: parsed, data: parsed, selected: buyItem == parsed });
-                            return option;
-                        })}
-                        required
-                        onChange={onItemChange}
-                    />
-                </div>
-                <div className={styles.buyContainer}>
-                    <div className={styles.buyMessage}>Enter your address:</div>
-                </div>
-                <div className={styles.buyContainer}>
-                    <TextField className={styles.buyInput} value={address} onChange={onAddressChange} multiline resizable={false} borderless />
-                </div>
-                <div className={styles.buyContainer}>
-                    <DefaultButton className={styles.buyMessage} onClick={updateItems}>
-                        Buy Now?
-                    </DefaultButton>
-                </div>
-            </div>
-        </Modal>
+        <Dialog open={isBuy} onOpenChange={(_ev, data) => setIsBuy(data.open)}>
+            <DialogSurface className={styles.buyContainer}>
+                <DialogBody>
+                    <DialogTitle
+                        className={styles.modalTitle}
+                        action={<Button appearance="subtle" icon={<Dismiss24Regular />} aria-label="Close popup modal" onClick={() => setIsBuy(false)} />}
+                    >
+                        Confirm Selection
+                    </DialogTitle>
+                    <DialogContent>
+                        <div className={styles.buyContainer}>
+                            <label htmlFor="buyItemDropdown">{labelWithCollection}</label>
+                        </div>
+                        <div className={styles.buyContainer}>
+                            <Dropdown
+                                id="buyItemDropdown"
+                                className={styles.buyInput}
+                                aria-label="Selected Item to Buy"
+                                placeholder="Select an item to buy"
+                                value={buyItem}
+                                selectedOptions={buyItem ? [buyItem] : []}
+                                onOptionSelect={onItemChange}
+                            >
+                                {latestItems.map((c, ind) => {
+                                    const parsed: string = `${c.price} - ${c.name}`;
+                                    return (
+                                        <Option key={ind} value={parsed}>
+                                            {parsed}
+                                        </Option>
+                                    );
+                                })}
+                            </Dropdown>
+                        </div>
+                        <div className={styles.buyContainer}>
+                            <div className={styles.buyMessage}>Enter your address:</div>
+                        </div>
+                        <div className={styles.buyContainer}>
+                            <Textarea className={styles.buyInput} value={address} onChange={onAddressChange} resize="none" />
+                        </div>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button className={styles.buyMessage} onClick={updateItems}>
+                            Buy Now?
+                        </Button>
+                    </DialogActions>
+                </DialogBody>
+            </DialogSurface>
+        </Dialog>
     );
 };

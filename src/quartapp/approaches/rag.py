@@ -98,17 +98,17 @@ class RAG(ApproachesBase):
                 documents_list.append(
                     Document(page_content=document.page_content, metadata={"source": document.metadata["source"]})
                 )
-            formatted_response = (
-                f'{{"response": "{str(response.content)}", "rephrased_response": "{str(rephrased_question.content)}"}}'
+            formatted_response = json.dumps(
+                {"response": str(response.content), "rephrased_response": str(rephrased_question.content)}
             )
-            return documents_list, str(formatted_response)
+            return documents_list, formatted_response
 
         # Perform RAG search with no context
         response = await context_chain.ainvoke({"context": [], "input": rephrased_question.content})
-        formatted_response = (
-            f'{{"response": "{str(response.content)}", "rephrased_response": "{str(rephrased_question.content)}"}}'
+        formatted_response = json.dumps(
+            {"response": str(response.content), "rephrased_response": str(rephrased_question.content)}
         )
-        return [], str(formatted_response)
+        return [], formatted_response
 
     async def run_stream(
         self, messages: list, temperature: float, limit: int, score_threshold: float
