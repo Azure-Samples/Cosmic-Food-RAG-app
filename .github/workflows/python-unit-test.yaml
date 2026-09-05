@@ -35,17 +35,17 @@ jobs:
         os: ["ubuntu-latest"]
         python_version: ["3.11", "3.12", "3.13", "3.14"]
     steps:
-        - uses: actions/checkout@v7
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         - name: Setup python
-          uses: actions/setup-python@v7
+          uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
           with:
             python-version: ${{ matrix.python_version }}
             architecture: x64
-        - uses: astral-sh/setup-uv@v9.0.0
+        - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
           with:
             enable-cache: true
         - name: Setup node
-          uses: actions/setup-node@v7.0.0
+          uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
           with:
             node-version: 22
         - name: Build frontend
@@ -65,7 +65,7 @@ jobs:
             uv run --project src pytest tests/e2e.py --tracing=retain-on-failure
         - name: Upload test artifacts
           if: ${{ failure() && steps.e2e.conclusion == 'failure' }}
-          uses: actions/upload-artifact@v7
+          uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
           with:
             name: playwright-traces-${{ matrix.python_version }}
             path: test-results
