@@ -10,7 +10,7 @@ dependencies = [
     "langchain==1.2.7",
     "langchain-openai==1.1.7",
     "langchain-community==0.4.1",
-    "pymongo==4.16.0"
+    "pymongo==4.18.2"
 ]
 
 [dependency-groups]
