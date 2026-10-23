@@ -4,13 +4,13 @@ version = "1.0.0"
 description = "Demo Chat Application to demonstrate retrieval augmented generation using Azure Open AI, Azure DocumentDB (with MongoDB compatibility), and lang chain."
 requires-python = ">=3.11"
 dependencies = [
-    "Quart==0.20.0",
+    "Quart>=0.20.0",
     "python-dotenv",
-    "Hypercorn==0.18.0",
-    "langchain==1.2.7",
-    "langchain-openai==1.1.7",
-    "langchain-community==0.4.1",
-    "pymongo==4.18.2"
+    "Hypercorn>=0.18.0",
+    "langchain>=1.2.7",
+    "langchain-openai>=1.1.7",
+    "langchain-community>=0.4.1",
+    "pymongo>=4.18.2"
 ]
 
 [dependency-groups]
@@ -23,15 +23,26 @@ dev = [
     "mongomock",
     "requests",
     "types-requests",
+    "tox",
+    "tox-uv",
 ]
 lint = [
     "ruff",
     "mypy",
     "pre-commit",
 ]
-[tool.uv]
-exclude-newer = "14 days"
 
 [build-system]
 requires = ["flit_core<4"]
 build-backend = "flit_core.buildapi"
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.tox.env.update-requirements]
+description = "update uv lock"
+labels = ["update"]
+dependency_groups = []
+no_default_groups = true
+skip_install = true
+commands = [["uv", "lock", {replace = "posargs", default = ["-U"], extend = true}]]
