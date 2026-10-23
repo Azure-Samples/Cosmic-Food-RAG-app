@@ -82,7 +82,7 @@ def test_embeddings_api_ollama():
     result = embeddings_api(
         openai_embeddings_model="nomic-embed-text",
         openai_embeddings_deployment="",
-        api_key=SecretStr(""),
+        api_key=SecretStr("nokeyneeded"),
         api_version="",
         endpoint="http://localhost:11434/v1",
         openai_embed_host="ollama",
@@ -97,7 +97,7 @@ def test_embeddings_api_ollama_custom_endpoint():
     result = embeddings_api(
         openai_embeddings_model="nomic-embed-text",
         openai_embeddings_deployment="",
-        api_key=SecretStr(""),
+        api_key=SecretStr("nokeyneeded"),
         api_version="",
         endpoint="http://my-ollama:11434/v1",
         openai_embed_host="ollama",
@@ -157,7 +157,7 @@ def test_chat_api_ollama():
     result = chat_api(
         openai_chat_model="llama3.2",
         openai_chat_deployment="",
-        api_key=SecretStr(""),
+        api_key=SecretStr("nokeyneeded"),
         api_version="",
         endpoint="http://localhost:11434/v1",
         openai_chat_host="ollama",
@@ -172,7 +172,7 @@ def test_chat_api_ollama_custom_endpoint():
     result = chat_api(
         openai_chat_model="llama3.2",
         openai_chat_deployment="",
-        api_key=SecretStr(""),
+        api_key=SecretStr("nokeyneeded"),
         api_version="",
         endpoint="http://my-ollama:11434/v1",
         openai_chat_host="ollama",

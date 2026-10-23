@@ -20,3 +20,35 @@ filterwarnings = ["ignore::DeprecationWarning"]
 
 [tool.coverage.report]
 show_missing = true
+
+[dependency-groups]
+dev = [
+    "tox",
+    "tox-uv",
+]
+gha-update = [
+    "gha-update ; python_full_version >= '3.12'",
+]
+pre-commit = [
+    "pre-commit",
+    "pre-commit-uv",
+]
+
+[tool.uv]
+default-groups = ["dev", "pre-commit"]
+
+
+[tool.tox.env.update-actions]
+description = "update GitHub Actions pins"
+labels = ["update"]
+dependency_groups = ["gha-update"]
+pass_env = ["GITHUB_TOKEN"]
+skip_install = true
+commands = [["gha-update"]]
+
+[tool.tox.env.update-pre_commit]
+description = "update pre-commit pins"
+labels = ["update"]
+dependency_groups = ["pre-commit"]
+skip_install = true
+commands = [["pre-commit", "autoupdate", "--freeze", "-j4"]]
